@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+type Theme = "light" | "dark";
 
 type Team = {
   id: string;
@@ -23,6 +25,33 @@ const PRESETS = {
   chaos: { mclaren: 22, ferrari: 30, mercedes: 28, redbull: 29 },
 };
 
+const SKILL_GROUPS = [
+  {
+    title: "Languages",
+    skills: ["Python", "R", "SQL", "C++", "SAS"],
+  },
+  {
+    title: "Libraries & data tools",
+    skills: ["Pandas", "NumPy", "scikit-learn", "PySpark", "Beautiful Soup", "Tidyverse", "Tidymodels", "Git", "Jupyter", "VS Code", "RStudio"],
+  },
+  {
+    title: "Data science",
+    skills: ["Data cleaning", "Feature engineering", "Data visualization", "Model evaluation", "Cross-validation", "Monte Carlo simulation"],
+  },
+  {
+    title: "Modeling",
+    skills: ["Regression", "Classification", "Clustering", "PCA", "Bayesian analysis", "NLP", "TF-IDF"],
+  },
+  {
+    title: "AI & LLM",
+    skills: ["OpenAI-compatible APIs", "LLM-assisted classification", "Prompt design", "Blinded LLM auditing", "AI evaluation"],
+  },
+  {
+    title: "Visualization & reporting",
+    skills: ["Matplotlib", "Seaborn", "ggplot2", "Quarto", "R Markdown", "Correlation heatmaps", "Confusion matrices"],
+  },
+];
+
 const apps = [
   {
     number: "01",
@@ -32,7 +61,7 @@ const apps = [
     url: "https://nba.brianbzeng.com",
     github: "https://github.com/brianbzeng/nbamodel",
     description:
-      "A living prediction system that scrapes games, maintains margin-weighted Elo ratings, and blends strength, form, rest, and injuries into matchup probabilities.",
+      "NBA game forecasts using margin-adjusted Elo ratings, recent form, rest, and injury data.",
     proof: ["1,321 games tracked", "30 teams", "64.8% benchmark"],
     theme: "nba",
   },
@@ -44,13 +73,14 @@ const apps = [
     url: "https://treasury.brianbzeng.com",
     github: "https://github.com/brianbzeng/treasurytakehome",
     description:
-      "Decision support for alcohol-label review: extract visible evidence, apply commodity-aware rules, and make uncertainty obvious across single, scan, and batch workflows.",
+      "AI-assisted alcohol-label review with evidence extraction, commodity-aware rules, and three review workflows.",
     proof: ["3 review modes", "Vision + rules", "Human in the loop"],
     theme: "treasury",
   },
 ];
 
 export default function Home() {
+  const [theme, setTheme] = useState<Theme>("light");
   const [remaining, setRemaining] = useState(8);
   const [averages, setAverages] = useState<Record<string, number>>(PRESETS.baseline);
   const [activePreset, setActivePreset] = useState<keyof typeof PRESETS | null>("baseline");
@@ -68,6 +98,40 @@ export default function Home() {
   const leader = standings[0];
   const gap = standings[0].projected - standings[1].projected;
   const maxProjected = standings[0].projected;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const saved = window.localStorage.getItem("bz-theme");
+    const initial: Theme = saved === "light" || saved === "dark"
+      ? saved
+      : window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+    setTheme(initial);
+    root.dataset.theme = initial;
+    root.style.colorScheme = initial;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const syncWithSystem = (event: MediaQueryListEvent) => {
+      if (window.localStorage.getItem("bz-theme")) return;
+      const nextTheme: Theme = event.matches ? "dark" : "light";
+      setTheme(nextTheme);
+      root.dataset.theme = nextTheme;
+      root.style.colorScheme = nextTheme;
+    };
+
+    media.addEventListener("change", syncWithSystem);
+    return () => media.removeEventListener("change", syncWithSystem);
+  }, []);
+
+  function toggleTheme() {
+    const nextTheme: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    document.documentElement.dataset.theme = nextTheme;
+    document.documentElement.style.colorScheme = nextTheme;
+    window.localStorage.setItem("bz-theme", nextTheme);
+  }
 
   function selectPreset(preset: keyof typeof PRESETS) {
     setActivePreset(preset);
@@ -87,34 +151,54 @@ export default function Home() {
           <span className="brand-index">/ 01</span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#work">Work</a>
-          <a href="#f1-lab">F1 lab</a>
-          <a href="#about">About</a>
+          <a href="#work">Projects</a>
+          <a href="#f1-lab">F1 demo</a>
+          <a href="#skills">Skills</a>
         </nav>
-        <a
-          className="header-github"
-          href="https://github.com/brianbzeng"
-          target="_blank"
-          rel="noreferrer"
-        >
-          GitHub <span aria-hidden="true">↗</span>
-        </a>
+        <div className="header-actions">
+          <button
+            className="theme-toggle"
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            aria-pressed={theme === "dark"}
+          >
+            <span className="theme-icon" aria-hidden="true"><i /></span>
+            <span>{theme === "dark" ? "Light" : "Dark"}</span>
+          </button>
+          <a
+            className="header-github"
+            href="https://github.com/brianbzeng"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </header>
 
       <section className="hero shell" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="kicker">Brian Zeng · Data + software</p>
-          <h1 id="hero-title">
-            Tools for questions that don&apos;t have <em>tidy answers.</em>
-          </h1>
+          <p className="kicker">Portfolio / 2026</p>
+          <h1 id="hero-title">Brian Zeng</h1>
           <div className="hero-bottom">
-            <p>
-              Sports, markets, models, and practical software. I turn messy data
-              into interfaces people can actually use.
-            </p>
+            <dl className="profile-facts">
+              <div>
+                <dt>Current focus</dt>
+                <dd>Data Analyst · Data Engineer · Data Scientist · AI/IT Specialist</dd>
+              </div>
+              <div>
+                <dt>Education</dt>
+                <dd>UC Santa Barbara · B.S. Probability &amp; Statistics with Data Science · 2026</dd>
+              </div>
+              <div>
+                <dt>Based in</dt>
+                <dd>Oakland, California</dd>
+              </div>
+            </dl>
             <div className="hero-actions">
               <a className="button button-dark" href="#work">
-                Explore the work <span aria-hidden="true">↓</span>
+                View projects <span aria-hidden="true">↓</span>
               </a>
               <a
                 className="text-link"
@@ -122,7 +206,7 @@ export default function Home() {
                 target="_blank"
                 rel="noreferrer"
               >
-                See all code <span aria-hidden="true">↗</span>
+                GitHub <span aria-hidden="true">↗</span>
               </a>
             </div>
           </div>
@@ -130,8 +214,8 @@ export default function Home() {
 
         <div className="signal-map" aria-label="Project signal map">
           <div className="signal-meta">
-            <span>SELECTED SYSTEMS</span>
-            <span>04 / ACTIVE</span>
+            <span>SELECTED PROJECTS</span>
+            <span>04 PROJECTS</span>
           </div>
           <div className="signal-rule signal-rule-one" />
           <div className="signal-rule signal-rule-two" />
@@ -157,20 +241,13 @@ export default function Home() {
             <small>Audit</small>
           </div>
           <div className="signal-dot" aria-hidden="true" />
-          <p className="signal-caption">
-            One connected practice: collect carefully, model honestly, present clearly.
-          </p>
         </div>
       </section>
 
       <section className="work-section shell" id="work" aria-labelledby="work-title">
-        <div className="section-heading">
-          <p className="kicker">01 / Selected work</p>
-          <h2 id="work-title">Built to leave the notebook.</h2>
-          <p>
-            The flagship projects are complete, usable products—each with its own
-            data pipeline, interface, and point of view.
-          </p>
+        <div className="section-heading concise">
+          <p className="kicker">01 / Projects</p>
+          <h2 id="work-title">Projects</h2>
         </div>
 
         <div className="app-grid">
@@ -202,7 +279,7 @@ export default function Home() {
                   <ul aria-label={`${app.title} highlights`}>
                     {app.proof.map((item) => <li key={item}>{item}</li>)}
                   </ul>
-                  <span className="launch-link">Open live app <b aria-hidden="true">↗</b></span>
+                  <span className="launch-link">Open app <b aria-hidden="true">↗</b></span>
                 </div>
               </a>
               <a className="repo-link" href={app.github} target="_blank" rel="noreferrer">
@@ -216,13 +293,11 @@ export default function Home() {
       <section className="f1-section" id="f1-lab" aria-labelledby="f1-title">
         <div className="shell f1-layout">
           <div className="f1-intro">
-            <p className="kicker">02 / Interactive model</p>
-            <h2 id="f1-title">Put the paddock on a whiteboard.</h2>
+            <p className="kicker">02 / Interactive demo</p>
+            <h2 id="f1-title">F1 Constructors Championship Predictor</h2>
             <p className="f1-lead">
-              The full notebook learns from 2010–2025 race history and runs 10,000
-              Monte Carlo simulations. This lightweight lab lets you pressure-test
-              one legible part of the idea: the points each constructor might carry
-              through the remaining calendar.
+              Ridge regression trained on 2010–2025 race data, with 10,000 Monte
+              Carlo simulations for season outcomes. Adjust the assumptions below.
             </p>
             <dl className="model-facts">
               <div><dt>Model</dt><dd>Tuned Ridge</dd></div>
@@ -235,7 +310,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
             >
-              Open the full notebook <span aria-hidden="true">↗</span>
+              View on GitHub <span aria-hidden="true">↗</span>
             </a>
           </div>
 
@@ -328,8 +403,8 @@ export default function Home() {
 
       <section className="archive-section shell" aria-labelledby="archive-title">
         <div className="section-heading compact">
-          <p className="kicker">03 / Model archive</p>
-          <h2 id="archive-title">One more useful rabbit hole.</h2>
+          <p className="kicker">03 / Other project</p>
+          <h2 id="archive-title">Amazon Review Classification</h2>
         </div>
         <a
           className="archive-row"
@@ -343,60 +418,47 @@ export default function Home() {
             <h3>Amazon Review Suspicion Audit</h3>
           </div>
           <p className="archive-description">
-            An interpretable risk score for the 2023 Amazon Reviews dataset, paired
-            with an independent LLM audit and explicit disagreement review.
+            NLP pipeline for 2023 Amazon reviews using TF-IDF, engineered signals,
+            and a blinded LLM audit.
           </p>
-          <div className="archive-result">
-            <strong>92.18%</strong>
-            <span>rating-proxy baseline</span>
-          </div>
           <span className="archive-arrow" aria-hidden="true">↗</span>
         </a>
-        <p className="archive-note">
-          Carefully scoped: this is a review-risk audit, not a claim that a review is fake.
-        </p>
       </section>
 
-      <section className="about-section" id="about" aria-labelledby="about-title">
-        <div className="shell about-grid">
-          <p className="kicker">04 / About the work</p>
-          <div>
-            <h2 id="about-title">The model is only half the product.</h2>
-            <p>
-              I like projects where the hard part isn&apos;t only training a model.
-              It&apos;s collecting the right data, exposing the assumptions, and deciding
-              what the result should let someone do next.
-            </p>
-            <p className="serif-note">
-              Some serious, some for Sundays. All built to be used.
-            </p>
+      <section className="skills-section" id="skills" aria-labelledby="skills-title">
+        <div className="shell">
+          <div className="section-heading concise skills-heading">
+            <p className="kicker">04 / Technical skills</p>
+            <h2 id="skills-title">Skills</h2>
           </div>
-          <div className="toolkit">
-            <span>Often working with</span>
-            <ul>
-              <li>Python</li><li>scikit-learn</li><li>Flask</li><li>React</li>
-              <li>Data pipelines</li><li>Applied AI</li><li>Product design</li>
-            </ul>
+          <div className="skills-grid">
+            {SKILL_GROUPS.map((group, index) => (
+              <article className="skill-group" key={group.title}>
+                <div className="skill-group-title">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{group.title}</h3>
+                </div>
+                <ul>
+                  {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
+                </ul>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
       <footer className="site-footer">
-        <div className="shell footer-top">
-          <p className="kicker">BZ / End</p>
-          <h2>Have a problem worth making smaller?</h2>
-          <a
-            className="button button-paper"
-            href="https://github.com/brianbzeng"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Find me on GitHub <span aria-hidden="true">↗</span>
-          </a>
+        <div className="shell footer-profile">
+          <div>
+            <p className="kicker">Portfolio / 2026</p>
+            <h2>Brian Zeng</h2>
+          </div>
+          <p>Data analysis · data science · software</p>
         </div>
         <div className="shell footer-bottom">
-          <p>Brian Zeng · Data products & software</p>
+          <p>Oakland, California</p>
           <div>
+            <a href="https://github.com/brianbzeng" target="_blank" rel="noreferrer">GitHub ↗</a>
             <a href="https://nba.brianbzeng.com" target="_blank" rel="noreferrer">NBA app ↗</a>
             <a href="https://treasury.brianbzeng.com" target="_blank" rel="noreferrer">Treasury app ↗</a>
             <a href="#top">Back to top ↑</a>
