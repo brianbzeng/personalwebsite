@@ -1,29 +1,37 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import ThemeToggle from "./components/ThemeToggle";
 
-type Theme = "light" | "dark";
+type OddsMetric = "title" | "top3" | "top5";
 
-type Team = {
-  id: string;
+type ConstructorOdds = {
   name: string;
-  short: string;
-  current: number;
+  meanRank: number;
+  title: number;
+  top3: number;
+  top5: number;
   color: string;
 };
 
-const TEAMS: Team[] = [
-  { id: "mclaren", name: "McLaren", short: "MCL", current: 362, color: "#ff8700" },
-  { id: "ferrari", name: "Ferrari", short: "FER", current: 306, color: "#e8002d" },
-  { id: "mercedes", name: "Mercedes", short: "MER", current: 266, color: "#00a19b" },
-  { id: "redbull", name: "Red Bull", short: "RBR", current: 253, color: "#3154c7" },
-];
-
-const PRESETS = {
-  baseline: { mclaren: 29, ferrari: 25, mercedes: 21, redbull: 24 },
-  challengers: { mclaren: 25, ferrari: 29, mercedes: 24, redbull: 27 },
-  chaos: { mclaren: 22, ferrari: 30, mercedes: 28, redbull: 29 },
+const ODDS_METRICS: Record<OddsMetric, string> = {
+  title: "Title",
+  top3: "Top 3",
+  top5: "Top 5",
 };
+
+const F1_ODDS: ConstructorOdds[] = [
+  { name: "McLaren", meanRank: 1.9318, title: 48.47, top3: 88.52, top5: 99.57, color: "#ff8700" },
+  { name: "Ferrari", meanRank: 2.8744, title: 20.12, top3: 67.79, top5: 95.30, color: "#e8002d" },
+  { name: "Mercedes", meanRank: 3.0366, title: 16.53, top3: 63.99, top5: 94.20, color: "#00a19b" },
+  { name: "Red Bull", meanRank: 3.2916, title: 13.04, top3: 56.43, top5: 91.85, color: "#3154c7" },
+  { name: "Williams", meanRank: 5.2408, title: 1.68, top3: 16.10, top5: 57.90, color: "#00a3e0" },
+  { name: "RB", meanRank: 6.8727, title: 0.10, top3: 3.46, top5: 22.48, color: "#6692ff" },
+  { name: "Aston Martin", meanRank: 7.1826, title: 0.04, top3: 1.96, top5: 17.39, color: "#229971" },
+  { name: "Haas", meanRank: 7.5742, title: 0.02, top3: 1.24, top5: 12.18, color: "#b6babd" },
+  { name: "Sauber", meanRank: 8.1826, title: 0.00, top3: 0.39, top5: 6.35, color: "#52e252" },
+  { name: "Alpine", meanRank: 8.8127, title: 0.00, top3: 0.12, top5: 2.78, color: "#ff87bc" },
+];
 
 const SKILL_GROUPS = [
   {
@@ -80,68 +88,11 @@ const apps = [
 ];
 
 export default function Home() {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [remaining, setRemaining] = useState(8);
-  const [averages, setAverages] = useState<Record<string, number>>(PRESETS.baseline);
-  const [activePreset, setActivePreset] = useState<keyof typeof PRESETS | null>("baseline");
-
-  const standings = useMemo(
-    () =>
-      TEAMS.map((team) => ({
-        ...team,
-        average: averages[team.id],
-        projected: team.current + remaining * averages[team.id],
-      })).sort((a, b) => b.projected - a.projected),
-    [averages, remaining],
+  const [oddsMetric, setOddsMetric] = useState<OddsMetric>("title");
+  const sortedOdds = useMemo(
+    () => [...F1_ODDS].sort((a, b) => b[oddsMetric] - a[oddsMetric]),
+    [oddsMetric],
   );
-
-  const leader = standings[0];
-  const gap = standings[0].projected - standings[1].projected;
-  const maxProjected = standings[0].projected;
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const saved = window.localStorage.getItem("bz-theme");
-    const initial: Theme = saved === "light" || saved === "dark"
-      ? saved
-      : window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-
-    setTheme(initial);
-    root.dataset.theme = initial;
-    root.style.colorScheme = initial;
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const syncWithSystem = (event: MediaQueryListEvent) => {
-      if (window.localStorage.getItem("bz-theme")) return;
-      const nextTheme: Theme = event.matches ? "dark" : "light";
-      setTheme(nextTheme);
-      root.dataset.theme = nextTheme;
-      root.style.colorScheme = nextTheme;
-    };
-
-    media.addEventListener("change", syncWithSystem);
-    return () => media.removeEventListener("change", syncWithSystem);
-  }, []);
-
-  function toggleTheme() {
-    const nextTheme: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    document.documentElement.dataset.theme = nextTheme;
-    document.documentElement.style.colorScheme = nextTheme;
-    window.localStorage.setItem("bz-theme", nextTheme);
-  }
-
-  function selectPreset(preset: keyof typeof PRESETS) {
-    setActivePreset(preset);
-    setAverages(PRESETS[preset]);
-  }
-
-  function updateAverage(teamId: string, value: number) {
-    setActivePreset(null);
-    setAverages((current) => ({ ...current, [teamId]: value }));
-  }
 
   return (
     <main id="top">
@@ -151,21 +102,13 @@ export default function Home() {
           <span className="brand-index">/ 01</span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#work">Projects</a>
-          <a href="#f1-lab">F1 demo</a>
-          <a href="#skills">Skills</a>
+          <a className="nav-skills" href="#skills">Skills</a>
+          <a className="nav-projects" href="#work">Projects</a>
+          <a className="nav-f1" href="#f1-lab">F1 Demo</a>
+          <a className="nav-contact" href="/contact">Contact</a>
         </nav>
         <div className="header-actions">
-          <button
-            className="theme-toggle"
-            type="button"
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            aria-pressed={theme === "dark"}
-          >
-            <span className="theme-icon" aria-hidden="true"><i /></span>
-            <span>{theme === "dark" ? "Light" : "Dark"}</span>
-          </button>
+          <ThemeToggle />
           <a
             className="header-github"
             href="https://github.com/brianbzeng"
@@ -244,9 +187,31 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="skills-section" id="skills" aria-labelledby="skills-title">
+        <div className="shell">
+          <div className="section-heading concise skills-heading">
+            <p className="kicker">01 / Technical Skills</p>
+            <h2 id="skills-title">Skills</h2>
+          </div>
+          <div className="skills-grid">
+            {SKILL_GROUPS.map((group, index) => (
+              <article className="skill-group" key={group.title}>
+                <div className="skill-group-title">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{group.title}</h3>
+                </div>
+                <ul>
+                  {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="work-section shell" id="work" aria-labelledby="work-title">
         <div className="section-heading concise">
-          <p className="kicker">01 / Projects</p>
+          <p className="kicker">02 / Projects</p>
           <h2 id="work-title">Projects</h2>
         </div>
 
@@ -293,11 +258,11 @@ export default function Home() {
       <section className="f1-section" id="f1-lab" aria-labelledby="f1-title">
         <div className="shell f1-layout">
           <div className="f1-intro">
-            <p className="kicker">02 / Interactive demo</p>
-            <h2 id="f1-title">F1 Constructors Championship Predictor</h2>
+            <p className="kicker">03 / Interactive Demo</p>
+            <h2 id="f1-title">2026 Constructors&rsquo; Model Odds</h2>
             <p className="f1-lead">
-              Ridge regression trained on 2010–2025 race data, with 10,000 Monte
-              Carlo simulations for season outcomes. Adjust the assumptions below.
+              Tuned Ridge forecast using 2025 constructor inputs and 10,000
+              residual-resampled simulations.
             </p>
             <dl className="model-facts">
               <div><dt>Model</dt><dd>Tuned Ridge</dd></div>
@@ -314,96 +279,92 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="predictor" aria-label="F1 constructor points scenario explorer">
+          <div className="predictor odds-panel" aria-label="2026 F1 constructors model forecast">
             <div className="predictor-header">
               <div>
-                <p className="instrument-label">Scenario explorer · Sample data</p>
-                <h3>Constructor projection</h3>
+                <p className="instrument-label">Model snapshot · 2025 inputs</p>
+                <h3>Championship odds</h3>
               </div>
-              <span className="model-online"><i /> Interactive</span>
+              <span className="model-snapshot">10,000 simulations</span>
             </div>
 
-            <div className="predictor-controls">
-              <div className="round-control">
-                <span>Remaining weekends</span>
-                <div className="stepper">
+            <div className="odds-toolbar">
+              <span>Sort leaderboard by</span>
+              <div className="odds-metrics" role="group" aria-label="Forecast metric">
+                {(Object.keys(ODDS_METRICS) as OddsMetric[]).map((metric) => (
                   <button
                     type="button"
-                    onClick={() => setRemaining((value) => Math.max(1, value - 1))}
-                    aria-label="Decrease remaining race weekends"
-                  >−</button>
-                  <strong>{remaining}</strong>
-                  <button
-                    type="button"
-                    onClick={() => setRemaining((value) => Math.min(12, value + 1))}
-                    aria-label="Increase remaining race weekends"
-                  >+</button>
-                </div>
-              </div>
-              <div className="preset-control" role="group" aria-label="Scenario presets">
-                {(Object.keys(PRESETS) as Array<keyof typeof PRESETS>).map((preset) => (
-                  <button
-                    type="button"
-                    key={preset}
-                    className={activePreset === preset ? "active" : ""}
-                    onClick={() => selectPreset(preset)}
-                    aria-pressed={activePreset === preset}
+                    key={metric}
+                    className={oddsMetric === metric ? "active" : ""}
+                    onClick={() => setOddsMetric(metric)}
+                    aria-pressed={oddsMetric === metric}
                   >
-                    {preset === "baseline" ? "Current form" : preset === "challengers" ? "Closing pack" : "Chaos"}
+                    {ODDS_METRICS[metric]}
                   </button>
                 ))}
               </div>
             </div>
 
-            <fieldset className="team-inputs">
-              <legend>Average points per race weekend</legend>
-              {TEAMS.map((team) => (
-                <label key={team.id}>
-                  <span className="team-key">
-                    <i style={{ background: team.color }} />
-                    <b>{team.short}</b>
-                    <span>{averages[team.id]} pts</span>
-                  </span>
-                  <input
-                    type="range"
-                    min="12"
-                    max="38"
-                    value={averages[team.id]}
-                    onChange={(event) => updateAverage(team.id, Number(event.target.value))}
-                    aria-label={`${team.name} average points per race weekend`}
-                  />
-                </label>
-              ))}
-            </fieldset>
+            <p className="sr-only" aria-live="polite">
+              Leaderboard sorted by {ODDS_METRICS[oddsMetric]} probability.
+            </p>
 
-            <div className="result-head">
-              <div aria-live="polite">
-                <span>Projected leader</span>
-                <strong>{leader.name}</strong>
-              </div>
-              <p>+{gap} pts over P2</p>
+            <div className="odds-table-wrap">
+              <table className="odds-table">
+                <caption className="sr-only">
+                  2026 constructors forecast sorted by {ODDS_METRICS[oddsMetric]} probability
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Constructor</th>
+                    <th scope="col">{ODDS_METRICS[oddsMetric]}</th>
+                    <th scope="col">Avg. finish</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedOdds.map((team, index) => {
+                    const value = team[oddsMetric];
+                    const barWidth = value === 0 ? 0 : Math.max(value, 0.35);
+                    return (
+                      <tr key={team.name}>
+                        <td>{String(index + 1).padStart(2, "0")}</td>
+                        <th scope="row">
+                          <i className="constructor-dot" style={{ background: team.color }} />
+                          {team.name}
+                        </th>
+                        <td>
+                          <div className="odds-value">
+                            <span className="odds-track" aria-hidden="true">
+                              <i style={{ width: `${barWidth}%`, background: team.color }} />
+                            </span>
+                            <strong>{value.toFixed(2)}%</strong>
+                          </div>
+                        </td>
+                        <td>{team.meanRank.toFixed(2)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
 
-            <ol className="standings">
-              {standings.map((team, index) => (
-                <li key={team.id}>
-                  <span className="rank">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="standing-name"><i style={{ background: team.color }} />{team.name}</span>
-                  <span className="score-track" aria-hidden="true">
-                    <i style={{ width: `${Math.max(15, (team.projected / maxProjected) * 100)}%`, background: team.color }} />
-                  </span>
-                  <strong>{team.projected}</strong>
-                </li>
-              ))}
-            </ol>
-            <p className="formula">Projection = sample current points + weekends × average points</p>
+            <details className="odds-method">
+              <summary>Method &amp; limits</summary>
+              <p>
+                Prior-season constructor performance and driver-strength features feed a tuned
+                Ridge model. Probabilities are each team&rsquo;s share of 10,000 residual-resampled
+                simulations. This is a model forecast, not betting odds or a live data feed;
+                2026 regulation changes, Cadillac, and Sauber&rsquo;s Audi transition are not modeled.
+              </p>
+            </details>
           </div>
         </div>
       </section>
 
       <section className="archive-section shell" aria-labelledby="archive-title">
         <div className="section-heading compact">
-          <p className="kicker">03 / Other project</p>
+          <p className="kicker">04 / Other Project</p>
           <h2 id="archive-title">Amazon Review Classification</h2>
         </div>
         <a
@@ -425,28 +386,6 @@ export default function Home() {
         </a>
       </section>
 
-      <section className="skills-section" id="skills" aria-labelledby="skills-title">
-        <div className="shell">
-          <div className="section-heading concise skills-heading">
-            <p className="kicker">04 / Technical skills</p>
-            <h2 id="skills-title">Skills</h2>
-          </div>
-          <div className="skills-grid">
-            {SKILL_GROUPS.map((group, index) => (
-              <article className="skill-group" key={group.title}>
-                <div className="skill-group-title">
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <h3>{group.title}</h3>
-                </div>
-                <ul>
-                  {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <footer className="site-footer">
         <div className="shell footer-profile">
           <div>
@@ -458,9 +397,10 @@ export default function Home() {
         <div className="shell footer-bottom">
           <p>Oakland, California</p>
           <div>
+            <a href="/contact">Contact</a>
+            <a href="mailto:bzeng0000@gmail.com">Email ↗</a>
+            <a href="https://www.linkedin.com/in/brianbzeng" target="_blank" rel="noreferrer">LinkedIn ↗</a>
             <a href="https://github.com/brianbzeng" target="_blank" rel="noreferrer">GitHub ↗</a>
-            <a href="https://nba.brianbzeng.com" target="_blank" rel="noreferrer">NBA app ↗</a>
-            <a href="https://treasury.brianbzeng.com" target="_blank" rel="noreferrer">Treasury app ↗</a>
             <a href="#top">Back to top ↑</a>
           </div>
         </div>
