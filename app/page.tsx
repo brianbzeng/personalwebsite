@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import GitHubPulse from "./components/GitHubPulse";
 import ThemeToggle from "./components/ThemeToggle";
 import f1Forecast from "./data/f1-forecast.json";
 
@@ -147,36 +148,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="signal-map" aria-label="Project signal map">
-          <div className="signal-meta">
-            <span>SELECTED PROJECTS</span>
-            <span>04 PROJECTS</span>
-          </div>
-          <div className="signal-rule signal-rule-one" />
-          <div className="signal-rule signal-rule-two" />
-          <div className="signal-rule signal-rule-three" />
-          <div className="signal-node node-nba">
-            <span>01</span>
-            <strong>NBA</strong>
-            <small>Prediction</small>
-          </div>
-          <div className="signal-node node-treasury">
-            <span>02</span>
-            <strong>TTB</strong>
-            <small>Review</small>
-          </div>
-          <div className="signal-node node-f1">
-            <span>03</span>
-            <strong>F1</strong>
-            <small>Simulation</small>
-          </div>
-          <div className="signal-node node-amazon">
-            <span>04</span>
-            <strong>AMZ</strong>
-            <small>Audit</small>
-          </div>
-          <div className="signal-dot" aria-hidden="true" />
-        </div>
+        <GitHubPulse />
       </section>
 
       <section className="skills-section" id="skills" aria-labelledby="skills-title">
