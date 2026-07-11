@@ -2,11 +2,14 @@
 
 import { useMemo, useState } from "react";
 import ThemeToggle from "./components/ThemeToggle";
+import f1Forecast from "./data/f1-forecast.json";
 
 type OddsMetric = "title" | "top3" | "top5";
 
 type ConstructorOdds = {
   name: string;
+  currentRank: number;
+  currentPoints: number;
   meanRank: number;
   title: number;
   top3: number;
@@ -20,18 +23,7 @@ const ODDS_METRICS: Record<OddsMetric, string> = {
   top5: "Top 5",
 };
 
-const F1_ODDS: ConstructorOdds[] = [
-  { name: "McLaren", meanRank: 1.9318, title: 48.47, top3: 88.52, top5: 99.57, color: "#ff8700" },
-  { name: "Ferrari", meanRank: 2.8744, title: 20.12, top3: 67.79, top5: 95.30, color: "#e8002d" },
-  { name: "Mercedes", meanRank: 3.0366, title: 16.53, top3: 63.99, top5: 94.20, color: "#00a19b" },
-  { name: "Red Bull", meanRank: 3.2916, title: 13.04, top3: 56.43, top5: 91.85, color: "#3154c7" },
-  { name: "Williams", meanRank: 5.2408, title: 1.68, top3: 16.10, top5: 57.90, color: "#00a3e0" },
-  { name: "RB", meanRank: 6.8727, title: 0.10, top3: 3.46, top5: 22.48, color: "#6692ff" },
-  { name: "Aston Martin", meanRank: 7.1826, title: 0.04, top3: 1.96, top5: 17.39, color: "#229971" },
-  { name: "Haas", meanRank: 7.5742, title: 0.02, top3: 1.24, top5: 12.18, color: "#b6babd" },
-  { name: "Sauber", meanRank: 8.1826, title: 0.00, top3: 0.39, top5: 6.35, color: "#52e252" },
-  { name: "Alpine", meanRank: 8.8127, title: 0.00, top3: 0.12, top5: 2.78, color: "#ff87bc" },
-];
+const F1_ODDS: ConstructorOdds[] = f1Forecast.teams;
 
 const SKILL_GROUPS = [
   {
@@ -259,15 +251,14 @@ export default function Home() {
         <div className="shell f1-layout">
           <div className="f1-intro">
             <p className="kicker">03 / Interactive Demo</p>
-            <h2 id="f1-title">2026 Constructors&rsquo; Model Odds</h2>
+            <h2 id="f1-title">2026 Constructors&rsquo; Forecast</h2>
             <p className="f1-lead">
-              Tuned Ridge forecast using 2025 constructor inputs and 10,000
-              residual-resampled simulations.
+              Updated with FastF1 race and Sprint results through the British Grand Prix.
             </p>
             <dl className="model-facts">
-              <div><dt>Model</dt><dd>Tuned Ridge</dd></div>
-              <div><dt>Test RMSE</dt><dd>1.524</dd></div>
-              <div><dt>Simulations</dt><dd>10,000</dd></div>
+              <div><dt>Model</dt><dd>In-season Ridge</dd></div>
+              <div><dt>Test RMSE</dt><dd>{f1Forecast.validationRmse.toFixed(3)}</dd></div>
+              <div><dt>Simulations</dt><dd>{f1Forecast.simulations.toLocaleString()}</dd></div>
             </dl>
             <a
               className="f1-source"
@@ -282,10 +273,12 @@ export default function Home() {
           <div className="predictor odds-panel" aria-label="2026 F1 constructors model forecast">
             <div className="predictor-header">
               <div>
-                <p className="instrument-label">Model snapshot · 2025 inputs</p>
-                <h3>Championship odds</h3>
+                <p className="instrument-label">
+                  In-season update · Round {String(f1Forecast.completedRaces).padStart(2, "0")}/{f1Forecast.totalRaces}
+                </p>
+                <h3>Model probabilities</h3>
               </div>
-              <span className="model-snapshot">10,000 simulations</span>
+              <span className="model-snapshot">Updated Jul 10</span>
             </div>
 
             <div className="odds-toolbar">
@@ -319,7 +312,8 @@ export default function Home() {
                     <th scope="col">#</th>
                     <th scope="col">Constructor</th>
                     <th scope="col">{ODDS_METRICS[oddsMetric]}</th>
-                    <th scope="col">Avg. finish</th>
+                    <th className="odds-points" scope="col">Points</th>
+                    <th className="odds-rank" scope="col">Avg. rank</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -341,7 +335,8 @@ export default function Home() {
                             <strong>{value.toFixed(2)}%</strong>
                           </div>
                         </td>
-                        <td>{team.meanRank.toFixed(2)}</td>
+                        <td className="odds-points">{team.currentPoints}</td>
+                        <td className="odds-rank">{team.meanRank.toFixed(2)}</td>
                       </tr>
                     );
                   })}
@@ -352,10 +347,11 @@ export default function Home() {
             <details className="odds-method">
               <summary>Method &amp; limits</summary>
               <p>
-                Prior-season constructor performance and driver-strength features feed a tuned
-                Ridge model. Probabilities are each team&rsquo;s share of 10,000 residual-resampled
-                simulations. This is a model forecast, not betting odds or a live data feed;
-                2026 regulation changes, Cadillac, and Sauber&rsquo;s Audi transition are not modeled.
+                The Ridge model is trained on historical seasons at the same 40.9% progress point,
+                using points share, current rank, grid and finish position, corrected DNF rate,
+                wins, podiums, and top-10 finishes. Sprint points are included. Probabilities come
+                from {f1Forecast.simulations.toLocaleString()} heldout-residual simulations. These
+                are model estimates, not betting odds or a continuously live feed.
               </p>
             </details>
           </div>

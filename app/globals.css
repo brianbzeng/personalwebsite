@@ -1386,15 +1386,22 @@ input[type="range"]::-moz-range-thumb {
 
 .odds-table thead th:nth-child(3),
 .odds-table tbody td:nth-child(3) {
-  width: 48%;
+  width: 43%;
 }
 
-.odds-table thead th:last-child,
-.odds-table tbody td:last-child {
-  width: 74px;
+.odds-table .odds-points,
+.odds-table .odds-rank {
   color: #a7a8a1;
   font-family: var(--mono);
   text-align: right;
+}
+
+.odds-table .odds-points {
+  width: 58px;
+}
+
+.odds-table .odds-rank {
+  width: 72px;
 }
 
 .constructor-dot {
@@ -1929,6 +1936,7 @@ input[type="range"]::-moz-range-thumb {
   .odds-table th, .odds-table td { padding-inline: 5px; }
   .odds-table tbody th { min-width: 104px; }
   .odds-value { grid-template-columns: minmax(35px, 1fr) 52px; gap: 7px; }
+  .odds-table .odds-rank { display: none; }
 
   .archive-row {
     grid-template-columns: 34px 1fr 25px;
