@@ -81,10 +81,10 @@ const apps = [
   {
     number: "03",
     eyebrow: "Geospatial ML · Research beta",
-    title: "ContourCast",
-    domain: "contourcast.brianbzeng.com",
-    url: "https://contourcast.brianbzeng.com",
-    github: "https://github.com/brianbzeng/contourcast",
+    title: "CastCompass",
+    domain: "castcompass.brianbzeng.com",
+    url: "https://castcompass.brianbzeng.com",
+    github: "https://github.com/brianbzeng/castcompass",
     description:
       "A California halibut planner that ranks public Bay Area fishing spots using bottom structure, seasonality, tides, wind, and water conditions.",
     proof: ["47 public spots", "72-hour outlook", "Trips + skunks"],
