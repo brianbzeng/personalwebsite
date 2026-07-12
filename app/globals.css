@@ -777,6 +777,10 @@ a {
   transform: translateY(-5px);
 }
 
+.app-card.contourcast {
+  grid-column: 1 / -1;
+}
+
 .app-card-link {
   display: block;
   padding: clamp(18px, 2.1vw, 30px);
@@ -1181,6 +1185,144 @@ a {
 .repo-link:hover { color: #121310; background: #fffef9; }
 
 .treasury .repo-link { top: 76px; right: clamp(32px, 3vw, 46px); }
+
+.contourcast-preview {
+  color: #eef7ff;
+  background: #061b37;
+}
+
+.contourcast-preview .preview-chrome {
+  border-color: rgba(166, 216, 242, .22);
+  color: #a6d8f2;
+}
+
+.contourcast-board {
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  gap: 1px;
+  height: 330px;
+  background: rgba(166, 216, 242, .18);
+}
+
+.contour-mini-map {
+  position: relative;
+  overflow: hidden;
+  background:
+    repeating-radial-gradient(ellipse 44% 62% at 18% 112%, transparent 0 27px, rgba(166, 216, 242, .2) 28px 30px, transparent 31px 51px),
+    repeating-radial-gradient(ellipse 54% 42% at 92% 4%, transparent 0 24px, rgba(166, 216, 242, .14) 25px 27px, transparent 28px 47px),
+    linear-gradient(145deg, #0b3768, #071f40 64%, #04162d);
+}
+
+.contour-mini-map::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(5, 21, 43, .1), rgba(5, 21, 43, .62));
+  content: "";
+}
+
+.contour-map-label {
+  position: absolute;
+  z-index: 2;
+  bottom: 22px;
+  left: 22px;
+}
+
+.contour-map-label small {
+  display: block;
+  margin-bottom: 8px;
+  color: #a6d8f2;
+  font-family: var(--mono);
+  font-size: .5rem;
+  letter-spacing: .1em;
+}
+
+.contour-map-label strong {
+  font-size: clamp(1.55rem, 2.3vw, 2.6rem);
+  letter-spacing: -.055em;
+  line-height: .92;
+}
+
+.contour-marker {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 2px solid #eef7ff;
+  border-radius: 50%;
+  color: #061b37;
+  background: #d9f58a;
+  box-shadow: 0 8px 22px rgba(1, 10, 25, .3);
+  font-family: var(--mono);
+  font-size: .61rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.marker-one { top: 22%; left: 25%; }
+.marker-two { top: 48%; left: 56%; background: #9fdccc; }
+.marker-three { top: 18%; right: 14%; background: #c1e8f2; }
+
+.contour-mini-list {
+  padding: 18px;
+  background: #071d35;
+}
+
+.contour-mini-list > p,
+.contour-mini-list > div {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+}
+
+.contour-mini-list > p {
+  grid-template-columns: 1fr auto;
+  margin: 0 0 12px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(166, 216, 242, .2);
+  color: #a6d8f2;
+  font-family: var(--mono);
+  font-size: .46rem;
+  letter-spacing: .08em;
+}
+
+.contour-mini-list > div {
+  min-height: 64px;
+  border-bottom: 1px solid rgba(166, 216, 242, .15);
+}
+
+.contour-mini-list em {
+  color: rgba(238, 247, 255, .45);
+  font-family: var(--mono);
+  font-size: .5rem;
+  font-style: normal;
+}
+
+.contour-mini-list strong {
+  font-size: .72rem;
+}
+
+.contour-mini-list b {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  color: #061b37;
+  background: #d9f58a;
+  font-family: var(--mono);
+  font-size: .6rem;
+}
+
+.contour-mini-list > small {
+  display: block;
+  margin-top: 16px;
+  color: rgba(238, 247, 255, .52);
+  font-family: var(--mono);
+  font-size: .46rem;
+  letter-spacing: .04em;
+}
 
 .f1-section {
   overflow: hidden;
@@ -2040,6 +2182,7 @@ input[type="range"]::-moz-range-thumb {
 
   .app-grid { grid-template-columns: 1fr; }
   .app-card:nth-child(2) { width: 88%; margin-left: auto; }
+  .app-card.contourcast { grid-column: auto; }
 
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -2121,6 +2264,8 @@ input[type="range"]::-moz-range-thumb {
   .nba-board { grid-template-columns: 1fr; height: 275px; }
   .elo-list { display: none; }
   .review-workspace { grid-template-columns: .82fr 1.18fr; height: 250px; }
+  .contourcast-board { grid-template-columns: 1fr; height: 275px; }
+  .contour-mini-list { display: none; }
   .review-results { padding: 9px; }
   .review-results > div { min-height: 44px; font-size: .56rem; }
   .label-art { padding: 10px; }

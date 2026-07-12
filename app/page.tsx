@@ -33,7 +33,7 @@ const SKILL_GROUPS = [
   },
   {
     title: "Libraries & data tools",
-    skills: ["Pandas", "NumPy", "scikit-learn", "PySpark", "Beautiful Soup", "Tidyverse", "Tidymodels", "Git", "Jupyter", "VS Code", "RStudio"],
+    skills: ["Pandas", "NumPy", "scikit-learn", "PyTorch", "Rasterio", "MapLibre", "PySpark", "Beautiful Soup", "Tidyverse", "Tidymodels", "Git", "Jupyter", "VS Code", "RStudio"],
   },
   {
     title: "Data science",
@@ -45,7 +45,7 @@ const SKILL_GROUPS = [
   },
   {
     title: "AI & LLM",
-    skills: ["OpenAI-compatible APIs", "LLM-assisted classification", "Prompt design", "Blinded LLM auditing", "AI evaluation"],
+    skills: ["Deep learning", "Self-supervised learning", "OpenAI-compatible APIs", "LLM-assisted classification", "Prompt design", "Blinded LLM auditing", "AI evaluation"],
   },
   {
     title: "Visualization & reporting",
@@ -77,6 +77,18 @@ const apps = [
       "AI-assisted alcohol-label review with evidence extraction, commodity-aware rules, and three review workflows.",
     proof: ["3 review modes", "Vision + rules", "Human in the loop"],
     theme: "treasury",
+  },
+  {
+    number: "03",
+    eyebrow: "Geospatial ML · Research beta",
+    title: "ContourCast",
+    domain: "contourcast.brianbzeng.com",
+    url: "https://contourcast.brianbzeng.com",
+    github: "https://github.com/brianbzeng/contourcast",
+    description:
+      "A California halibut planner that ranks public Bay Area fishing spots using bottom structure, seasonality, tides, wind, and water conditions.",
+    proof: ["47 public spots", "72-hour outlook", "Trips + skunks"],
+    theme: "contourcast",
   },
 ];
 
@@ -195,7 +207,11 @@ export default function Home() {
                   <span className="live-status"><i /> Live</span>
                 </div>
 
-                {app.theme === "nba" ? <NbaPreview /> : <TreasuryPreview />}
+                {app.theme === "nba"
+                  ? <NbaPreview />
+                  : app.theme === "treasury"
+                    ? <TreasuryPreview />
+                    : <ContourCastPreview />}
 
                 <div className="app-copy">
                   <div>
@@ -417,6 +433,39 @@ function TreasuryPreview() {
           <div><i className="check">✓</i><span>Brand name located</span></div>
           <div><i className="check">✓</i><span>Class / type aligned</span></div>
           <div><i className="warn">!</i><span>Human review suggested</span></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContourCastPreview() {
+  const spots = [
+    ["Pillar Point", "92"],
+    ["Crissy Field", "86"],
+    ["Oyster Point", "81"],
+  ];
+
+  return (
+    <div className="app-preview contourcast-preview" aria-hidden="true">
+      <div className="preview-chrome"><span /><span /><span /><b>BAY AREA · LIVE CONDITIONS</b></div>
+      <div className="contourcast-board">
+        <div className="contour-mini-map">
+          <i className="contour-marker marker-one">92</i>
+          <i className="contour-marker marker-two">86</i>
+          <i className="contour-marker marker-three">81</i>
+          <div className="contour-map-label"><small>CALIFORNIA HALIBUT</small><strong>Find the water<br />worth fishing.</strong></div>
+        </div>
+        <div className="contour-mini-list">
+          <p><span>FISHING SPOTS</span><span>OPPORTUNITY</span></p>
+          {spots.map(([name, score], index) => (
+            <div key={name}>
+              <em>{String(index + 1).padStart(2, "0")}</em>
+              <strong>{name}</strong>
+              <b>{score}</b>
+            </div>
+          ))}
+          <small>Bottom structure · tide · wind · water</small>
         </div>
       </div>
     </div>
