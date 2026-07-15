@@ -16,7 +16,7 @@ export default function ThemeToggle() {
         ? "dark"
         : "light";
 
-    setTheme(initial);
+    const frame = window.requestAnimationFrame(() => setTheme(initial));
     root.dataset.theme = initial;
     root.style.colorScheme = initial;
 
@@ -30,7 +30,10 @@ export default function ThemeToggle() {
     };
 
     media.addEventListener("change", syncWithSystem);
-    return () => media.removeEventListener("change", syncWithSystem);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      media.removeEventListener("change", syncWithSystem);
+    };
   }, []);
 
   function toggleTheme() {

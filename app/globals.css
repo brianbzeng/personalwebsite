@@ -760,13 +760,14 @@ a {
 
 .app-grid {
   display: grid;
-  grid-template-columns: 1.12fr .88fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .app-card {
   position: relative;
+  min-width: 0;
   border: 1px solid var(--line);
   background: var(--surface);
   transition: transform .3s var(--ease), border-color .3s var(--ease);
@@ -777,12 +778,14 @@ a {
   transform: translateY(-5px);
 }
 
-.app-card.contourcast {
+.app-card.castingcompass {
   grid-column: 1 / -1;
 }
 
 .app-card-link {
-  display: block;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
   padding: clamp(18px, 2.1vw, 30px);
 }
 
@@ -1115,11 +1118,38 @@ a {
   line-height: .98;
 }
 
-.app-copy > p {
+.app-summary > p {
   margin: 0;
   color: var(--secondary-copy);
   font-size: .91rem;
   line-height: 1.55;
+}
+
+.app-resume-points {
+  display: grid;
+  gap: 9px;
+  margin: 16px 0 0;
+  padding: 0;
+  color: var(--secondary-copy);
+  font-size: .78rem;
+  line-height: 1.5;
+  list-style: none;
+}
+
+.app-resume-points li {
+  position: relative;
+  padding-left: 15px;
+}
+
+.app-resume-points li::before {
+  position: absolute;
+  top: .62em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #23854a;
+  content: "";
 }
 
 .app-footer {
@@ -1127,7 +1157,7 @@ a {
   align-items: end;
   justify-content: space-between;
   gap: 24px;
-  margin-top: 30px;
+  margin-top: auto;
   padding-top: 18px;
   border-top: 1px solid var(--line);
 }
@@ -1186,17 +1216,17 @@ a {
 
 .treasury .repo-link { top: 76px; right: clamp(32px, 3vw, 46px); }
 
-.contourcast-preview {
+.castingcompass-preview {
   color: #eef7ff;
   background: #061b37;
 }
 
-.contourcast-preview .preview-chrome {
+.castingcompass-preview .preview-chrome {
   border-color: rgba(166, 216, 242, .22);
   color: #a6d8f2;
 }
 
-.contourcast-board {
+.castingcompass-board {
   display: grid;
   grid-template-columns: 1.35fr .65fr;
   gap: 1px;
@@ -2181,8 +2211,7 @@ input[type="range"]::-moz-range-thumb {
   .about-grid .toolkit { grid-column: 2; }
 
   .app-grid { grid-template-columns: 1fr; }
-  .app-card:nth-child(2) { width: 88%; margin-left: auto; }
-  .app-card.contourcast { grid-column: auto; }
+  .app-card.castingcompass { grid-column: auto; }
 
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -2264,7 +2293,7 @@ input[type="range"]::-moz-range-thumb {
   .nba-board { grid-template-columns: 1fr; height: 275px; }
   .elo-list { display: none; }
   .review-workspace { grid-template-columns: .82fr 1.18fr; height: 250px; }
-  .contourcast-board { grid-template-columns: 1fr; height: 275px; }
+  .castingcompass-board { grid-template-columns: 1fr; height: 275px; }
   .contour-mini-list { display: none; }
   .review-results { padding: 9px; }
   .review-results > div { min-height: 44px; font-size: .56rem; }

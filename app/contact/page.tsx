@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ThemeToggle from "../components/ThemeToggle";
 
 export const metadata: Metadata = {
@@ -31,15 +32,15 @@ export default function ContactPage() {
   return (
     <main id="top" className="contact-page">
       <header className="site-header">
-        <a className="brand" href="/" aria-label="Brian Zeng, home">
+        <Link className="brand" href="/" aria-label="Brian Zeng, home">
           <span>BZ</span>
           <span className="brand-index">/ 01</span>
-        </a>
+        </Link>
         <nav aria-label="Primary navigation">
-          <a className="nav-skills" href="/#skills">Skills</a>
-          <a className="nav-projects" href="/#work">Projects</a>
-          <a className="nav-f1" href="/#f1-lab">F1 Demo</a>
-          <a className="nav-contact" href="/contact" aria-current="page">Contact</a>
+          <Link className="nav-skills" href="/#skills">Skills</Link>
+          <Link className="nav-projects" href="/#work">Projects</Link>
+          <Link className="nav-f1" href="/#f1-lab">F1 Demo</Link>
+          <Link className="nav-contact" href="/contact" aria-current="page">Contact</Link>
         </nav>
         <div className="header-actions">
           <ThemeToggle />
@@ -80,7 +81,7 @@ export default function ContactPage() {
 
       <footer className="contact-footer shell">
         <p>Brian Zeng · Oakland, California</p>
-        <a href="/">Back home ←</a>
+        <Link href="/">Back home ←</Link>
       </footer>
     </main>
   );

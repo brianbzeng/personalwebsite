@@ -56,6 +56,23 @@ const SKILL_GROUPS = [
 const apps = [
   {
     number: "01",
+    eyebrow: "Flagship · Full-stack geospatial ML",
+    title: "CastingCompass",
+    domain: "castingcompass.com",
+    url: "https://castingcompass.com",
+    github: "https://github.com/brianbzeng/castingcompass",
+    description:
+      "A production California halibut planner that turns public ocean, weather, bathymetry, and first-party trip data into explainable fishing-window rankings.",
+    bullets: [
+      "Built a mobile-first Next.js and TypeScript PWA with interactive geospatial mapping, responsive data visualization, offline caching, and accessible account workflows.",
+      "Designed Cloudflare Workers APIs, D1 SQL schemas, authentication, 2FA email, scheduled ingestion, data validation, and LLM-assisted moderation for community trip reports.",
+      "Engineered reproducible Python, PyTorch, Rasterio, and scikit-learn pipelines for bathymetry feature extraction, self-supervised deep learning, spatial validation, model evaluation, and MLOps.",
+    ],
+    proof: ["47 public spots", "72-hour forecasts", "Full-stack ML + MLOps"],
+    theme: "castingcompass",
+  },
+  {
+    number: "02",
     eyebrow: "Sports analytics · Live app",
     title: "NBA Odds Predictor",
     domain: "nba.brianbzeng.com",
@@ -67,7 +84,7 @@ const apps = [
     theme: "nba",
   },
   {
-    number: "02",
+    number: "03",
     eyebrow: "Applied AI · Live app",
     title: "TTB Label Review Assistant",
     domain: "treasury.brianbzeng.com",
@@ -77,18 +94,6 @@ const apps = [
       "AI-assisted alcohol-label review with evidence extraction, commodity-aware rules, and three review workflows.",
     proof: ["3 review modes", "Vision + rules", "Human in the loop"],
     theme: "treasury",
-  },
-  {
-    number: "03",
-    eyebrow: "Geospatial ML · Research beta",
-    title: "CastCompass",
-    domain: "castcompass.brianbzeng.com",
-    url: "https://castcompass.brianbzeng.com",
-    github: "https://github.com/brianbzeng/castcompass",
-    description:
-      "A California halibut planner that ranks public Bay Area fishing spots using bottom structure, seasonality, tides, wind, and water conditions.",
-    proof: ["47 public spots", "72-hour outlook", "Trips + skunks"],
-    theme: "contourcast",
   },
 ];
 
@@ -211,14 +216,21 @@ export default function Home() {
                   ? <NbaPreview />
                   : app.theme === "treasury"
                     ? <TreasuryPreview />
-                    : <ContourCastPreview />}
+                    : <CastingCompassPreview />}
 
                 <div className="app-copy">
                   <div>
                     <p className="app-domain">{app.domain}</p>
                     <h3>{app.title}</h3>
                   </div>
-                  <p>{app.description}</p>
+                  <div className="app-summary">
+                    <p>{app.description}</p>
+                    {app.bullets && (
+                      <ul className="app-resume-points" aria-label={`${app.title} technical highlights`}>
+                        {app.bullets.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <div className="app-footer">
                   <ul aria-label={`${app.title} highlights`}>
@@ -439,7 +451,7 @@ function TreasuryPreview() {
   );
 }
 
-function ContourCastPreview() {
+function CastingCompassPreview() {
   const spots = [
     ["Pillar Point", "92"],
     ["Crissy Field", "86"],
@@ -447,9 +459,9 @@ function ContourCastPreview() {
   ];
 
   return (
-    <div className="app-preview contourcast-preview" aria-hidden="true">
+    <div className="app-preview castingcompass-preview" aria-hidden="true">
       <div className="preview-chrome"><span /><span /><span /><b>BAY AREA · LIVE CONDITIONS</b></div>
-      <div className="contourcast-board">
+      <div className="castingcompass-board">
         <div className="contour-mini-map">
           <i className="contour-marker marker-one">92</i>
           <i className="contour-marker marker-two">86</i>
