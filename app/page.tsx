@@ -85,15 +85,15 @@ const apps = [
   },
   {
     number: "03",
-    eyebrow: "Applied AI · Live app",
-    title: "TTB Label Review Assistant",
-    domain: "treasury.brianbzeng.com",
-    url: "https://treasury.brianbzeng.com",
-    github: "https://github.com/brianbzeng/treasurytakehome",
+    eyebrow: "NLP · Human-review triage",
+    title: "Amazon Review Suspicion Audit",
+    domain: "github.com/brianbzeng/amazonmodel",
+    url: "https://github.com/brianbzeng/amazonmodel",
+    github: "https://github.com/brianbzeng/amazonmodel",
     description:
-      "AI-assisted alcohol-label review with evidence extraction, commodity-aware rules, and three review workflows.",
-    proof: ["3 review modes", "Vision + rules", "Human in the loop"],
-    theme: "treasury",
+      "Interpretable NLP pipeline that prioritizes suspicious Amazon reviews for human inspection without claiming to prove deception.",
+    proof: ["900-review audit", "TF-IDF + signals", "Blinded LLM review"],
+    theme: "amazon",
   },
 ];
 
@@ -209,13 +209,13 @@ export default function Home() {
                 <div className="app-topline">
                   <span>{app.number}</span>
                   <span>{app.eyebrow}</span>
-                  <span className="live-status"><i /> Live</span>
+                  <span className="live-status"><i /> {app.theme === "amazon" ? "Repository" : "Live"}</span>
                 </div>
 
                 {app.theme === "nba"
                   ? <NbaPreview />
-                  : app.theme === "treasury"
-                    ? <TreasuryPreview />
+                  : app.theme === "amazon"
+                    ? <AmazonPreview />
                     : <CastingCompassPreview />}
 
                 <div className="app-copy">
@@ -236,7 +236,7 @@ export default function Home() {
                   <ul aria-label={`${app.title} highlights`}>
                     {app.proof.map((item) => <li key={item}>{item}</li>)}
                   </ul>
-                  <span className="launch-link">Open app <b aria-hidden="true">↗</b></span>
+                  <span className="launch-link">{app.theme === "amazon" ? "Open project" : "Open app"} <b aria-hidden="true">↗</b></span>
                 </div>
               </a>
               <a className="repo-link" href={app.github} target="_blank" rel="noreferrer">
@@ -361,22 +361,22 @@ export default function Home() {
       <section className="archive-section shell" aria-labelledby="archive-title">
         <div className="section-heading compact">
           <p className="kicker">04 / Other Project</p>
-          <h2 id="archive-title">Amazon Review Classification</h2>
+          <h2 id="archive-title">TTB Label Review Assistant</h2>
         </div>
         <a
           className="archive-row"
-          href="https://github.com/brianbzeng/amazonmodel"
+          href="https://treasury.brianbzeng.com"
           target="_blank"
           rel="noreferrer"
         >
           <span className="archive-number">04</span>
           <div>
-            <p>Classification · NLP · Audit design</p>
-            <h3>Amazon Review Suspicion Audit</h3>
+            <p>Applied AI · Evidence extraction · Decision support</p>
+            <h3>TTB Label Review Assistant</h3>
           </div>
           <p className="archive-description">
-            NLP pipeline for 2023 Amazon reviews using TF-IDF, engineered signals,
-            and a blinded LLM audit.
+            AI-assisted alcohol-label review with commodity-aware rules,
+            evidence extraction, and three human-in-the-loop workflows.
           </p>
           <span className="archive-arrow" aria-hidden="true">↗</span>
         </a>
@@ -432,19 +432,19 @@ function NbaPreview() {
   );
 }
 
-function TreasuryPreview() {
+function AmazonPreview() {
   return (
-    <div className="app-preview treasury-preview" aria-hidden="true">
-      <div className="ttb-header"><span>TTB LABEL REVIEW</span><b>DECISION SUPPORT ONLY</b></div>
+    <div className="app-preview treasury-preview amazon-preview" aria-hidden="true">
+      <div className="ttb-header"><span>AMAZON REVIEW AUDIT</span><b>HUMAN REVIEW TRIAGE</b></div>
       <div className="review-workspace">
         <div className="label-art">
-          <span>BARREL No. 8</span><strong>NORTH COAST</strong><i>45% ALC / VOL</i>
+          <span>REVIEW SAMPLE</span><strong>“Five stars.<br />Works great!”</strong><i>TEXT EVIDENCE · RATING 5/5</i>
         </div>
         <div className="review-results">
-          <p>REVIEW SIGNALS <span>5 / 6</span></p>
-          <div><i className="check">✓</i><span>Brand name located</span></div>
-          <div><i className="check">✓</i><span>Class / type aligned</span></div>
-          <div><i className="warn">!</i><span>Human review suggested</span></div>
+          <p>SUSPICION SIGNALS <span>3 FOUND</span></p>
+          <div><i className="warn">!</i><span>Low-detail language</span></div>
+          <div><i className="warn">!</i><span>Generic promotional phrasing</span></div>
+          <div><i className="check">✓</i><span>Queue for blinded audit</span></div>
         </div>
       </div>
     </div>

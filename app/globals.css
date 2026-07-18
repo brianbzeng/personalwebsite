@@ -1125,12 +1125,35 @@ a {
 .review-results .check { color: #fff; background: #2b6f4c; }
 .review-results .warn { color: #443100; background: #ffbe2e; }
 
+.amazon-preview { background: #f1eee5; }
+.amazon-preview .ttb-header { background: #20211e; }
+.amazon-preview .label-art { background: #f8f1df; }
+
+.amazon-preview .label-art::before {
+  content: "A+";
+  color: #b24721;
+  border-color: #b24721;
+  font-family: var(--mono);
+  font-size: .8rem;
+}
+
+.amazon-preview .label-art strong {
+  color: #302b23;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.amazon-preview .review-results .check { background: #b24721; }
+
 .app-copy {
   display: grid;
   grid-template-columns: 1fr 1.04fr;
   gap: 34px;
   margin-top: 28px;
 }
+
+.app-card:not(.castingcompass) .app-copy { margin-bottom: 24px; }
 
 .app-domain {
   margin: 0 0 7px;
@@ -1159,7 +1182,7 @@ a {
 .app-resume-points {
   display: grid;
   gap: 9px;
-  margin: 16px 0 12px;
+  margin: 16px 0;
   padding: 0;
   color: var(--secondary-copy);
   font-size: .78rem;
