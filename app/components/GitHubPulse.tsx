@@ -4,9 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const GITHUB_USERNAME = "brianbzeng";
 const ACTIVITY_DAYS = 28;
-const EVENTS_PER_PAGE = 100;
-const MAX_EVENT_PAGES = 3;
-const CACHE_KEY = "bz-github-activity-v2";
+const CACHE_KEY = "bz-github-activity-v3";
 const CACHE_TTL = 30 * 60 * 1000;
 const CHART_WIDTH = 560;
 const CHART_HEIGHT = 178;
@@ -40,12 +38,17 @@ type ActivityItem = {
 type ActivitySource = "loading" | "live" | "snapshot";
 
 type GitHubActivity = {
-  daily: number[];
+  daily: ContributionDay[];
   total: number | null;
   repoCount: number | null;
   latest: string;
   recent: ActivityItem[];
   source: ActivitySource;
+};
+
+type ContributionDay = {
+  date: string;
+  count: number;
 };
 
 type CachedActivity = {
@@ -60,7 +63,7 @@ type ChartPoint = {
 };
 
 const EMPTY_ACTIVITY: GitHubActivity = {
-  daily: Array.from({ length: ACTIVITY_DAYS }, () => 0),
+  daily: Array.from({ length: ACTIVITY_DAYS }, () => ({ date: "", count: 0 })),
   total: null,
   repoCount: null,
   latest: "Syncing",
@@ -69,7 +72,8 @@ const EMPTY_ACTIVITY: GitHubActivity = {
 };
 
 const SNAPSHOT_ACTIVITY: GitHubActivity = {
-  daily: [0, 0, 0, 0, 25, 8, 6, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 6, 27, 10],
+  daily: [0, 0, 0, 0, 25, 8, 6, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 6, 27, 10]
+    .map((count) => ({ date: "", count })),
   total: 88,
   repoCount: 3,
   latest: "Jul 11",
@@ -151,19 +155,7 @@ function describeEvent(event: GitHubEvent) {
   }
 }
 
-function eventContributionCount(event: GitHubEvent) {
-  if (event.type !== "PushEvent") return 1;
-
-  return Math.max(
-    event.payload?.distinct_size
-      ?? event.payload?.size
-      ?? event.payload?.commits?.length
-      ?? 1,
-    1,
-  );
-}
-
-function buildActivity(events: GitHubEvent[]): GitHubActivity {
+function buildActivity(events: GitHubEvent[], daily: ContributionDay[]): GitHubActivity {
   const now = new Date();
   const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
   const days = Array.from({ length: ACTIVITY_DAYS }, (_, index) => {
@@ -172,15 +164,9 @@ function buildActivity(events: GitHubEvent[]): GitHubActivity {
     return dateKey(day);
   });
   const dayIndex = new Map(days.map((day, index) => [day, index]));
-  const daily = Array.from({ length: ACTIVITY_DAYS }, () => 0);
   const windowEvents = events
     .filter((event) => dayIndex.has(event.created_at.slice(0, 10)))
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
-
-  windowEvents.forEach((event) => {
-    const index = dayIndex.get(event.created_at.slice(0, 10));
-    if (index !== undefined) daily[index] += eventContributionCount(event);
-  });
 
   const recent: ActivityItem[] = [];
   const seen = new Set<string>();
@@ -201,7 +187,7 @@ function buildActivity(events: GitHubEvent[]): GitHubActivity {
 
   return {
     daily,
-    total: daily.reduce((sum, value) => sum + value, 0),
+    total: daily.reduce((sum, day) => sum + day.count, 0),
     repoCount: new Set(windowEvents.map((event) => event.repo.name)).size,
     latest: windowEvents[0] ? relativeTime(windowEvents[0].created_at, now) : "Quiet",
     recent,
@@ -220,20 +206,27 @@ function isCachedActivity(value: unknown): value is CachedActivity {
   );
 }
 
-function chartPoints(values: number[]): ChartPoint[] {
-  const maxValue = Math.max(...values, 1);
+function chartPoints(days: ContributionDay[]): ChartPoint[] {
+  const maxValue = Math.max(...days.map((day) => day.count), 1);
   const usableWidth = CHART_WIDTH - CHART_PAD_X * 2;
   const usableHeight = CHART_HEIGHT - CHART_PAD_Y * 2;
 
-  return values.map((value, index) => ({
-    x: CHART_PAD_X + (index / Math.max(values.length - 1, 1)) * usableWidth,
-    y: CHART_HEIGHT - CHART_PAD_Y - (value / maxValue) * usableHeight,
-    value,
+  return days.map((day, index) => ({
+    x: CHART_PAD_X + (index / Math.max(days.length - 1, 1)) * usableWidth,
+    y: CHART_HEIGHT - CHART_PAD_Y - (day.count / maxValue) * usableHeight,
+    value: day.count,
   }));
+}
+
+function tooltipDate(value: string) {
+  if (!value) return "Recent date";
+  const [year, month, day] = value.split("-");
+  return `${month}/${day}/${year.slice(-2)}`;
 }
 
 export default function GitHubPulse() {
   const [activity, setActivity] = useState<GitHubActivity>(EMPTY_ACTIVITY);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const points = useMemo(() => chartPoints(activity.daily), [activity.daily]);
   const linePoints = points.map((point) => `${point.x},${point.y}`).join(" ");
   const areaPoints = `${CHART_PAD_X},${CHART_HEIGHT - CHART_PAD_Y} ${linePoints} ${CHART_WIDTH - CHART_PAD_X},${CHART_HEIGHT - CHART_PAD_Y}`;
@@ -264,31 +257,19 @@ export default function GitHubPulse() {
           }
         }
 
-        const windowStart = new Date();
-        windowStart.setUTCDate(windowStart.getUTCDate() - (ACTIVITY_DAYS - 1));
-        windowStart.setUTCHours(0, 0, 0, 0);
-        const events: GitHubEvent[] = [];
-
-        for (let page = 1; page <= MAX_EVENT_PAGES; page += 1) {
-          const response = await fetch(
-            `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=${EVENTS_PER_PAGE}&page=${page}`,
-            { signal: controller.signal },
-          );
-          if (!response.ok) throw new Error(`GitHub responded with ${response.status}`);
-
-          const pageEvents = await response.json() as GitHubEvent[];
-          events.push(...pageEvents);
-
-          const oldestEvent = pageEvents.at(-1);
-          if (
-            pageEvents.length < EVENTS_PER_PAGE
-            || (oldestEvent && new Date(oldestEvent.created_at) < windowStart)
-          ) {
-            break;
-          }
+        const [contributionsResponse, eventsResponse] = await Promise.all([
+          fetch("/api/github-contributions", { signal: controller.signal }),
+          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`, {
+            signal: controller.signal,
+          }),
+        ]);
+        if (!contributionsResponse.ok || !eventsResponse.ok) {
+          throw new Error("GitHub activity could not be loaded");
         }
 
-        const nextActivity = buildActivity(events);
+        const contributions = await contributionsResponse.json() as { daily: ContributionDay[] };
+        const events = await eventsResponse.json() as GitHubEvent[];
+        const nextActivity = buildActivity(events, contributions.daily);
         setActivity(nextActivity);
         try {
           window.localStorage.setItem(
@@ -373,7 +354,32 @@ export default function GitHubPulse() {
                 <circle className="github-chart-dot" cx={latestPoint.x} cy={latestPoint.y} r="4.5" />
               </>
             )}
+            {points.map((point, index) => (
+              <circle
+                key={activity.daily[index]?.date || index}
+                className="github-chart-hit"
+                cx={point.x}
+                cy={point.y}
+                r="10"
+                tabIndex={0}
+                role="button"
+                aria-label={`${tooltipDate(activity.daily[index]?.date)} — ${point.value} ${point.value === 1 ? "contribution" : "contributions"}`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onFocus={() => setHoveredIndex(index)}
+                onBlur={() => setHoveredIndex(null)}
+              />
+            ))}
           </svg>
+          {hoveredIndex !== null && points[hoveredIndex] && (
+            <div
+              className="github-chart-tooltip"
+              style={{ left: `${(points[hoveredIndex].x / CHART_WIDTH) * 100}%` }}
+              role="status"
+            >
+              {tooltipDate(activity.daily[hoveredIndex]?.date)} – {points[hoveredIndex].value} {points[hoveredIndex].value === 1 ? "contribution" : "contributions"}
+            </div>
+          )}
         </div>
         <div className="github-chart-axis" aria-hidden="true">
           <span>4 weeks ago</span>
