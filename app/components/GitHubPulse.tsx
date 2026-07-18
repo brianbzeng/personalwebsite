@@ -4,7 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 
 const GITHUB_USERNAME = "brianbzeng";
 const ACTIVITY_DAYS = 28;
-const CACHE_KEY = "bz-github-activity-v1";
+const EVENTS_PER_PAGE = 100;
+const MAX_EVENT_PAGES = 3;
+const CACHE_KEY = "bz-github-activity-v2";
 const CACHE_TTL = 30 * 60 * 1000;
 const CHART_WIDTH = 560;
 const CHART_HEIGHT = 178;
@@ -18,9 +20,12 @@ type GitHubEvent = {
   repo: { name: string };
   payload?: {
     action?: string;
+    commits?: unknown[];
+    distinct_size?: number;
     number?: number;
     ref?: string | null;
     ref_type?: string | null;
+    size?: number;
   };
 };
 
@@ -146,6 +151,18 @@ function describeEvent(event: GitHubEvent) {
   }
 }
 
+function eventContributionCount(event: GitHubEvent) {
+  if (event.type !== "PushEvent") return 1;
+
+  return Math.max(
+    event.payload?.distinct_size
+      ?? event.payload?.size
+      ?? event.payload?.commits?.length
+      ?? 1,
+    1,
+  );
+}
+
 function buildActivity(events: GitHubEvent[]): GitHubActivity {
   const now = new Date();
   const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
@@ -162,7 +179,7 @@ function buildActivity(events: GitHubEvent[]): GitHubActivity {
 
   windowEvents.forEach((event) => {
     const index = dayIndex.get(event.created_at.slice(0, 10));
-    if (index !== undefined) daily[index] += 1;
+    if (index !== undefined) daily[index] += eventContributionCount(event);
   });
 
   const recent: ActivityItem[] = [];
@@ -247,13 +264,30 @@ export default function GitHubPulse() {
           }
         }
 
-        const response = await fetch(
-          `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`,
-          { signal: controller.signal },
-        );
-        if (!response.ok) throw new Error(`GitHub responded with ${response.status}`);
+        const windowStart = new Date();
+        windowStart.setUTCDate(windowStart.getUTCDate() - (ACTIVITY_DAYS - 1));
+        windowStart.setUTCHours(0, 0, 0, 0);
+        const events: GitHubEvent[] = [];
 
-        const events = await response.json() as GitHubEvent[];
+        for (let page = 1; page <= MAX_EVENT_PAGES; page += 1) {
+          const response = await fetch(
+            `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=${EVENTS_PER_PAGE}&page=${page}`,
+            { signal: controller.signal },
+          );
+          if (!response.ok) throw new Error(`GitHub responded with ${response.status}`);
+
+          const pageEvents = await response.json() as GitHubEvent[];
+          events.push(...pageEvents);
+
+          const oldestEvent = pageEvents.at(-1);
+          if (
+            pageEvents.length < EVENTS_PER_PAGE
+            || (oldestEvent && new Date(oldestEvent.created_at) < windowStart)
+          ) {
+            break;
+          }
+        }
+
         const nextActivity = buildActivity(events);
         setActivity(nextActivity);
         try {
@@ -295,7 +329,7 @@ export default function GitHubPulse() {
 
       <dl className="github-stats">
         <div>
-          <dt>Public events · 28d</dt>
+          <dt>Public contributions · 28d</dt>
           <dd>{activity.total ?? "—"}</dd>
         </div>
         <div>
@@ -310,7 +344,7 @@ export default function GitHubPulse() {
 
       <div className="github-chart-block">
         <div className="github-chart-meta">
-          <span>Public event volume</span>
+          <span>Public contribution volume</span>
           <span>Last 28 days</span>
         </div>
         <div className="github-chart">
@@ -322,7 +356,7 @@ export default function GitHubPulse() {
           >
             <title id="github-chart-title">GitHub public activity over the last 28 days</title>
             <desc id="github-chart-description">
-              {activity.total ?? 0} public events across {activity.repoCount ?? 0} repositories.
+              {activity.total ?? 0} public contributions across {activity.repoCount ?? 0} repositories.
             </desc>
             <line className="github-chart-grid" x1="0" x2={CHART_WIDTH} y1="14" y2="14" />
             <line className="github-chart-grid" x1="0" x2={CHART_WIDTH} y1="89" y2="89" />
