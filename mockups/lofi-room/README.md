@@ -124,4 +124,10 @@ This refinement adds a continuous lower rail to connect the recessed dividers, r
 
 ![Rainy-night connected vinyl rack v20](./rainy-night-anime-v20.png)
 
+## Rainy night — completed front support v21
+
+This refinement adds the missing complete triangle in front of the red sleeve and strengthens the single continuous lower rail connecting every recessed divider through the far end of the holder.
+
+![Rainy-night completed front support v21](./rainy-night-anime-v21.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
