@@ -28,4 +28,10 @@ This refinement balances the lower cabinet doors, replaces the lower-shelf clutt
 
 ![Rainy-night anime repaint v4](./rainy-night-anime-v4.png)
 
+## Rainy night — anime repaint v5
+
+This refinement cleans the walls, replaces the headboard clutter with one digital alarm clock, removes the headphone cable, fills the second-highest shelf with coordinated book series, and turns the vinyl holder into a dense, geometrically consistent wall of colorful LP sleeves.
+
+![Rainy-night anime repaint v5](./rainy-night-anime-v5.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
