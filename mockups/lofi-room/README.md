@@ -100,4 +100,10 @@ This rebuild restores crisp anime linework, smooth cel-shaded color, and readabl
 
 ![Rainy-night anime quality rebuild v16](./rainy-night-anime-v16.png)
 
+## Rainy night — accessory and rack refinement v17
+
+This refinement removes the headphone cable, rebuilds the keyboard and mouse as coherent wireless accessories, centers the visible album artwork in perspective, and spaces five pronounced rack triangles evenly across four record bays.
+
+![Rainy-night accessory and rack refinement v17](./rainy-night-anime-v17.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
