@@ -70,4 +70,10 @@ This refinement substantially downsizes and recenters the left-facing brick scoo
 
 ![Rainy-night anime repaint v11](./rainy-night-anime-v11.png)
 
+## Rainy night — anime repaint v12
+
+This refinement moves the widened record holder deeper into its shelf cubby and presents the player-facing first sleeve as a clearly visible square album cover, with the remaining records receding behind it.
+
+![Rainy-night anime repaint v12](./rainy-night-anime-v12.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
