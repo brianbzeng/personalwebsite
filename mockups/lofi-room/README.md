@@ -58,4 +58,10 @@ This refinement rotates both the vinyl rack and pale-blue brick scooter 90 degre
 
 ![Rainy-night anime repaint v9](./rainy-night-anime-v9.png)
 
+## Rainy night — anime repaint v10
+
+This refinement keeps the vinyl-holder frame fixed while rotating its sleeves to face the record player, then turns the pale-blue brick scooter another 90 degrees into a left-facing side profile.
+
+![Rainy-night anime repaint v10](./rainy-night-anime-v10.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
