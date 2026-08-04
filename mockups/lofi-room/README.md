@@ -34,4 +34,10 @@ This refinement cleans the walls, replaces the headboard clutter with one digita
 
 ![Rainy-night anime repaint v5](./rainy-night-anime-v5.png)
 
+## Rainy night — anime repaint v6
+
+This refinement restores the original upper-shelf arrangement and V2 city view, gives the novel shelf a muted blank-spine palette, completes the vinyl sleeves below the retaining rail, and replaces the character collectibles with cherry-blossom bonsai and pale-blue scooter brick builds.
+
+![Rainy-night anime repaint v6](./rainy-night-anime-v6.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
