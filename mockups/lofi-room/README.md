@@ -112,4 +112,10 @@ This refinement returns to V16's simpler holder direction and reduces the vinyl 
 
 ![Rainy-night simplified vinyl rack v18](./rainy-night-anime-v18.png)
 
+## Rainy night — recessed edge-on rack v19
+
+This refinement turns the dividers perpendicular to the cubby's back wall, recesses the complete vinyl assembly into the rear of the shelf, and reduces the visible wirework to subtle lower corners between the sleeves.
+
+![Rainy-night recessed edge-on rack v19](./rainy-night-anime-v19.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
