@@ -94,4 +94,10 @@ This refinement leaves only the player-side triangle fully visible, buries the i
 
 ![Rainy-night anime repaint v15](./rainy-night-anime-v15.png)
 
+## Rainy night — anime quality rebuild v16
+
+This rebuild restores crisp anime linework, smooth cel-shaded color, and readable LEGO construction details. It also recesses the vinyl stack safely into the shelf and clarifies three softly lit internal divider indents between the lead and end triangles.
+
+![Rainy-night anime quality rebuild v16](./rainy-night-anime-v16.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
