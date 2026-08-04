@@ -88,4 +88,10 @@ This refinement replaces the complex vinyl holder with a minimal wire rack: one 
 
 ![Rainy-night anime repaint v14](./rainy-night-anime-v14.png)
 
+## Rainy night — anime repaint v15
+
+This refinement leaves only the player-side triangle fully visible, buries the internal dividers inside wider browsing gaps between grouped records, and places the final divider outside the far end of the stack.
+
+![Rainy-night anime repaint v15](./rainy-night-anime-v15.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
