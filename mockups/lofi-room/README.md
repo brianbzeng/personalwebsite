@@ -16,4 +16,10 @@ This refinement preserves the rainy-night composition, moves the left speaker in
 
 ![Rainy-night anime repaint v2](./rainy-night-anime-v2.png)
 
+## Rainy night — anime repaint v3
+
+This refinement gives the records a physically supported metal A-frame holder, simplifies the under-desk wiring, enlarges the desktop PC tower, and pushes the entire scene farther toward graphic hand-drawn anime rendering.
+
+![Rainy-night anime repaint v3](./rainy-night-anime-v3.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
