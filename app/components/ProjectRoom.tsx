@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { PROJECTS } from "../data/projects";
 
 type SpillPhase = "shelf" | "spilling" | "spilled";
@@ -37,6 +37,7 @@ function playTone(enabled: boolean, type: "click" | "spill" | "flip") {
 export default function ProjectRoom() {
   const [phase, setPhase] = useState<SpillPhase>("shelf");
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [camera, setCamera] = useState({ x: 0, y: 0 });
   const timer = useRef<number | null>(null);
 
   useEffect(() => () => {
@@ -53,6 +54,14 @@ export default function ProjectRoom() {
   function replaySpill() {
     setPhase("shelf");
     window.requestAnimationFrame(() => spillRecords());
+  }
+
+  function trackRoom(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "touch") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
+    const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2;
+    setCamera({ x: Math.max(-10, Math.min(10, x * 10)), y: Math.max(-7, Math.min(7, y * 7)) });
   }
 
   return (
@@ -87,8 +96,23 @@ export default function ProjectRoom() {
           </p>
         </div>
 
-        <div className={`record-room phase-${phase}`}>
-          <div className="room-grid" aria-hidden="true" />
+        <div
+          className={`record-room phase-${phase}`}
+          onPointerMove={trackRoom}
+          onPointerLeave={() => setCamera({ x: 0, y: 0 })}
+          style={{ "--camera-x": `${camera.x}px`, "--camera-y": `${camera.y}px` } as CSSProperties}
+        >
+          <div className="room-depth room-depth-back" aria-hidden="true">
+            <div className="room-back-wall" />
+            <div className="room-light-beam room-light-beam-left" />
+            <div className="room-light-beam room-light-beam-right" />
+          </div>
+          <div className="room-depth room-depth-mid" aria-hidden="true">
+            <div className="room-grid" />
+            <div className="room-plinth" />
+          </div>
+          <div className="room-orb room-orb-left" aria-hidden="true" />
+          <div className="room-orb room-orb-right" aria-hidden="true" />
           <div className="room-sign" aria-hidden="true"><span>ARCHIVE</span><b>05</b></div>
           <div className="room-cable cable-one" aria-hidden="true" />
           <div className="room-cable cable-two" aria-hidden="true" />
