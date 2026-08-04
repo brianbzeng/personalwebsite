@@ -142,4 +142,10 @@ This version returns directly to V21, keeps its vinyl sleeves and triangle geome
 
 ![Rainy-night V21 rail-only correction v23](./rainy-night-anime-v23.png)
 
+## Rainy night — completed vinyl holder rails v24
+
+This handoff keeps the approved full-room composition and completes the vinyl holder with the short front support bar and the long lower rail connecting its triangular dividers.
+
+![Rainy-night completed vinyl holder rails v24](./rainy-night-anime-v24.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
