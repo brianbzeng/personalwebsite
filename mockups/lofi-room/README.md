@@ -130,4 +130,10 @@ This refinement adds the missing complete triangle in front of the red sleeve an
 
 ![Rainy-night completed front support v21](./rainy-night-anime-v21.png)
 
+## Rainy night — detail restoration v22
+
+This refinement completes the holder with a short transverse base under the front triangle and a separate full-length connecting rail, while restoring crisp brick construction, coherent desk accessories, sharper books, defined leaves, and clean anime linework throughout the room.
+
+![Rainy-night detail restoration v22](./rainy-night-anime-v22.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
