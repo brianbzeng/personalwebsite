@@ -1,5 +1,5 @@
-import OfficeScene from "./components/OfficeScene";
+import VinylPortfolio from "./components/VinylPortfolio";
 
 export default function Home() {
-  return <OfficeScene />;
+  return <VinylPortfolio />;
 }

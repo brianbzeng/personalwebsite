@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Brian Zeng / Neon Cabinet",
-  description: "An interactive portfolio of data, software, and applied AI projects by Brian Zeng.",
+  title: "Brian Zeng / Project Archive",
+  description: "A three-dimensional project archive of data, software, and applied AI work by Brian Zeng.",
   metadataBase: new URL("https://brianbzeng.com"),
   openGraph: {
-    title: "Brian Zeng / Neon Cabinet",
-    description: "An interactive portfolio of data, software, and applied AI projects.",
+    title: "Brian Zeng / Project Archive",
+    description: "A three-dimensional project archive of data, software, and applied AI projects.",
     type: "website",
     images: [{ url: "/og.png", width: 1733, height: 908, alt: "Brian Zeng Neon Cabinet portfolio" }],
   },

@@ -1,5 +1,5 @@
-import ProjectRoom from "../components/ProjectRoom";
+import VinylPortfolio from "../components/VinylPortfolio";
 
 export default function ProjectsPage() {
-  return <ProjectRoom />;
+  return <VinylPortfolio />;
 }
