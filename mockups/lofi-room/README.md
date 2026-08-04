@@ -64,4 +64,10 @@ This refinement keeps the vinyl-holder frame fixed while rotating its sleeves to
 
 ![Rainy-night anime repaint v10](./rainy-night-anime-v10.png)
 
+## Rainy night — anime repaint v11
+
+This refinement substantially downsizes and recenters the left-facing brick scooter, then rebuilds the record holder as a straight left-to-right metal frame with its end supports facing the player and shelf wall.
+
+![Rainy-night anime repaint v11](./rainy-night-anime-v11.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
