@@ -46,4 +46,10 @@ This refinement rebuilds the vinyl storage as a freestanding black metal rack ca
 
 ![Rainy-night anime repaint v7](./rainy-night-anime-v7.png)
 
+## Rainy night — anime repaint v8
+
+This refinement rotates the vinyl rack into parallel alignment with the turntable, gives its exposed end jacket the supplied crimson pixel-art album cover, and strengthens the bonsai's visible brick seams, studs, plates, and connectors.
+
+![Rainy-night anime repaint v8](./rainy-night-anime-v8.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
