@@ -82,4 +82,10 @@ This refinement repairs the protruding record shelf so it sits flush with the sh
 
 ![Rainy-night anime repaint v13](./rainy-night-anime-v13.png)
 
+## Rainy night — anime repaint v14
+
+This refinement replaces the complex vinyl holder with a minimal wire rack: one triangular divider holds the first red sleeve, with four matching dividers placed in small browsing gaps between groups of approximately four records.
+
+![Rainy-night anime repaint v14](./rainy-night-anime-v14.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
