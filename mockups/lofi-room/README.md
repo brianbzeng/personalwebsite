@@ -136,4 +136,10 @@ This refinement completes the holder with a short transverse base under the fron
 
 ![Rainy-night detail restoration v22](./rainy-night-anime-v22.png)
 
+## Rainy night — V21 rail-only correction v23
+
+This version returns directly to V21, keeps its vinyl sleeves and triangle geometry unchanged, and adds only the short front-triangle base segment plus the continuous lower rail connecting all supports.
+
+![Rainy-night V21 rail-only correction v23](./rainy-night-anime-v23.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
