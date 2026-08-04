@@ -40,4 +40,10 @@ This refinement restores the original upper-shelf arrangement and V2 city view, 
 
 ![Rainy-night anime repaint v6](./rainy-night-anime-v6.png)
 
+## Rainy night — anime repaint v7
+
+This refinement rebuilds the vinyl storage as a freestanding black metal rack carrying a dense diagonal block of full LP jackets, scales down both brick displays, and rotates the pale-blue scooter into a clean side profile.
+
+![Rainy-night anime repaint v7](./rainy-night-anime-v7.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
