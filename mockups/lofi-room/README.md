@@ -52,4 +52,10 @@ This refinement rotates the vinyl rack into parallel alignment with the turntabl
 
 ![Rainy-night anime repaint v8](./rainy-night-anime-v8.png)
 
+## Rainy night — anime repaint v9
+
+This refinement rotates both the vinyl rack and pale-blue brick scooter 90 degrees counterclockwise in their shelf planes, preserving their construction while presenting new front-to-back orientations.
+
+![Rainy-night anime repaint v9](./rainy-night-anime-v9.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
