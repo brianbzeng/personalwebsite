@@ -106,4 +106,10 @@ This refinement removes the headphone cable, rebuilds the keyboard and mouse as 
 
 ![Rainy-night accessory and rack refinement v17](./rainy-night-anime-v17.png)
 
+## Rainy night — simplified vinyl rack v18
+
+This refinement returns to V16's simpler holder direction and reduces the vinyl wall into four sparse, evenly separated groups around five readable triangular wire supports.
+
+![Rainy-night simplified vinyl rack v18](./rainy-night-anime-v18.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
