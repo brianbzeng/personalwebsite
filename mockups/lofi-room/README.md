@@ -118,4 +118,10 @@ This refinement turns the dividers perpendicular to the cubby's back wall, reces
 
 ![Rainy-night recessed edge-on rack v19](./rainy-night-anime-v19.png)
 
+## Rainy night — connected vinyl rack v20
+
+This refinement adds a continuous lower rail to connect the recessed dividers, restores matching end triangles on both sides of the vinyl stack, and centers each support peak on the sleeve depth.
+
+![Rainy-night connected vinyl rack v20](./rainy-night-anime-v20.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
