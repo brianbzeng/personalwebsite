@@ -22,4 +22,10 @@ This refinement gives the records a physically supported metal A-frame holder, s
 
 ![Rainy-night anime repaint v3](./rainy-night-anime-v3.png)
 
+## Rainy night — anime repaint v4
+
+This refinement balances the lower cabinet doors, replaces the lower-shelf clutter with four comic-themed chibi collectibles, corrects the vinyl sleeves into rigid square planes, and commits more strongly to bold outlines and flat anime cel shading.
+
+![Rainy-night anime repaint v4](./rainy-night-anime-v4.png)
+
 Both directions use the same room structure: record-player shelf on the left, desk and monitor in the center, framed artwork above the desk, window on the right, and bed in the foreground.
