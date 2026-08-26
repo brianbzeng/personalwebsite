@@ -1,0 +1,26 @@
+{
+  "source": "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\lofi-room-rebuild-v06-rainy-neighborhood.blend",
+  "output": "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\lofi-room-rebuild-v08-rainy-suburb.blend",
+  "houses": 2,
+  "detached": true,
+  "trees": 4,
+  "cars": 2,
+  "rain_streaks": 82,
+  "master_timeline": [
+    1,
+    240
+  ],
+  "fps": 24,
+  "lightning_peaks": [
+    48,
+    172
+  ],
+  "design": "One broad suburban home per room window, independent front yards, visible side gates, broad driveways, and a right-window parked car.",
+  "renders": [
+    "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\rebuild-v08-rainy-suburb-hero.png",
+    "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\rebuild-v08-rainy-suburb-normal.png",
+    "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\rebuild-v08-rainy-suburb-lightning.png",
+    "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\rebuild-v08-left-window.png",
+    "C:\\Users\\Brian Zeng\\Documents\\Codex\\2026-08-07\\c-users-brian-zeng-documents-codex-3\\outputs\\blender\\rebuild-v08-right-window.png"
+  ]
+}
