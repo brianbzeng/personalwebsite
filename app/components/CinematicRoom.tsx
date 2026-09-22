@@ -10,6 +10,7 @@ import {driveTransitionRate,SCENE_MOTION} from './sceneMotion';
 import PolaroidPulse from './PolaroidPulse';
 import DiplomaEnlargement from './DiplomaEnlargement';
 import ActivityCues from './ActivityCues';
+import { ManicLettering } from './HandwrittenCue';
 import {createCueVisitState} from './cueVisitState';
 import './mobileRoom.css';
 
@@ -270,6 +271,17 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
 
       {phase === "room" && <footer className="cinematic-controls">
         <span>Brian Zeng</span>
+        <button type="button" className="cinematic-new" aria-label="New! Open Notes on the monitor" title="New — Notes on the monitor"
+          onPointerEnter={() => hover("approach")} onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor}>
+          <svg viewBox="0 0 230 132" aria-hidden="true" focusable="false">
+            <g className="cinematic-new-float">
+              <g transform="rotate(-6 118 62)">
+                <ManicLettering text="New!" x={118} y={58} seed="room-new-notes" />
+                <path className="cinematic-new-underline" d="M60 78C92 88 148 86 178 74" />
+              </g>
+            </g>
+          </svg>
+        </button>
         <nav aria-label="Room shortcuts">
           <button type="button" onPointerEnter={() => hover("approach")} onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor}>Monitor</button>
           <button type="button" onPointerEnter={() => hover("vinyl-in")} onPointerDown={() => arm("vinyl-in")} onFocus={() => arm("vinyl-in")} onClick={enterVinyls}>Projects</button>

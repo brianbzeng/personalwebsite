@@ -91,7 +91,10 @@ test('cue styling remains review-only until each floating note is approved', () 
   const home = readFileSync(new URL('../app/page.tsx', import.meta.url), 'utf8');
   const room = readFileSync(new URL('../app/components/CinematicRoom.tsx', import.meta.url), 'utf8');
   const shelf = readFileSync(new URL('../app/components/BookshelfExperience.tsx', import.meta.url), 'utf8');
-  assert.doesNotMatch(home + room + shelf, /HandwrittenCue|handwrittenCue\.css/);
+  // Approved 2026-09-21: the room "New!" notes redirect may use the Manic lettering
+  // primitive. Gesture cues and the cue stylesheet stay review-only.
+  const approved = /import \{ ManicLettering \} from ['"]\.\/HandwrittenCue['"];?\r?\n/g;
+  assert.doesNotMatch((home + room + shelf).replace(approved, ''), /HandwrittenCue|handwrittenCue\.css/);
   assert.match(review, /staging only/);
   assert.match(review, /each floating note gets its own staging preview/);
   assert.match(review, /Nothing is live yet/);

@@ -23,8 +23,9 @@ const richNote = { id: "formatting", title: "Formatting", blocks: [
 test("published board contains Brian's supplied note, stable unique IDs, and no invented entries", () => {
   assert.equal(BOARD_NOTES.length, 1);
   assert.equal(BOARD_NOTES[0].title, "to do:");
-  assert.equal(notePlainText(BOARD_NOTES[0]), "Finish CastingCompass Frontend");
-  assert.equal(BOARD_NOTES[0].blocks[0].items[0].checked, false);
+  assert.equal(notePlainText(BOARD_NOTES[0]), "JS debugging through console and devtools\nVersion control & VCS hosting\nData structures & algorithms\nSystem design\nPerformance/Latency\nCache control\nScaling databases");
+  const checked = BOARD_NOTES[0].blocks[0].items.map((item) => item.checked);
+  assert.deepEqual(checked, [true, true, true, true, true, true, false]);
   assert.equal(new Set(BOARD_NOTES.map((note) => note.id)).size, BOARD_NOTES.length);
   assert.equal(findBoardNote("to-do"), BOARD_NOTES[0]);
   assert.equal(findBoardNote("unknown"), undefined);
@@ -33,7 +34,7 @@ test("published board contains Brian's supplied note, stable unique IDs, and no 
 test("multiple notes can be selected and searched by title or rich text body", () => {
   const notes = [...BOARD_NOTES, richNote];
   assert.equal(findBoardNote("formatting", notes), richNote);
-  assert.deepEqual(filterBoardNotes("  CASTINGcompass ", notes), [BOARD_NOTES[0]]);
+  assert.deepEqual(filterBoardNotes("  SCALING databases ", notes), [BOARD_NOTES[0]]);
   assert.deepEqual(filterBoardNotes("All four", notes), [richNote]);
   assert.deepEqual(filterBoardNotes("Formatting", notes), [richNote]);
   assert.deepEqual(filterBoardNotes(" ", notes), notes);
@@ -109,7 +110,10 @@ test("the MacBook layout renders three panes and honest read-only authoring cont
     assert.match(html, new RegExp(`<button[^>]*disabled=""[^>]*aria-label="${label} \\(read-only board\\)"`));
   }
   assert.match(html, /<h1>to do:<\/h1>/);
-  assert.match(html, /Finish CastingCompass Frontend/);
+  assert.match(html, /JS debugging through console and devtools/);
+  assert.match(html, /Scaling databases/);
+  assert.match(html, /aria-label="Completed"/);
+  assert.match(html, /aria-label="Not completed"/);
   assert.match(html, /<span>1 note<\/span>/);
   assert.match(html, /type="search"/);
   assert.doesNotMatch(html, /contenteditable|<textarea|6 notes/);

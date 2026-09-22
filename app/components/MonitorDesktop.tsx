@@ -99,6 +99,11 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
   }, []);
 
   useEffect(() => {
+    // Every monitor visit greets with the Notes board popped over the terminal.
+    dispatch({ type: "open-notes" });
+  }, []);
+
+  useEffect(() => {
     const tick = () => setNow(new Date());
     const connection = () => setOnline(navigator.onLine);
     tick(); connection();

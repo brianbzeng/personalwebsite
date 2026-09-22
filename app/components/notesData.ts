@@ -13,8 +13,16 @@ export type BoardNote = { id: string; title: string; blocks: NoteBlock[]; update
 export const BOARD_NOTES: BoardNote[] = [{
   id: "to-do",
   title: "to do:",
-  updatedAt: "2026-09-05T23:31:58.684-07:00",
-  blocks: [{ type: "checklist", items: [{ checked: false, content: [{ text: "Finish CastingCompass Frontend" }] }] }],
+  updatedAt: "2026-09-22T05:55:00.000-07:00",
+  blocks: [{ type: "checklist", items: [
+    { checked: true, content: [{ text: "JS debugging through console and devtools" }] },
+    { checked: true, content: [{ text: "Version control & VCS hosting" }] },
+    { checked: true, content: [{ text: "Data structures & algorithms" }] },
+    { checked: true, content: [{ text: "System design" }] },
+    { checked: true, content: [{ text: "Performance/Latency" }] },
+    { checked: true, content: [{ text: "Cache control" }] },
+    { checked: false, content: [{ text: "Scaling databases" }] },
+  ] }],
 }];
 
 export function notePlainText(note: BoardNote): string {

@@ -20,6 +20,18 @@
 .cinematic-controls nav { position: absolute; top: 20px; right: 28px; display: flex; gap: 22px; align-items: center; }
 .cinematic-controls button { border: 0; padding: 8px 0; background: transparent; cursor: pointer; font-size: inherit; }
 .cinematic-controls :is(a,button):hover { color: var(--room-highlight); }
+/* Handwritten "New!" callout for the Notes board; anchors the top-left corner the nav leaves free.
+   Prefixed to out-rank the generic .cinematic-controls button/hover rules. */
+.cinematic-controls .cinematic-new { position: absolute; top: 20px; left: 28px; width: 128px; padding: 4px; border: 0; background: transparent; cursor: pointer; color: #ff5148; filter: drop-shadow(0 2px 3px #000c) drop-shadow(0 0 14px #ff51483d); transition: color 200ms, filter 200ms; animation: cinematic-new-in 700ms ease-out 500ms both; }
+.cinematic-controls .cinematic-new svg { display: block; width: 100%; height: auto; overflow: visible; transition: transform 200ms; }
+.cinematic-controls .cinematic-new:hover, .cinematic-controls .cinematic-new:focus-visible { color: #ff7068; filter: drop-shadow(0 2px 3px #000c) drop-shadow(0 0 18px #ff51485c); }
+.cinematic-controls .cinematic-new:hover svg, .cinematic-controls .cinematic-new:focus-visible svg { transform: scale(1.05); }
+.cinematic-controls .cinematic-new:active svg { transform: scale(.97); }
+.cinematic-new-float { transform-origin: 50% 50%; animation: cinematic-new-float 4.6s ease-in-out infinite; }
+.cinematic-new-underline { stroke: currentColor; stroke-width: 4.5; fill: none; stroke-linecap: round; opacity: .95; }
+@keyframes cinematic-new-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@keyframes cinematic-new-float { 0%, 100% { transform: translate(0, 1px) rotate(-0.6deg); } 50% { transform: translate(3px, -3px) rotate(0.7deg); } }
+@media (max-width: 600px) { .cinematic-controls .cinematic-new { width: 92px; top: auto; bottom: 62px; left: 16px; } }
 .cinematic-desktop { position: fixed; inset: 0; background: #050505; z-index: 5; }
 .cinematic-approach .cinematic-desktop { opacity: 0; pointer-events: none; background: transparent; }
 .cinematic-diploma { position: fixed; inset: 0; background: #000; z-index: 5; }
