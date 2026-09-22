@@ -8,7 +8,7 @@ const shelf = read('app/components/BookshelfExperience.tsx');
 const desktop = read('app/components/MonitorDesktop.tsx');
 
 test('approved cues and mobile layout are promoted without staging redirect suppression', () => {
-  assert.match(read('app/page.tsx'), /<CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn \/>/);
+  assert.match(read('app/page.tsx'), /<CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
   assert.doesNotMatch(read('app/page.tsx'), /shelfReview/);
   assert.match(read('app/desktop/page.tsx'), /<MonitorDesktop mobileLayout \/>/);
   assert.match(room, /activityCues && shelfReview && \(phase==='vinyls'\|\|phase==='diploma'\)/);
@@ -32,8 +32,9 @@ test('each activity family explicitly opts into the shared cue layer', () => {
 
 test('greeting is arrow-only, two seconds in staging and three live, consumed on leaving or completion', () => {
   assert.match(room, /visibleMs=\{refinedCues\?2000:3000\} allowReplay=\{false\}/);
-  assert.match(room, /onComplete=\{\(\)=>setGreetingCuesDone\(true\)\}/);
-  assert.match(room, /if\(phase!=='room'\)setGreetingCuesDone\(true\)/);
+  assert.match(room, /onComplete=\{\(\)=>setGreetingCuesCompleted\(true\)\}/);
+  assert.match(room, /if\(phase!=='room'&&!leftRoom\)setLeftRoom\(true\)/);
+  assert.match(room, /const greetingCuesDone=greetingCuesCompleted\|\|leftRoom/);
   assert.equal((room.match(/appearance:'arrow-only'/g)||[]).length, 5);
   assert.match(room, /targetInset:\{top:\.65,right:refinedCues\?\.72:\.25\}/);
   assert.match(room, /targetInset:\{bottom:\.55\}/);

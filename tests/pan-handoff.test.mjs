@@ -18,7 +18,7 @@ test('the decoded endpoint survives until two paint boundaries; stale releases c
   vm.runInNewContext(ts.transpileModule(read('app/components/panHandoff.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,
     {exports,require:()=>react,requestAnimationFrame:f=>frames.push(f)});
   const h=exports.usePanHandoff(),node={style:{},dataset:{},getContext:()=>({drawImage:()=>{}})};
-  h.canvas.current=node;
+  h.setCanvas(node);
   const video={readyState:2,videoWidth:1920,videoHeight:1080};
   h.capture(video);h.release();assert.equal(node.dataset.holding,'true');
   frames.shift()();assert.equal(node.dataset.holding,'true');
