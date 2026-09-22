@@ -14,6 +14,9 @@ The main site now uses the same approved playback and return animations; review 
 
 ## Future changes
 
+Operational Notes app (2026-09-22): Brian requested and approved production publication after local review. The full Mac-style toolbar works (new note/folder, format popover with styles and B/I/U/S, interactive checklists with the approved centered SVG checkmarks, table insert, attach ≤750 KB, markup drawing, delete with undo). Visitor edits persist to localStorage only; unedited board copies refresh on BOARD_SYNC bumps and edited/local notes are never overwritten. All 267 tests, typecheck, build, and dry run passed; the live MonitorDesktop client bundle SHA-256 matches the local build, home/desktop and the Spotify API return 200, and a live browser check confirmed the editor, interactive checklist bubbles, toolbar, and localStorage on brianbzeng.com. Version: afb2dc84-99d3-4155-b85a-1305d4343961; rollback reference: f5eb5281-72fb-4813-a9b3-e72e534e6271. Domain, D1 binding, vars and secrets preserved.
+
+
 Faster scene transitions and the New! Notes board (2026-09-22): deployed nqrwhal's merged PR #2 (accelerated camera-move playback curve, hover clip pre-arming) together with Brian's requested New! room-menu redirect, Notes-over-terminal monitor greeting, and the recruiter-facing learning to-do list (six completed, Scaling databases open). All 264 tests, build, and dry run passed; the live CinematicRoom client bundle SHA-256 matches the local build, home/desktop/review routes and the Spotify API return 200, and a live browser check confirmed the sticker, accelerated monitor approach, and Notes over Terminal. Version: f5eb5281-72fb-4813-a9b3-e72e534e6271; rollback reference: 668c479a-79ed-42ba-8434-483e93ffa2a2. Domain, D1 binding, vars and secrets preserved.
 
 
