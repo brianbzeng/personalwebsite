@@ -90,8 +90,9 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
 
   useEffect(() => {
     const openLinkedNote = () => {
-      const note = findBoardNote(new URLSearchParams(window.location.search).get("note"));
-      if (note) { setSelectedNoteId(note.id); setNoteOpenRequest({ id: note.id }); dispatch({ type: "open-notes" }); }
+      const id = new URLSearchParams(window.location.search).get("note");
+      // Board links resolve here; local-note links resolve inside the Notes store.
+      if (id && (findBoardNote(id) || id.startsWith("local-"))) { setSelectedNoteId(id); setNoteOpenRequest({ id }); dispatch({ type: "open-notes" }); }
     };
     openLinkedNote();
     window.addEventListener("popstate", openLinkedNote);

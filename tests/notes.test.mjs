@@ -7,7 +7,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import ts from "typescript";
 import * as notesData from "../app/components/notesData.ts";
 import * as desktopState from "../app/components/desktopState.ts";
+import * as noteEditor from "../app/components/noteEditor.ts";
+import * as localNotes from "../app/components/localNotes.ts";
 const { BOARD_NOTES, filterBoardNotes, findBoardNote, groupBoardNotes, noteDateLabel, noteListDate, notePlainText, noteSharePath } = notesData;
+const { blocksToHtml, safeNoteSrc } = noteEditor;
+const { freshLocalNotes, mergeBoardInto, loadLocalNotes, saveLocalNotes, NOTES_STORAGE_KEY, isLocalNoteId, ATTACHMENT_LIMIT_BYTES } = localNotes;
 import { desktopWindowReducer as reduce, INITIAL_DESKTOP_SESSION, managedWindowTitle } from "../app/components/desktopWindowManager.ts";
 
 const source = (file) => readFileSync(new URL(`../app/components/${file}`, import.meta.url), "utf8");
@@ -43,6 +47,12 @@ test("multiple notes can be selected and searched by title or rich text body", (
 
 test("formatted note text remains searchable without leaking markup into previews", () => {
   assert.equal(notePlainText(richNote), "Heading\nSubheading\nAll four <script>alert(1)</script>\nBullet\nNumbered\nDone\nTo do");
+  const mediaNote = { id: "media", title: "Media", blocks: [
+    { type: "table", rows: [["a", "b"], ["c", "d"]] },
+    { type: "image", src: "data:image/png;base64,AAAA", alt: "Chart" },
+    { type: "attachment", src: "data:application/pdf;base64,BBBB", name: "Resume.pdf" },
+  ] };
+  assert.equal(notePlainText(mediaNote), "a b\nc d\nImage — Chart\nResume.pdf");
 });
 
 test("Notes groups actual edit dates in Pacific time without mutating published order", () => {
@@ -71,10 +81,10 @@ test("Notes date headings use calendar days across DST and Pacific midnight", ()
   }
 });
 
-test("Notes renders combined text styles, semantic lists and read-only checklists safely", () => {
+test("Notes renders combined text styles, semantic lists and interactive checklists safely", () => {
   const { outputText } = ts.transpileModule(source("NoteContent.tsx"), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } });
   const module = { exports: {} };
-  new Function("require", "module", "exports", outputText)(createRequire(import.meta.url), module, module.exports);
+  new Function("require", "module", "exports", outputText)((id) => id === "./noteEditor" ? noteEditor : id.endsWith(".css") ? {} : createRequire(import.meta.url)(id), module, module.exports);
   const html = renderToStaticMarkup(createElement(module.exports.default, { note: richNote }));
   assert.match(html, /<s><span class="note-underline"><em><strong>All four<\/strong><\/em><\/span><\/s>/);
   assert.match(html, /<h2>Heading<\/h2>/);
@@ -87,7 +97,73 @@ test("Notes renders combined text styles, semantic lists and read-only checklist
   assert.doesNotMatch(html, /<script>|contenteditable|<input/);
 });
 
-test("the MacBook layout renders three panes and honest read-only authoring controls", () => {
+test("NoteContent renders editor-created tables, images and attachments with safe sources", () => {
+  const { outputText } = ts.transpileModule(source("NoteContent.tsx"), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } });
+  const module = { exports: {} };
+  new Function("require", "module", "exports", outputText)((id) => id === "./noteEditor" ? noteEditor : id.endsWith(".css") ? {} : createRequire(import.meta.url)(id), module, module.exports);
+  const mediaNote = { id: "media", title: "Media", blocks: [
+    { type: "table", rows: [["Plan", "Ship"], ["<b>no</b>", "yes & no"]] },
+    { type: "image", src: "data:image/png;base64,AAAA", alt: "Sketch" },
+    { type: "attachment", src: "data:application/pdf;base64,BBBB", name: "Notes <draft>.pdf" },
+    { type: "image", src: "javascript:alert(1)" },
+  ] };
+  const html = renderToStaticMarkup(createElement(module.exports.default, { note: mediaNote }));
+  assert.match(html, /<table class="note-table"><tbody><tr><td>Plan<\/td><td>Ship<\/td><\/tr>/);
+  assert.match(html, /&lt;b&gt;no&lt;\/b&gt;/);
+  assert.match(html, /&amp; no/);
+  assert.match(html, /<img class="note-image" src="data:image\/png;base64,AAAA" alt="Sketch" loading="lazy"\/>/);
+  assert.match(html, /download="Notes &lt;draft&gt;.pdf"/);
+  assert.doesNotMatch(html, /javascript:/);
+});
+
+test("editor HTML is produced only through escaped serialization with whitelisted sources", () => {
+  const html = blocksToHtml([
+    { type: "paragraph", content: [{ text: "plain <img src=x onerror=alert(1)>" }] },
+    { type: "heading", content: [{ text: "Title", marks: ["bold"] }] },
+    { type: "checklist", items: [{ checked: true, content: [{ text: "Done", marks: ["italic"] }] }] },
+    { type: "table", rows: [["a<b", "c&d"]] },
+    { type: "image", src: "javascript:alert(1)" },
+    { type: "image", src: "data:image/png;base64,AAAA", alt: `"quoted"` },
+    { type: "attachment", src: "javascript:alert(1)", name: "evil" },
+    { type: "attachment", src: "data:application/pdf;base64,BBBB", name: "ok.pdf" },
+  ]);
+  assert.doesNotMatch(html, /<img src=x/);
+  assert.match(html, /&lt;img src=x onerror=alert\(1\)&gt;/);
+  assert.match(html, /<h2><strong>Title<\/strong><\/h2>/);
+  assert.match(html, /data-checked="true"/);
+  assert.match(html, /<em>Done<\/em>/);
+  assert.match(html, /<td>a&lt;b<\/td><td>c&amp;d<\/td>/);
+  assert.doesNotMatch(html, /javascript:/);
+  assert.match(html, /<img src="data:image\/png;base64,AAAA" alt="&quot;quoted&quot;" contenteditable="false">/);
+  assert.match(html, /data-name="ok.pdf"/);
+  assert.equal(safeNoteSrc("javascript:alert(1)"), "");
+  assert.equal(safeNoteSrc("data:image/gif;base64,AA"), "data:image/gif;base64,AA");
+  assert.equal(safeNoteSrc("https://example.com/a.png"), "https://example.com/a.png");
+});
+
+test("local notes store refreshes unedited board copies but never loses local work", () => {
+  assert.equal(isLocalNoteId("local-3"), true);
+  assert.equal(isLocalNoteId("to-do"), false);
+  const fresh = freshLocalNotes();
+  assert.deepEqual(fresh.notes.map((note) => note.id), BOARD_NOTES.map((note) => note.id));
+  assert.equal(fresh.sync, notesData.BOARD_SYNC);
+  // An edited board copy survives a board refresh; an unedited one is replaced.
+  const edited = { ...structuredClone(BOARD_NOTES[0]), title: "my version", edited: true };
+  const stored = { ...fresh, sync: 0, notes: [edited, { id: "local-1", title: "mine", blocks: [], edited: true }], removedBoardIds: [], nextId: 2 };
+  const merged = mergeBoardInto(stored);
+  assert.equal(merged.sync, notesData.BOARD_SYNC);
+  assert.equal(merged.notes.find((note) => note.id === "to-do")?.title, "my version");
+  assert.equal(merged.notes.find((note) => note.id === "local-1")?.title, "mine");
+  // Visitor-deleted board notes stay deleted across a board refresh.
+  const removed = mergeBoardInto({ ...fresh, sync: 0, notes: [], removedBoardIds: [BOARD_NOTES[0].id] });
+  assert.deepEqual(removed.notes, []);
+  // Without localStorage (server render), the published board is the state.
+  assert.deepEqual(loadLocalNotes().notes.map((note) => note.id), BOARD_NOTES.map((note) => note.id));
+  assert.equal(saveLocalNotes(fresh).ok, false); // no storage available in this environment
+  assert.equal(ATTACHMENT_LIMIT_BYTES, 750 * 1024);
+});
+
+test("the MacBook layout renders three panes with an operational editor and toolbar", () => {
   const require = createRequire(import.meta.url);
   function component(file, mocks = {}) {
     const { outputText } = ts.transpileModule(source(file), { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022 } });
@@ -98,25 +174,31 @@ test("the MacBook layout renders three panes and honest read-only authoring cont
   const Notes = component("DesktopNotes.tsx", {
     "./DesktopWindow": component("DesktopWindow.tsx", { "./desktopState": desktopState }),
     "./DesktopIcon": { default: () => null },
-    "./NoteContent": component("NoteContent.tsx"),
+    "./NoteContent": component("NoteContent.tsx", { "./noteEditor": noteEditor }),
     "./notesData": notesData,
     "./desktopState": desktopState,
+    "./noteEditor": noteEditor,
+    "./localNotes": localNotes,
   }).default;
   const html = renderToStaticMarkup(createElement(Notes, {
     selectedId: "to-do", openRequest: null, onSelect() {}, active: true, foreground: true, minimized: false, zIndex: 2, onActivate() {}, onMinimize() {}, onClose() {},
   }));
-  for (const label of ["Notes folders", "Published notes", "Hide Notes sidebar", "Note list options", "Copy link to this note", "Close Notes", "Minimize Notes", "Enter full screen for Notes"]) assert.ok(html.includes(`aria-label="${label}"`), label);
+  for (const label of ["Notes folders", "Hide Notes sidebar", "Note list options", "Copy link to this note", "Close Notes", "Minimize Notes", "Enter full screen for Notes", "Note title", "Note body"]) assert.ok(html.includes(`aria-label="${label}"`), label);
   for (const label of ["New folder", "New note", "Format text", "Checklist", "Table", "Attach file", "Markup"]) {
-    assert.match(html, new RegExp(`<button[^>]*disabled=""[^>]*aria-label="${label} \\(read-only board\\)"`));
+    const match = html.match(new RegExp(`<button[^>]*aria-label="${label}"[^>]*>`));
+    assert.ok(match, label);
+    assert.doesNotMatch(match[0], /disabled/, `${label} must be enabled`);
   }
-  assert.match(html, /<h1>to do:<\/h1>/);
+  assert.doesNotMatch(html, /read-only board/);
+  assert.match(html, /contentEditable="true"/g);
+  assert.match(html, /data-placeholder="Title"/);
+  assert.match(html, /data-placeholder="Type here…"/);
+  assert.match(html, /role="textbox"/);
   assert.match(html, /JS debugging through console and devtools/);
   assert.match(html, /Scaling databases/);
-  assert.match(html, /aria-label="Completed"/);
-  assert.match(html, /aria-label="Not completed"/);
   assert.match(html, /<span>1 note<\/span>/);
   assert.match(html, /type="search"/);
-  assert.doesNotMatch(html, /contenteditable|<textarea|6 notes/);
+  assert.doesNotMatch(html, /<textarea|6 notes/);
 });
 
 test("sharing uses stable encoded note links without redirect destinations", () => {
@@ -147,12 +229,13 @@ test("Notes is a singleton window with independent focus, minimize and restore b
 });
 
 test("Notes integrates with desktop, Dock, deep links and existing window controls", () => {
-  const desktop = source("MonitorDesktop.tsx"), notes = source("DesktopNotes.tsx");
+  const desktop = source("MonitorDesktop.tsx"), notes = source("DesktopNotes.tsx"), store = source("localNotes.ts");
   assert.match(source("DesktopIcon.tsx"), /name: "Notes"/);
   assert.match(source("MacDock.tsx"), /"terminal", "notes"/);
   assert.doesNotMatch(desktop, /<NotesWidget/);
   assert.match(desktop, /<GitHubPulse variant="widget"/);
   assert.match(desktop, /new URLSearchParams\(window.location.search\).get\("note"\)/);
+  assert.match(desktop, /id\.startsWith\("local-"\)/);
   assert.match(desktop, /Hide Notes/);
   assert.match(desktop, /Close Notes/);
   assert.match(notes, /<DesktopWindow \{\.\.\.windowProps\}/);
@@ -167,7 +250,12 @@ test("Notes integrates with desktop, Dock, deep links and existing window contro
   assert.match(notes, /className="mac-note-page" tabIndex=\{0\}/);
   assert.match(desktop, /!target.contains\(document.activeElement\)/);
   assert.match(source("desktopNotes.css"), /@container \(max-width: 400px\)/);
-  assert.doesNotMatch(notes, /localStorage|sessionStorage|contentEditable|dangerouslySetInnerHTML/);
+  // Editing is visitor-local by design: guarded localStorage, no raw HTML injection.
+  assert.match(store, /NOTES_STORAGE_KEY = "bz-notes-v1"/);
+  assert.match(store, /typeof localStorage === "undefined"/);
+  assert.match(notes, /saveLocalNotes\(store\)/);
+  assert.match(notes, /contentEditable/);
+  assert.doesNotMatch(notes + store, /sessionStorage|dangerouslySetInnerHTML/);
   const icon = readFileSync(new URL("../public/macos-icons/notes.png", import.meta.url));
   assert.equal(icon.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
   assert.equal(icon.readUInt32BE(16), 400);

@@ -28,11 +28,56 @@
 .note-content li { margin: .4em 0; white-space: pre-wrap; }
 .note-content .note-checklist { list-style: none; padding-left: 0; }
 .note-checklist li { display: flex; gap: 10px; align-items: flex-start; }
-.note-check { flex: 0 0 17px; width: 17px; height: 17px; margin-top: .28em; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid #bbb; border-radius: 50%; font-size: 12px; line-height: 1; }
+.note-check { flex: 0 0 17px; width: 17px; height: 17px; margin-top: .28em; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid #bbb; border-radius: 50%; }
+.note-check svg { display: block; width: 60%; height: auto; }
 .note-checklist .is-checked { color: #a8a8a8; }
 .note-checklist .is-checked > span:last-child { text-decoration: line-through; }
-.note-checklist .is-checked .note-check { background: #d5d5d5; color: #222; }
+.note-checklist .is-checked .note-check { background: #d5d5d5; color: #222; border-color: transparent; }
 .note-underline { text-decoration: underline; text-underline-offset: 3px; }
+/* Editing surface and rich blocks (tables, images, attachments). */
+.mac-note-title, .mac-note-editor { outline: none; }
+.mac-note-title:focus-visible, .mac-note-editor:focus-visible { outline: none; }
+[contenteditable][data-placeholder]:empty::before { content: attr(data-placeholder); color: #6b6b6b; pointer-events: none; }
+.mac-note-editor table { border-collapse: collapse; margin: 0 0 1em; max-width: 100%; }
+.mac-note-editor td, .note-table td { border: 1px solid #5a5a5a; padding: .35em .6em; min-width: 3.5em; }
+.mac-note-editor img, .note-image { display: block; max-width: 100%; height: auto; margin: 0 0 1em; border-radius: 8px; border: 1px solid #3c3c3c; }
+.note-attachment { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 .6em; padding: 6px 12px; border: 1px solid #555; border-radius: 8px; background: #2b2b2b; color: #d8d8d8; font-size: .85em; text-decoration: none; overflow-wrap: anywhere; }
+.note-attachment:hover, .note-attachment:focus-visible { border-color: #888; color: #fff; }
+.note-table-wrap { overflow-x: auto; margin: 0 0 1em; }
+.note-table { border-collapse: collapse; }
+.mac-notes-toolbar button[aria-pressed="true"] { background: #ffffff1f; color: #fff; }
+.notes-format-panel { width: 168px; }
+.notes-format-panel hr { margin: 4px 2px; border: 0; border-top: 1px solid #464646; }
+.notes-format-panel button { font-size: 13px; }
+.notes-format-marks { display: flex; gap: 4px; padding: 4px 2px; }
+.notes-format-marks .notes-mark-button { width: 36px; height: 32px; justify-content: center; font-size: 14px; }
+.notes-mark-button-bold { font-weight: 800; }
+.notes-mark-button-italic { font-style: italic; font-family: Georgia, serif; }
+.notes-mark-button-underline { text-decoration: underline; }
+.notes-mark-button-strike { text-decoration: line-through; }
+.notes-format-lists, .notes-format-blocks { display: flex; flex-direction: column; }
+.notes-table-panel { display: grid; gap: 8px; padding: 10px; width: 200px; }
+.notes-table-panel label { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; color: #cfcfcf; }
+.notes-table-panel input { width: 64px; padding: 4px 6px; border: 1px solid #666; border-radius: 6px; background: #242424; color: #eee; font: inherit; }
+.notes-table-panel > button { justify-content: center; background: #3f3f3f; }
+.notes-folder-entry { position: relative; display: flex; align-items: center; }
+.notes-folder-entry .notes-folder-row { flex: 1; min-width: 0; }
+.notes-folder-delete { position: absolute; right: 4px; display: none; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: #4a4a4a; color: #eee; cursor: pointer; }
+.notes-folder-entry:hover .notes-folder-delete, .notes-folder-entry:focus-within .notes-folder-delete { display: inline-flex; }
+.notes-folder-entry[data-renaming] .notes-folder-delete { display: none; }
+.notes-folder-rename { flex: 1; min-width: 0; padding: 5px 8px; border: 1px solid #7a7a7a; border-radius: 8px; background: #2e2e2e; color: #eee; font: inherit; font-size: clamp(13px, 1.4cqw, 23px); }
+.notes-copy-toast.is-action { display: flex; align-items: center; gap: 10px; }
+.notes-copy-toast.is-action button { padding: 3px 10px; border: 1px solid #888; border-radius: 6px; background: #4a4a4a; color: #fff; font: inherit; font-size: 12px; cursor: pointer; }
+.notes-markup { position: absolute; inset: 0; z-index: 9; display: flex; flex-direction: column; gap: 10px; padding: 14px; background: #1b1b1bf2; backdrop-filter: blur(8px); }
+.notes-markup-tools { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.notes-markup-tools > button { padding: 6px 12px; border: 1px solid #666; border-radius: 7px; background: #333; color: #eee; font: inherit; font-size: 13px; cursor: pointer; }
+.notes-markup-tools .notes-markup-done { background: #4a7bd0; border-color: #4a7bd0; color: #fff; }
+.notes-markup-color { width: 24px; height: 24px; padding: 0; border: 2px solid #666; border-radius: 50%; cursor: pointer; }
+.notes-markup-color[aria-pressed="true"] { border-color: #fff; }
+.notes-markup-width { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 26px; padding: 0; border: 1px solid #666; border-radius: 6px; background: #333; cursor: pointer; }
+.notes-markup-width[aria-pressed="true"] { border-color: #eee; background: #4a4a4a; }
+.notes-markup-width i { display: block; border-radius: 50%; background: #eee; }
+.notes-markup canvas { flex: 1; min-height: 0; width: 100%; border: 1px solid #4c4c4c; border-radius: 10px; touch-action: none; cursor: crosshair; }
 .mac-desktop .mac-notes-window {
   --notes-folders-width: 20.55cqw;
   --notes-list-width: 20cqw;

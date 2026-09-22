@@ -6,8 +6,15 @@ export type NoteBlock =
   | { type: "subheading"; content: NoteText[] }
   | { type: "bullets"; items: NoteText[][] }
   | { type: "numbered"; items: NoteText[][] }
-  | { type: "checklist"; items: { checked: boolean; content: NoteText[] }[] };
-export type BoardNote = { id: string; title: string; blocks: NoteBlock[]; updatedAt?: string; folder?: "notes" | "quick" };
+  | { type: "checklist"; items: { checked: boolean; content: NoteText[] }[] }
+  | { type: "table"; rows: string[][] }
+  | { type: "image"; src: string; alt?: string }
+  | { type: "attachment"; src: string; name: string };
+/** Folders are ids: the board ships "notes" and "quick"; visitors add local ones. */
+export type BoardNote = { id: string; title: string; blocks: NoteBlock[]; updatedAt?: string; folder?: string };
+
+/** Bump when BOARD_NOTES changes so unedited board copies refresh for returning visitors. */
+export const BOARD_SYNC = 1;
 
 // Published content is managed with Brian in Codex, not visitor-local storage.
 export const BOARD_NOTES: BoardNote[] = [{
@@ -30,6 +37,9 @@ export function notePlainText(note: BoardNote): string {
   return note.blocks.map((block) => {
     if (block.type === "checklist") return block.items.map((item) => text(item.content)).join("\n");
     if (block.type === "bullets" || block.type === "numbered") return block.items.map(text).join("\n");
+    if (block.type === "table") return block.rows.map((row) => row.join(" ")).join("\n");
+    if (block.type === "image") return block.alt ? `Image — ${block.alt}` : "Image";
+    if (block.type === "attachment") return block.name;
     return text(block.content);
   }).join("\n");
 }
