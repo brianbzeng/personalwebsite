@@ -12,15 +12,16 @@ import { swipeBookDirection, swipeCubbyDirection, wheelPixels } from "./shelfGes
 import {PHOTO_LABELS} from './shelfPolaroids';
 import {usePanHandoff,getShelfPlates,shelfTravelClip} from './panHandoff';
 import {primeSceneClip,shelfExitSrc} from './sceneTransitionCache';
+import {driveTransitionRate,SHELF_MOTION} from './sceneMotion';
 import "./vinylShelf.css";
 
 type Travel = { from: number; to: number; exit: boolean };
 
-export default function BookshelfExperience({ onExit, onReady: onDestinationReady, motion, initialCubby = 1, review=false, coherentPhotos=false, coherentBooks=false, mobileLayout=false, responsiveLayout=false, preparing=false, activityCues=false, refinedCues=false, cueFadeIn=false, cueMemory, cueInput='auto' }: { onExit: (cubby: number) => void; onReady?:()=>void; motion: boolean; initialCubby?: number; review?:boolean; coherentPhotos?:boolean; coherentBooks?:boolean; mobileLayout?:boolean; responsiveLayout?:boolean; preparing?:boolean; activityCues?:boolean; refinedCues?:boolean; cueFadeIn?:boolean; cueMemory?:CueVisitState; cueInput?:'auto'|'mouse'|'touch' }) {
-  const handoff=usePanHandoff();
+export default function BookshelfExperience({ onExit, onReady: onDestinationReady, motion, initialCubby = 1, review=false, coherentPhotos=false, coherentBooks=false, mobileLayout=false, responsiveLayout=false, preparing=false, activityCues=false, refinedCues=false, cueFadeIn=false, cueMemory, cueInput='auto', fastTransitions=false }: { onExit: (cubby: number) => void; onReady?:()=>void; motion: boolean; initialCubby?: number; review?:boolean; coherentPhotos?:boolean; coherentBooks?:boolean; mobileLayout?:boolean; responsiveLayout?:boolean; preparing?:boolean; activityCues?:boolean; refinedCues?:boolean; cueFadeIn?:boolean; cueMemory?:CueVisitState; cueInput?:'auto'|'mouse'|'touch'; fastTransitions?:boolean }) {
+  const {setCanvas: setHandoffCanvas, capture: captureHandoff, release: releaseHandoff}=usePanHandoff();
   const shelfPlates=getShelfPlates(coherentPhotos,coherentBooks);
-  const localCueMemory=useRef(createCueVisitState());
-  const visitMemory=cueMemory??localCueMemory.current;
+  const [localCueMemory]=useState(createCueVisitState);
+  const visitMemory=cueMemory??localCueMemory;
   const [,refreshCueMemory]=useState(0);
   const controls = useRef<ShelfControls | null>(null), movie = useRef<HTMLVideoElement>(null);
   const surface = useRef<HTMLElement>(null);
@@ -55,6 +56,8 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
   const bookButton = useRef<HTMLButtonElement>(null),photosButton=useRef<HTMLButtonElement>(null);
   const inspectButton = useRef<HTMLButtonElement>(null), recordButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const restoreSelectionFocus = useRef<ShelfSelection>(null);
+  // Assigned before any effect closes over the ref; later effects may only read it.
+  function markBusy(value: boolean) { busyRef.current = value; setBusy(value); }
   useEffect(()=>{
     if(turning||!bookOpen||!bookLayout?.visible)return;
     const left=surface.current?.querySelector('.page-corner-left'),right=surface.current?.querySelector('.page-corner-right');
@@ -83,14 +86,14 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
     setReady(true);
     if (travel) return;
     setBusy(false); busyRef.current = false;
-    handoff.release();onDestinationReady?.();
+    releaseHandoff();onDestinationReady?.();
   }
   function onFailed() {
     setFailed(true);
     if (travel) return;
     setBusy(false); busyRef.current = false;
     const image=new Image();image.src=shelfPlates[cubby].still;
-    void image.decode().catch(()=>{}).then(()=>{if(mounted.current){handoff.release();onDestinationReady?.();}});
+    void image.decode().catch(()=>{}).then(()=>{if(mounted.current){releaseHandoff();onDestinationReady?.();}});
   }
   useEffect(() => {
     if (ready || failed || travel) return;
@@ -108,12 +111,17 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
     }
   }, [selected]);
   function finishTravel(current: Travel) {
-    handoff.capture(movie.current);
+    captureHandoff(movie.current);
     setReady(false); setFailed(false); setCubby(current.to); setTravel(null); setPlaying(false);
     // The full records poster already matches the return movie; no WebGL load
     // is needed before leaving, including on devices where WebGL has failed.
     if (current.exit) onExit(current.to);
   }
+  useEffect(() => {
+    const video = movie.current;
+    if (!fastTransitions || !travel || !video) return;
+    return driveTransitionRate(video, SHELF_MOTION);
+  }, [fastTransitions, travel]);
   useEffect(() => {
     if (!travel) return;
     const timer = window.setTimeout(() => finishTravel(travel), 6000);
@@ -124,22 +132,23 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
 
   async function moveTo(to: number, exit = false) {
     if (busyRef.current || to < 0 || to > 2) return;
-    busyRef.current = true; setBusy(true);
+    markBusy(true);
     await controls.current?.settle();
     if (!mounted.current) return;
     // Wait for the restored 16:9 layout before handing off to prerecorded media.
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     if (!mounted.current) return;
-    if (to === cubby) { if (exit) onExit(cubby); else { setBusy(false); busyRef.current = false; } return; }
+    if (to === cubby) { if (exit) onExit(cubby); else markBusy(false); return; }
     const next = { from: cubby, to, exit };
     if (!motion) finishTravel(next);
     else { setPlaying(false); setTravel(next); }
   }
+  function rememberSelectionFocus() { restoreSelectionFocus.current = selected; }
   async function returnToShelf() {
     if (busyRef.current) return;
-    busyRef.current = true; setBusy(true); restoreSelectionFocus.current = selected;
+    markBusy(true); rememberSelectionFocus();
     await controls.current?.returnToShelf();
-    if (mounted.current) { busyRef.current = false; setBusy(false); }
+    if (mounted.current) markBusy(false);
   }
   function gestureMove(direction: -1 | 1) {
     if (selected !== null || busyRef.current || (!ready && !failed)) return;
@@ -237,6 +246,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
     <div className="vinyl-render-stage">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={shelfPlates[cubby].still} style={{visibility:ready?'hidden':'visible'}} alt={cubby === 0 ? "Books on the upper shelf" : cubby === 1 ? "Five project records and two blank covers in their holder" : "Camera, four personal photographs and globe on the shelf"} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={shelfPlates[cubby].background} style={{visibility:ready?'visible':'hidden'}} alt="" aria-hidden="true" />
       <div className="shelf-scene-wrap" style={{ visibility: ready ? "visible" : "hidden" }}>
         <ShelfScene review={review} coherentPhotos={coherentPhotos} coherentBooks={coherentBooks} mobileLayout={mobileLayout} responsiveLayout={responsiveLayout} cueLayout={activityCues} cubby={cubby} motion={motion} controls={controls} onReady={onReady} onFailed={onFailed}
@@ -255,7 +265,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
           if ("requestVideoFrameCallback" in video) video.requestVideoFrameCallback(() => { if (movie.current === video) setPlaying(true); });
           else setPlaying(true);
         }} onEnded={() => finishTravel(travel)} onError={() => finishTravel(travel)} />}
-      <canvas ref={handoff.canvas} className="shelf-handoff" aria-hidden="true" />
+      <canvas ref={setHandoffCanvas} className="shelf-handoff" aria-hidden="true" />
     </div>
     <button className="cinematic-back" disabled={busy} onPointerDown={() => primeSceneClip(shelfExitSrc(cubby, coherentPhotos, coherentBooks), true)} onClick={() => void moveTo(cubby, true)}>← Room</button>
     {selected === null && <>

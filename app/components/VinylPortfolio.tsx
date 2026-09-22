@@ -335,7 +335,7 @@ export default function VinylPortfolio() {
 
     const pointerPosition = (event: PointerEvent) => {
       const bounds = canvas.getBoundingClientRect();
-      return { x: ((event.clientX - bounds.left) / bounds.width) * 2 - 1, y: -((event.clientY - bounds.top) / bounds.height) * 2 + 1 };
+      return new THREE.Vector2(((event.clientX - bounds.left) / bounds.width) * 2 - 1, -((event.clientY - bounds.top) / bounds.height) * 2 + 1);
     };
     const raycaster = new THREE.Raycaster();
     const updateHover = (event: globalThis.PointerEvent) => {

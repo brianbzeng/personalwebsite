@@ -1,10 +1,12 @@
 "use client";
 
 import { lazy, Suspense, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import Link from "next/link";
 import "./cinematicRoom.css";
 import RoomSpeakerActivity, { useSpeakerPlayback, type SpeakerPreviewMode } from "./RoomSpeakerActivity";
 import {usePanHandoff,PHOTO_CONSISTENCY_MEDIA,BOOK_CONSISTENCY_MEDIA} from './panHandoff';
 import {pauseSceneClips,primeSceneClip,sceneTransitionSrc,setScenePrimeSuspended} from './sceneTransitionCache';
+import {driveTransitionRate,SCENE_MOTION} from './sceneMotion';
 import PolaroidPulse from './PolaroidPulse';
 import DiplomaEnlargement from './DiplomaEnlargement';
 import ActivityCues from './ActivityCues';
@@ -27,14 +29,14 @@ const HOTSPOTS = {
   frame: { left: "72.5%", top: "30.49%", width: "5.2%", height: "12.5%" },
 };
 
-export default function CinematicRoom({ speakerPreview = false, coherentPhotos = false, coherentBooks = false, shelfReview = false, mobileLayout = false, responsiveLayout = false, activityCues = false, refinedCues = false, cueFadeIn = false }: { speakerPreview?: boolean; coherentPhotos?: boolean; coherentBooks?: boolean; shelfReview?: boolean; mobileLayout?: boolean; responsiveLayout?: boolean; activityCues?: boolean; refinedCues?: boolean; cueFadeIn?: boolean }) {
-  const handoff=usePanHandoff();
+export default function CinematicRoom({ speakerPreview = false, coherentPhotos = false, coherentBooks = false, shelfReview = false, mobileLayout = false, responsiveLayout = false, activityCues = false, refinedCues = false, cueFadeIn = false, fastTransitions = false }: { speakerPreview?: boolean; coherentPhotos?: boolean; coherentBooks?: boolean; shelfReview?: boolean; mobileLayout?: boolean; responsiveLayout?: boolean; activityCues?: boolean; refinedCues?: boolean; cueFadeIn?: boolean; fastTransitions?: boolean }) {
+  const {setCanvas: setHandoffCanvas, capture: captureHandoff, release: releaseHandoff}=usePanHandoff();
   const photosMedia=coherentPhotos?PHOTO_CONSISTENCY_MEDIA:PHOTOS_MEDIA;
   const booksMedia=coherentBooks?BOOK_CONSISTENCY_MEDIA:BOOKS_MEDIA;
   const media = useMemo(() => ({ room: MEDIA, monitor: MONITOR_MEDIA, shelf: SHELF_MEDIA, books: booksMedia, photos: photosMedia }), [booksMedia, photosMedia]);
   const phaseRef = useRef<Phase>("room");
   const shelfReady = useRef(false);
-  const shelfCueMemory=useRef(createCueVisitState());
+  const [shelfCueMemory]=useState(createCueVisitState);
   const [phase, setPhase] = useState<Phase>("room");
   const [initialCubby, setInitialCubby] = useState(1);
   const [motion, setMotion] = useState(false);
@@ -57,27 +59,27 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
   const roomGlow = useRef<HTMLDivElement>(null);
   const glowFade = useRef<ReturnType<typeof setTimeout> | null>(null);
   const diplomaImage=useRef<HTMLImageElement>(null);
-  const [greetingCuesDone,setGreetingCuesDone]=useState(false);
-  phaseRef.current = phase;
-  useEffect(()=>{
-    // Leaving early also consumes the greeting; returning to the room never replays it.
-    if(phase!=='room')setGreetingCuesDone(true);
-  },[phase]);
+  const [greetingCuesCompleted,setGreetingCuesCompleted]=useState(false);
+  const [leftRoom,setLeftRoom]=useState(false);
+  // Leaving early also consumes the greeting; returning to the room never replays it.
+  if(phase!=='room'&&!leftRoom)setLeftRoom(true);
+  const greetingCuesDone=greetingCuesCompleted||leftRoom;
+  useEffect(()=>{phaseRef.current=phase;},[phase]);
   function replayActivityCues(){
     window.dispatchEvent(new Event('bz-replay-cues'));
   }
 
   useEffect(()=>{
     let active=true,frame=0;
-    const release=()=>{if(active)handoff.release();};
+    const video=idle.current;
+    const release=()=>{if(active)releaseHandoff();};
     if(phase==='room'){
-      const video=idle.current;
       if(motion&&!idleFailed&&video&&typeof video.requestVideoFrameCallback==='function')frame=video.requestVideoFrameCallback(release);
       else {const image=new Image();image.src=`${MEDIA}greeting.webp`;void image.decode().catch(()=>{}).then(release);}
     }else if(phase==='diploma')void diplomaImage.current?.decode().catch(()=>{}).then(release);
     else if(phase==='boot')release();
-    return()=>{active=false;if(frame)idle.current?.cancelVideoFrameCallback(frame);};
-  },[phase,motion,idleFailed,handoff.release]);
+    return()=>{active=false;if(frame)video?.cancelVideoFrameCallback(frame);};
+  },[phase,motion,idleFailed,releaseHandoff]);
 
   useEffect(() => () => { if (glowFade.current) clearTimeout(glowFade.current); }, []);
 
@@ -114,9 +116,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
     return () => window.clearTimeout(timer);
   }, [phase, motion]);
 
-  useEffect(() => {
-    if (phase === "boot" && bootFinished && desktopLoaded) setPhase("desktop");
-  }, [phase, bootFinished, desktopLoaded]);
+  if (phase === "boot" && bootFinished && desktopLoaded) setPhase("desktop");
 
   useEffect(() => {
     if (phase === "desktop") desktop.current?.focus();
@@ -149,6 +149,10 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
     const src = sceneTransitionSrc(next, media);
     if (src) primeSceneClip(src, true);
   }
+  // Hover usually precedes the click by a few hundred ms; decoding then hides the clip's startup.
+  function hover(next: Phase) {
+    if (fastTransitions) arm(next);
+  }
 
   function leaveMonitor() {
     restoreFocus.current = true;
@@ -169,6 +173,11 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
   }, [phase, motion]);
 
   const traveling = ["approach", "return", "diploma-in", "diploma-out", "vinyl-in", "vinyl-out", "books-in", "books-out", "photos-in", "photos-out"].includes(phase);
+  useEffect(() => {
+    const video = transition.current;
+    if (!fastTransitions || !traveling || !video) return;
+    return driveTransitionRate(video, SCENE_MOTION);
+  }, [fastTransitions, traveling, phase]);
   // Keep the departing surface mounted until a decoded return frame is ready.
   // Otherwise the greeting layer is exposed while the return movie loads.
   const holdingReturn = !transitionVisible;
@@ -177,8 +186,8 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
   const showShelf = phase === "vinyls" || (inboundShelf && transitionVisible) || ((phase === "vinyl-out" || phase === "books-out" || phase === "photos-out") && holdingReturn);
   useEffect(() => {
     if (!shelfReady.current) return;
-    if (phase === "vinyls" || phase === "vinyl-out" || phase === "books-out" || phase === "photos-out") handoff.release();
-  }, [phase, handoff.release]);
+    if (phase === "vinyls" || phase === "vinyl-out" || phase === "books-out" || phase === "photos-out") releaseHandoff();
+  }, [phase, releaseHandoff]);
   useEffect(() => {
     if (!motion) return;
     const playing = traveling || !pageVisible;
@@ -210,7 +219,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
   function onShelfReady() {
     shelfReady.current = true;
     const current = phaseRef.current;
-    if (current === "vinyls" || current === "vinyl-out" || current === "books-out" || current === "photos-out") handoff.release();
+    if (current === "vinyls" || current === "vinyl-out" || current === "books-out" || current === "photos-out") releaseHandoff();
   }
 
   return (
@@ -247,26 +256,26 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
             });
             else setTransitionVisible(true);
           }}
-          onEnded={event => {handoff.capture(event.currentTarget);setPhase(destination);}}
-          onError={event => {handoff.capture(event.currentTarget);setPhase(destination);}}
+          onEnded={event => {captureHandoff(event.currentTarget);setPhase(destination);}}
+          onError={event => {captureHandoff(event.currentTarget);setPhase(destination);}}
         />}
         {phase === "room" && <nav className="cinematic-hotspots" aria-label="Explore the room">
-          <button ref={monitorButton} type="button" className="cinematic-hotspot" style={HOTSPOTS.monitor as CSSProperties} onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor} aria-label="Enter monitor" />
-          <button ref={shelfButton} className="cinematic-hotspot" style={HOTSPOTS.vinyls as CSSProperties} onPointerDown={() => arm("vinyl-in")} onFocus={() => arm("vinyl-in")} onClick={enterVinyls} aria-label="Explore project records" />
-          <button ref={booksButton} className="cinematic-hotspot" style={HOTSPOTS.books as CSSProperties} onPointerDown={() => arm("books-in")} onFocus={() => arm("books-in")} onClick={enterBooks} aria-label="Explore report books" />
-          <button ref={photosButton} className="cinematic-hotspot" style={HOTSPOTS.photos as CSSProperties} onPointerDown={() => arm("photos-in")} onFocus={() => arm("photos-in")} onClick={enterPhotos} aria-label="Explore photographs" />
-          <button ref={diplomaButton} className="cinematic-hotspot" style={HOTSPOTS.frame as CSSProperties} onPointerDown={() => arm("diploma-in")} onFocus={() => arm("diploma-in")} onClick={enterDiploma} aria-label="Look at diploma" />
+          <button ref={monitorButton} type="button" className="cinematic-hotspot" style={HOTSPOTS.monitor as CSSProperties} onPointerEnter={() => hover("approach")} onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor} aria-label="Enter monitor" />
+          <button ref={shelfButton} className="cinematic-hotspot" style={HOTSPOTS.vinyls as CSSProperties} onPointerEnter={() => hover("vinyl-in")} onPointerDown={() => arm("vinyl-in")} onFocus={() => arm("vinyl-in")} onClick={enterVinyls} aria-label="Explore project records" />
+          <button ref={booksButton} className="cinematic-hotspot" style={HOTSPOTS.books as CSSProperties} onPointerEnter={() => hover("books-in")} onPointerDown={() => arm("books-in")} onFocus={() => arm("books-in")} onClick={enterBooks} aria-label="Explore report books" />
+          <button ref={photosButton} className="cinematic-hotspot" style={HOTSPOTS.photos as CSSProperties} onPointerEnter={() => hover("photos-in")} onPointerDown={() => arm("photos-in")} onFocus={() => arm("photos-in")} onClick={enterPhotos} aria-label="Explore photographs" />
+          <button ref={diplomaButton} className="cinematic-hotspot" style={HOTSPOTS.frame as CSSProperties} onPointerEnter={() => hover("diploma-in")} onPointerDown={() => arm("diploma-in")} onFocus={() => arm("diploma-in")} onClick={enterDiploma} aria-label="Look at diploma" />
         </nav>}
       </div>
 
       {phase === "room" && <footer className="cinematic-controls">
         <span>Brian Zeng</span>
         <nav aria-label="Room shortcuts">
-          <button type="button" onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor}>Monitor</button>
-          <button type="button" onPointerDown={() => arm("vinyl-in")} onFocus={() => arm("vinyl-in")} onClick={enterVinyls}>Projects</button>
-          <button type="button" onPointerDown={() => arm("books-in")} onFocus={() => arm("books-in")} onClick={enterBooks}>Books</button>
-          <button type="button" onPointerDown={() => arm("photos-in")} onFocus={() => arm("photos-in")} onClick={enterPhotos}>Photos</button>
-          <button type="button" onPointerDown={() => arm("diploma-in")} onFocus={() => arm("diploma-in")} onClick={enterDiploma}>Diploma</button>
+          <button type="button" onPointerEnter={() => hover("approach")} onPointerDown={() => arm("approach")} onFocus={() => arm("approach")} onClick={enterMonitor}>Monitor</button>
+          <button type="button" onPointerEnter={() => hover("vinyl-in")} onPointerDown={() => arm("vinyl-in")} onFocus={() => arm("vinyl-in")} onClick={enterVinyls}>Projects</button>
+          <button type="button" onPointerEnter={() => hover("books-in")} onPointerDown={() => arm("books-in")} onFocus={() => arm("books-in")} onClick={enterBooks}>Books</button>
+          <button type="button" onPointerEnter={() => hover("photos-in")} onPointerDown={() => arm("photos-in")} onFocus={() => arm("photos-in")} onClick={enterPhotos}>Photos</button>
+          <button type="button" onPointerEnter={() => hover("diploma-in")} onPointerDown={() => arm("diploma-in")} onFocus={() => arm("diploma-in")} onClick={enterDiploma}>Diploma</button>
           <button type="button" aria-pressed={!motion} onClick={() => setMotion(value => !value)}>{motion ? "Pause motion" : "Enable motion"}</button>
         </nav>
       </footer>}
@@ -276,13 +285,13 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
         <small>Draft effect · awaiting approval</small>
       </aside>}
 
-      {traveling && <button className="cinematic-back" type="button" onClick={() => {handoff.capture(transition.current);setPhase(destination);}}>Skip animation →</button>}
-      {showShelf && <Suspense fallback={<div className={inboundShelf ? 'cinematic-sr' : mobileLayout?'cinematic-sr':'cinematic-shelf-loading'} role="status">Preparing the shelf…</div>}><VinylShelf preparing={inboundShelf && transitionVisible} coherentPhotos={coherentPhotos} coherentBooks={coherentBooks} refinedCues={refinedCues} cueFadeIn={cueFadeIn} cueMemory={shelfCueMemory.current} mobileLayout={mobileLayout} responsiveLayout={responsiveLayout} activityCues={activityCues && phase==='vinyls'} review={shelfReview} initialCubby={initialCubby} onReady={onShelfReady} motion={motion} onExit={cubby=>{restoreFocus.current=true;setInitialCubby(cubby);returnTarget.current=cubby===0?"books":cubby===2?'photos':"vinyls";setTransitionVisible(false);setPhase(motion?(cubby===0?"books-out":cubby===2?'photos-out':"vinyl-out"):"room");}} /></Suspense>}
+      {traveling && <button className="cinematic-back" type="button" onClick={() => {captureHandoff(transition.current);setPhase(destination);}}>Skip animation →</button>}
+      {showShelf && <Suspense fallback={<div className={inboundShelf ? 'cinematic-sr' : mobileLayout?'cinematic-sr':'cinematic-shelf-loading'} role="status">Preparing the shelf…</div>}><VinylShelf preparing={inboundShelf && transitionVisible} fastTransitions={fastTransitions} coherentPhotos={coherentPhotos} coherentBooks={coherentBooks} refinedCues={refinedCues} cueFadeIn={cueFadeIn} cueMemory={shelfCueMemory} mobileLayout={mobileLayout} responsiveLayout={responsiveLayout} activityCues={activityCues && phase==='vinyls'} review={shelfReview} initialCubby={initialCubby} onReady={onShelfReady} motion={motion} onExit={cubby=>{restoreFocus.current=true;setInitialCubby(cubby);returnTarget.current=cubby===0?"books":cubby===2?'photos':"vinyls";setTransitionVisible(false);setPhase(motion?(cubby===0?"books-out":cubby===2?'photos-out':"vinyl-out"):"room");}} /></Suspense>}
       {(phase === "diploma" || (phase === "diploma-out" && holdingReturn)) && <div className="cinematic-diploma">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img ref={diplomaImage} src={`${MEDIA}diploma.webp`} alt="Close-up of Brian’s framed diploma" />
         {mobileLayout&&<DiplomaEnlargement />}
-        <button className="cinematic-back" onPointerDown={() => arm("diploma-out")} onClick={() => { restoreFocus.current = true; setTransitionVisible(false); setPhase(motion ? "diploma-out" : "room"); }}>← Room</button>
+        <button className="cinematic-back" onPointerEnter={() => hover("diploma-out")} onPointerDown={() => arm("diploma-out")} onClick={() => { restoreFocus.current = true; setTransitionVisible(false); setPhase(motion ? "diploma-out" : "room"); }}>← Room</button>
       </div>}
       {showDesktop && <div className={`cinematic-desktop ${phase === "desktop" || phase === "return" ? "is-ready" : ""}`}>
         <iframe ref={desktop} src={responsiveLayout?'/review/responsive-desktop':mobileLayout&&shelfReview?'/review/mobile-desktop':'/desktop'} title="Brian’s desktop" onLoad={() => setDesktopLoaded(true)} tabIndex={phase === "desktop" ? 0 : -1} />
@@ -291,11 +300,11 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
           <span className="cinematic-sr">Starting Brian’s desktop</span>
           {bootFinished && !desktopLoaded && <a href="/desktop">Open desktop directly →</a>}
         </div>}
-        <button className="cinematic-back" type="button" onPointerDown={() => arm("return")} onClick={leaveMonitor}>← Room</button>
+        <button className="cinematic-back" type="button" onPointerEnter={() => hover("return")} onPointerDown={() => arm("return")} onClick={leaveMonitor}>← Room</button>
       </div>}
-      <canvas ref={handoff.canvas} className="cinematic-handoff" aria-hidden="true" />
+      <canvas ref={setHandoffCanvas} className="cinematic-handoff" aria-hidden="true" />
       {activityCues && phase==='room' && !greetingCuesDone && <ActivityCues fadeIn={cueFadeIn} refined={refinedCues} sceneKey="room" ready={pageVisible}
-        visibleMs={refinedCues?2000:3000} allowReplay={false} onComplete={()=>setGreetingCuesDone(true)} cues={[
+        visibleMs={refinedCues?2000:3000} allowReplay={false} onComplete={()=>setGreetingCuesCompleted(true)} cues={[
         {id:'monitor',label:'',appearance:'arrow-only',selector:'.cinematic-hotspot[aria-label="Enter monitor"]',side:'left'},
         {id:'books',label:'',appearance:'arrow-only',selector:'.cinematic-hotspot[aria-label="Explore report books"]',side:'top',targetInset:{top:.65,right:refinedCues?.72:.25}},
         {id:'records',label:'',appearance:'arrow-only',selector:'.cinematic-hotspot[aria-label="Explore project records"]',side:'left'},
@@ -306,7 +315,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
         {id:'enlarge-diploma',label:refinedCues?'Click to Enlarge':'Click',touchLabel:refinedCues?'Tap to Enlarge':'Tap',selector:'.diploma-enlarge-target',side:'right'},
       ]}/>}
       {activityCues && shelfReview && (phase==='vinyls'||phase==='diploma') && <button className="activity-cue-replay" onClick={replayActivityCues}>Replay notes</button>}
-      <noscript><nav className="cinematic-noscript"><a href="/desktop">Open desktop</a><a href="/projects">Projects</a><a href="/about">About Brian</a></nav></noscript>
+      <noscript><nav className="cinematic-noscript"><Link href="/desktop">Open desktop</Link><Link href="/projects">Projects</Link><Link href="/about">About Brian</Link></nav></noscript>
     </main>
   );
 }

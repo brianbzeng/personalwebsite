@@ -39,6 +39,7 @@ test('approved refinements are promoted, book target is stable, labels distingui
   assert.match(shelf,/viewportAnchor:\{x:\.955,y:\.5\},scale:1\.35/);
   assert.match(shelf,/visibleMs=\{refinedCues\?2000:undefined\}/);
   const room=read('app/components/CinematicRoom.tsx');
-  assert.match(room,/cueMemory=\{shelfCueMemory\.current\}/);
+  assert.match(room,/const \[shelfCueMemory\]=useState\(createCueVisitState\)/);
+  assert.match(room,/cueMemory=\{shelfCueMemory\}/);
   assert.match(room,/visibleMs=\{refinedCues\?2000:3000\}/);
 });

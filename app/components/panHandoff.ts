@@ -3,6 +3,7 @@ import {useCallback,useEffect,useRef} from 'react';
 /** Keep the last decoded frame until the destination has actually painted. */
 export function usePanHandoff(){
   const canvas=useRef<HTMLCanvasElement>(null),generation=useRef(0);
+  const setCanvas=useCallback((node:HTMLCanvasElement|null)=>{canvas.current=node;},[]);
   const capture=useCallback((video:HTMLVideoElement|null)=>{
     const token=++generation.current,node=canvas.current;
     if(node&&video&&video.readyState>=2&&video.videoWidth){
@@ -20,7 +21,7 @@ export function usePanHandoff(){
     }));
   },[]);
   useEffect(()=>()=>{generation.current++;},[]);
-  return {canvas,capture,release};
+  return {setCanvas,capture,release};
 }
 
 export const shelfPlates=[
