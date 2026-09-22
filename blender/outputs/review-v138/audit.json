@@ -1,0 +1,35 @@
+{
+  "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender\\outputs\\blender\\glm-5-3-flash-iterations\\lofi-room-cathode-glm53f-city-v138-review-source.blend",
+  "target": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs/blender/glm-5-3-flash-iterations/lofi-room-cathode-glm53f-city-v138-player-book-review.blend",
+  "wireGapsMeters": [
+    0.0006999969482421875,
+    0.0006999969482421875,
+    0.0006999969482421875,
+    0.0006998777389526367,
+    0.0007001161575317383,
+    0.0006998777389526367,
+    0.0007001161575317383,
+    0.0006998777389526367,
+    0.0001499652862548828
+  ],
+  "leanDegrees": 4,
+  "platter": [
+    2.4649999141693115,
+    1.1729999780654907,
+    1.4670000076293945
+  ],
+  "pivot": [
+    2.565000057220459,
+    0.972000002861023,
+    1.4930000305175781
+  ],
+  "discStationaryFrames": [
+    1,
+    42
+  ],
+  "soundFrame": 122,
+  "redirectFrame": 138,
+  "newTab": true,
+  "bookSamplesOnly": true,
+  "existingTransformsUnchangedExceptPackedBooks": true
+}

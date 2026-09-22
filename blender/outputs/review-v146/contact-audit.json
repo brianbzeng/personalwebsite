@@ -1,0 +1,49 @@
+{
+  "source": "INTERACT_Vinyl_0",
+  "neighbor": "INTERACT_Vinyl_1",
+  "previousGapMeters": 0.009097576141357422,
+  "translationMeters": [
+    0.0,
+    0.008947576396167278,
+    -0.00885772705078125
+  ],
+  "leanPreserved": true,
+  "onlyAssemblyChanged": true,
+  "samples": [
+    {
+      "frame": 1,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 42,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 88,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 122,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 144,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 240,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    },
+    {
+      "frame": 277,
+      "outlineGap": 0.0001499652862548828,
+      "footHeightDifference": 0.0
+    }
+  ]
+}

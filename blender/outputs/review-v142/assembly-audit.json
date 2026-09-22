@@ -1,0 +1,44 @@
+{
+  "reference": "AT-LP70X family official diagram plus Brian close-up photos",
+  "dimensionBasis": "photo-derived; no dimensioned factory pivot blueprint found",
+  "tiers": [
+    {
+      "part": "MountFlange",
+      "radius": 0.031,
+      "bottom": 1.415,
+      "top": 1.4162000000000001
+    },
+    {
+      "part": "LowerSkirt",
+      "radius": 0.0297,
+      "bottom": 1.4162000000000001,
+      "top": 1.4198000000000002
+    },
+    {
+      "part": "MiddleTerrace",
+      "radius": 0.0264,
+      "bottom": 1.4198000000000002,
+      "top": 1.4236000000000002
+    },
+    {
+      "part": "UpperTerrace",
+      "radius": 0.0218,
+      "bottom": 1.4236000000000002,
+      "top": 1.4270000000000003
+    },
+    {
+      "part": "BearingDrum",
+      "radius": 0.0165,
+      "bottom": 1.4270000000000003,
+      "top": 1.4320000000000002
+    }
+  ],
+  "crossedOutCueLeverIncluded": false,
+  "fixedPivot": [
+    2.565000057220459,
+    0.972000002861023,
+    1.4455000162124634
+  ],
+  "clampState": "open/unlatched",
+  "preserved": "J arm, needle, record flight, contact timing, half-height plinth"
+}

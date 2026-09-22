@@ -1,0 +1,28 @@
+.activity-cue-replay{position:fixed;top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));z-index:80;padding:6px 10px;min-height:32px;border:1px solid #ffffff40;border-radius:6px;background:#1b1b1bc9;color:#ddd;font:11px/1.2 Arial,sans-serif;cursor:pointer;}
+.activity-cues {
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  pointer-events: none;
+  user-select: none;
+  color: #fff;
+  overflow: hidden;
+  contain: layout style;
+}
+.activity-cues, .activity-cues * { pointer-events: none !important; }
+.activity-cues__canvas { display: block; overflow: visible; }
+.activity-cues__note {
+  filter: drop-shadow(0 0 2px rgb(255 255 255 / .28)) drop-shadow(0 0 6px rgb(255 255 255 / .22));
+}
+.activity-cues .handwritten-cue__letters { font-size: 43px; opacity: .96; }
+.activity-cues path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.activity-cues__point path { stroke-width: 1.25; opacity: .85; }
+.activity-cues__gesture path { stroke-width: 2.2; opacity: .87; }
+/* Position and lettering stay still; only the layer's timed opacity changes. */
+.activity-cues__float, .activity-cues__point, .activity-cues__gesture { animation: none; }
+body:has(dialog[open]) .activity-cues { visibility: hidden; }

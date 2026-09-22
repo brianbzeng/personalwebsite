@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import TerminalPulse from "./TerminalPulse";
+import { publicPushes, type PublicPush } from "./githubPushes";
+import "./githubWidget.css";
 
 const GITHUB_USERNAME = "brianbzeng";
 const ACTIVITY_DAYS = 28;
-const CACHE_KEY = "bz-github-activity-v3";
+const CACHE_KEY = "bz-github-activity-v4";
 const CACHE_TTL = 30 * 60 * 1000;
 const CHART_WIDTH = 560;
 const CHART_HEIGHT = 178;
@@ -37,13 +40,15 @@ type ActivityItem = {
 
 type ActivitySource = "loading" | "live" | "snapshot";
 
-type GitHubActivity = {
+export type GitHubActivity = {
   daily: ContributionDay[];
   total: number | null;
   repoCount: number | null;
   latest: string;
   recent: ActivityItem[];
   source: ActivitySource;
+  pushes: PublicPush[];
+  pushesAvailable: boolean;
 };
 
 type ContributionDay = {
@@ -69,6 +74,7 @@ const EMPTY_ACTIVITY: GitHubActivity = {
   latest: "Syncing",
   recent: [],
   source: "loading",
+  pushes: [], pushesAvailable: false,
 };
 
 const SNAPSHOT_ACTIVITY: GitHubActivity = {
@@ -101,6 +107,7 @@ const SNAPSHOT_ACTIVITY: GitHubActivity = {
     },
   ],
   source: "snapshot",
+  pushes: [], pushesAvailable: false,
 };
 
 function dateKey(date: Date) {
@@ -163,9 +170,9 @@ function buildActivity(events: GitHubEvent[], daily: ContributionDay[]): GitHubA
     day.setUTCDate(today.getUTCDate() - (ACTIVITY_DAYS - 1 - index));
     return dateKey(day);
   });
-  const dayIndex = new Map(days.map((day, index) => [day, index]));
+  const dayIndex = new Map((daily.every(day => day.date) ? daily.map(day => day.date) : days).map((day, index) => [day, index]));
   const windowEvents = events
-    .filter((event) => dayIndex.has(event.created_at.slice(0, 10)))
+    .filter((event) => Number.isFinite(Date.parse(event.created_at)) && dayIndex.has(new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(event.created_at))))
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
 
   const recent: ActivityItem[] = [];
@@ -192,6 +199,7 @@ function buildActivity(events: GitHubEvent[], daily: ContributionDay[]): GitHubA
     latest: windowEvents[0] ? relativeTime(windowEvents[0].created_at, now) : "Quiet",
     recent,
     source: "live",
+    pushes: publicPushes(events), pushesAvailable: true,
   };
 }
 
@@ -202,8 +210,61 @@ function isCachedActivity(value: unknown): value is CachedActivity {
     typeof cached.savedAt === "number"
       && cached.activity
       && Array.isArray(cached.activity.daily)
-      && cached.activity.daily.length === ACTIVITY_DAYS,
+      && cached.activity.daily.length === ACTIVITY_DAYS
+      && cached.activity.daily.every(day => typeof day.date === "string" && Number.isFinite(day.count) && day.count >= 0)
+      && Array.isArray(cached.activity.recent)
+      && Array.isArray(cached.activity.pushes)
+      && typeof cached.activity.pushesAvailable === "boolean"
   );
+}
+
+let inFlight: Promise<GitHubActivity> | null = null;
+let memoryCache: CachedActivity | null = null;
+
+function loadPublicActivity(): Promise<GitHubActivity> {
+  if (memoryCache && Date.now() - memoryCache.savedAt < CACHE_TTL) return Promise.resolve(memoryCache.activity);
+  if (inFlight) return inFlight;
+  inFlight = (async (): Promise<GitHubActivity> => {
+    let cached = memoryCache;
+    try {
+      const stored: unknown = JSON.parse(window.localStorage.getItem(CACHE_KEY) ?? "null");
+      if (isCachedActivity(stored)) cached = stored;
+    } catch { /* Storage is optional. */ }
+    if (cached && Date.now() - cached.savedAt < CACHE_TTL) { memoryCache = cached; return cached.activity; }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    try {
+      const read = async (url: string) => {
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) throw new Error("Public activity unavailable");
+        return response.json();
+      };
+      const [calendar, feed] = await Promise.allSettled([
+        read("/api/github-contributions"),
+        read(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`),
+      ]);
+      const calendarValue = calendar.status === "fulfilled" ? calendar.value : null;
+      const calendarDays = calendarValue && typeof calendarValue === "object" && "daily" in calendarValue ? calendarValue.daily : null;
+      const hasCalendar = Array.isArray(calendarDays) && calendarDays.length === ACTIVITY_DAYS
+        && calendarDays.every(day => typeof day?.date === "string" && Number.isFinite(day.count) && day.count >= 0);
+      const feedValue = feed.status === "fulfilled" ? feed.value : null;
+      const hasFeed = Array.isArray(feedValue);
+      if (!hasCalendar && !hasFeed) return cached ? { ...cached.activity, source: "snapshot" } : SNAPSHOT_ACTIVITY;
+      const events: GitHubEvent[] = Array.isArray(feedValue) ? feedValue.filter((event: GitHubEvent) =>
+        typeof event?.id === "string" && typeof event?.type === "string" && typeof event?.created_at === "string"
+        && typeof event?.repo?.name === "string" && /^[\w.-]+\/[\w.-]+$/.test(event.repo.name)) : [];
+      const next = buildActivity(events, hasCalendar ? calendarDays : EMPTY_ACTIVITY.daily);
+      if (!hasCalendar) next.total = null;
+      if (!hasFeed) {
+        next.pushes = []; next.pushesAvailable = false;
+        next.recent = []; next.repoCount = null; next.latest = "—";
+      }
+      memoryCache = { savedAt: Date.now(), activity: next };
+      try { window.localStorage.setItem(CACHE_KEY, JSON.stringify(memoryCache)); } catch { /* Cache failure does not hide real data. */ }
+      return next;
+    } finally { clearTimeout(timeout); }
+  })().finally(() => { inFlight = null; });
+  return inFlight;
 }
 
 function chartPoints(days: ContributionDay[]): ChartPoint[] {
@@ -224,7 +285,7 @@ function tooltipDate(value: string) {
   return `${month}/${day}/${year.slice(-2)}`;
 }
 
-export default function GitHubPulse() {
+export default function GitHubPulse({ variant = "chart", active = true }: { variant?: "chart" | "terminal" | "widget"; active?: boolean }) {
   const [activity, setActivity] = useState<GitHubActivity>(EMPTY_ACTIVITY);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const points = useMemo(() => chartPoints(activity.daily), [activity.daily]);
@@ -235,62 +296,9 @@ export default function GitHubPulse() {
     : undefined;
 
   useEffect(() => {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 5_000);
-
-    async function loadActivity() {
-      try {
-        try {
-          const stored = window.localStorage.getItem(CACHE_KEY);
-          if (stored) {
-            const cached: unknown = JSON.parse(stored);
-            if (isCachedActivity(cached) && Date.now() - cached.savedAt < CACHE_TTL) {
-              setActivity({ ...cached.activity, source: "live" });
-              return;
-            }
-          }
-        } catch {
-          try {
-            window.localStorage.removeItem(CACHE_KEY);
-          } catch {
-            // Continue without local caching when storage is unavailable.
-          }
-        }
-
-        const [contributionsResponse, eventsResponse] = await Promise.all([
-          fetch("/api/github-contributions", { signal: controller.signal }),
-          fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`, {
-            signal: controller.signal,
-          }),
-        ]);
-        if (!contributionsResponse.ok || !eventsResponse.ok) {
-          throw new Error("GitHub activity could not be loaded");
-        }
-
-        const contributions = await contributionsResponse.json() as { daily: ContributionDay[] };
-        const events = await eventsResponse.json() as GitHubEvent[];
-        const nextActivity = buildActivity(events, contributions.daily);
-        setActivity(nextActivity);
-        try {
-          window.localStorage.setItem(
-            CACHE_KEY,
-            JSON.stringify({ savedAt: Date.now(), activity: nextActivity } satisfies CachedActivity),
-          );
-        } catch {
-          // Live data still renders when storage is unavailable.
-        }
-      } catch {
-        setActivity(SNAPSHOT_ACTIVITY);
-      } finally {
-        window.clearTimeout(timeout);
-      }
-    }
-
-    void loadActivity();
-    return () => {
-      controller.abort();
-      window.clearTimeout(timeout);
-    };
+    let mounted = true;
+    void loadPublicActivity().then(value => { if (mounted) setActivity(value); }).catch(() => { if (mounted) setActivity(SNAPSHOT_ACTIVITY); });
+    return () => { mounted = false; };
   }, []);
 
   const statusLabel = activity.source === "live"
@@ -298,6 +306,18 @@ export default function GitHubPulse() {
     : activity.source === "snapshot"
       ? "Recent snapshot"
       : "Syncing feed";
+
+  if (variant === "terminal") return <TerminalPulse activity={activity} active={active} />;
+
+  if (variant === "widget") return <section className="github-desktop-widget" aria-label="GitHub Pulse" aria-busy={activity.source === "loading"}>
+    <header><span>GitHub Pulse</span><a href={`https://github.com/${GITHUB_USERNAME}`} target="_blank" rel="noopener noreferrer" aria-label="Open Brian’s GitHub profile">↗</a></header>
+    <div className="github-widget-total"><strong>{activity.total ?? "—"}</strong><span>{activity.source === "snapshot" ? "contributions · saved snapshot" : "contributions · last 28 days"}</span></div>
+    {activity.source === "loading" ? <div className="github-widget-skeleton" aria-label="Loading GitHub activity" /> : <svg className="github-widget-chart" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} preserveAspectRatio="none" role="img" aria-label="Contribution activity over 28 days">
+      <polygon points={areaPoints} /><polyline points={linePoints} />
+      {latestPoint && <circle className="github-widget-ping" cx={latestPoint.x} cy={latestPoint.y} r="5" />}
+    </svg>}
+    <footer><span>{activity.repoCount ?? "—"} active repos</span></footer>
+  </section>;
 
   return (
     <aside className={`github-pulse source-${activity.source}`} aria-labelledby="github-pulse-title">

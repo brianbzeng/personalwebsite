@@ -1,0 +1,57 @@
+.windows-app-icon-f1 { display: grid; place-items: center; border-radius: 23%; background: linear-gradient(145deg, #707070, #222); border: 1px solid #ffffff40; color: #f1f1f1; box-shadow: inset 0 1px 2px #ffffff45, 0 2px 3px #0005; }
+.windows-app-icon-f1 svg { width: 70%; height: 70%; }
+.mac-desktop-app .windows-app-icon-f1 { display: grid; }
+.mac-desktop .mac-f1-window { background: #202020; }
+.mac-desktop .mac-f1-window .win-titlebar { height: 30px; min-height: 30px; background: #202020; border-bottom: 1px solid #ffffff09; }
+.mac-desktop .mac-f1-window:not(.is-focused) .win-titlebar { background: #303030; }
+.f1-app-body { min-height: 0; flex: 1; overflow: auto; padding: 24px 28px 18px; border-radius: 0 0 13px 13px; color: #eee; font-size: 1rem; line-height: 1.5; container-type: inline-size; }
+.f1-app-body a:focus-visible, .f1-app-body summary:focus-visible { outline: 2px solid #eee; outline-offset: 4px; }
+.f1-app-overview { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.f1-app-overview h1 { font-size: clamp(1.3rem, 3cqw, 1.9rem); line-height: 1.2; letter-spacing: -.035em; margin: 4px 0 9px; font-weight: 650; }
+.f1-app-overview p { margin: 0; color: #b6b6b6; font-size: .875rem; }
+.f1-app-overview .f1-eyebrow { font-size: .75rem; letter-spacing: .13em; color: #a4a4a4; }
+.f1-season-progress { display: flex; flex-direction: column; min-width: 160px; gap: 3px; }
+.f1-season-progress > strong { font-size: 2rem; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.f1-season-progress strong span { color: #878787; font-size: 1.25rem; }
+.f1-season-progress > span { color: #aaa; font-size: .75rem; }
+.f1-season-progress progress { width: 100%; height: 3px; margin-top: 9px; accent-color: #ddd; border: 0; background: #444; }
+.f1-season-progress progress::-webkit-progress-bar { background: #444; }
+.f1-season-progress progress::-webkit-progress-value { background: #ddd; }
+.f1-model-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 16px 0; margin: 18px 0; border-block: 1px solid #ffffff15; }
+.f1-model-facts dt { color: #aaa; font-size: .75rem; }
+.f1-model-facts dd { margin: 3px 0 0; font-size: .875rem; font-variant-numeric: tabular-nums; }
+.f1-odds-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.f1-odds-toolbar h2 { margin: 0; font-size: 1rem; font-weight: 600; }
+.f1-odds-heading { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.f1-sort-description { margin: 0; color: #aaa; font-size: .75rem; }
+.f1-metric-control { display: flex; padding: 3px; border-radius: 8px; border: 1px solid #ffffff17; background: #171717; }
+.f1-metric-control button { padding: 5px 12px; border: 0; border-radius: 5px; font: inherit; font-size: .875rem; background: transparent; color: #aaa; white-space: nowrap; }
+.f1-metric-control button[aria-pressed="true"] { background: #575757; color: #fff; box-shadow: 0 1px 3px #0006; }
+.f1-snapshot-date { font-size: .75rem; color: #aaa; margin: 9px 0 12px; }
+.f1-table-summary { margin: 0 0 8px; font-size: .75rem; line-height: 1.5; color: #aaa; white-space: nowrap; overflow-x: auto; }
+.f1-table-summary:focus-visible { outline: 2px solid #eee; outline-offset: 2px; }
+.f1-caption-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.f1-caption-toolbar .f1-table-summary { flex: 1; min-width: 0; margin: 0; }
+.f1-caption-toolbar .f1-metric-control { flex-shrink: 0; }
+.f1-table-scroll { overflow-x: auto; }
+.f1-odds-table { border-collapse: collapse; width: 100%; min-width: 570px; font-size: .875rem; font-variant-numeric: tabular-nums; }
+.f1-odds-table th, .f1-odds-table td { padding: 9px 10px; border-bottom: 1px solid #ffffff0e; text-align: right; white-space: nowrap; }
+.f1-odds-table thead th { color: #a5a5a5; font-size: .75rem; font-weight: 400; padding-top: 4px; }
+.f1-odds-table th:first-child, .f1-odds-table td:first-child { padding-left: 0; width: 30px; color: #929292; text-align: left; }
+.f1-odds-table th:nth-child(2) { text-align: left; font-weight: 500; }
+.f1-odds-table td:last-child, .f1-odds-table th:last-child { padding-right: 0; }
+.f1-odds-table tbody tr:hover { background: #ffffff04; }
+.f1-odds-value { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.f1-odds-value strong { min-width: 64px; font-weight: 500; }
+.f1-odds-track { display: block; height: 5px; width: clamp(60px, 15cqw, 180px); background: #ffffff0a; border-radius: 3px; overflow: hidden; }
+.f1-odds-track i { height: 100%; display: block; background: linear-gradient(90deg, #707070, #e0e0e0); border-radius: inherit; }
+.f1-method { margin-top: 17px; font-size: .875rem; color: #bdbdbd; }
+.f1-method summary { color: #ddd; width: fit-content; }
+.f1-method p { max-width: 85ch; margin: 12px 0 0; }
+.f1-app-footer { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 18px; font-size: .75rem; color: #ababab; }
+.f1-app-footer a:hover { color: white; text-decoration: underline; }
+@container (max-width: 600px) {
+  .f1-app-overview { gap: 16px; }
+  .f1-season-progress { min-width: 120px; }
+  .f1-model-facts { grid-template-columns: 1fr 1fr; gap: 12px; }
+}

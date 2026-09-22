@@ -1,0 +1,15 @@
+# Personal Notes bulletin board
+
+Brian manages published notes here in Codex. The authoritative shared content is `app/components/notesData.ts` (`BOARD_NOTES`), versioned with the site rather than stored in a visitor's browser. Ask Codex to add, edit, format, reorder or remove a note. There is no public write endpoint, visitor editor, Apple account integration, or claim of full Apple Notes parity.
+
+Each note has a stable unique `id`, title, and typed content blocks. Multiple notes appear in the Notes list; search covers titles and body text. Supported blocks: paragraph, heading, subheading, bullets, numbered lists, and checklists. Each inline text segment supports any combination of `bold`, `italic`, `underline`, and `strikethrough`. A checklist item's `checked` value is published by Brian, not changed by visitors. All text is escaped by React; no raw HTML is rendered.
+
+The layout follows Brian's MacBook reference: an inset folder panel, date-grouped note list, and editor/reading pane under a grouped toolbar. The yellow selection and colored window controls are gray. Toolbar authoring controls are disabled on this public read-only board; sidebar visibility, folder browsing, title/date sorting, search, and sharing are functional. The iCloud and Google headings are visual labels only, not connected accounts. The reference image's private note contents are not site content.
+
+Optional `updatedAt` metadata is an ISO timestamp for the note's actual published edit, shown in Pacific time and grouped under Today, Yesterday, Previous 30 Days, or a month. Undated notes appear in a Notes group. Set `folder: "quick"` to place a published note in Quick Notes; omitted or `"notes"` uses the main Notes folder. Do not invent extra notes just to fill the reference layout.
+
+The first note is Brian's supplied “to do:” / “Finish CastingCompass Frontend.” Additional notes are not fabricated. The desktop widget previews the first note; the Notes app opens from that widget, desktop icon, Dock, app menu, or Spotlight. The window supports dragging, resizing, minimize, full screen, and Mission Control through the shared window manager.
+
+Ordinary `/desktop` startup opens only Terminal, not Notes. Notes opens on demand at the compact reference frame (approximately 888 × 540 in a 1918 × 905 desktop), with a workarea-capped 440 × 300 minimum for smaller screens. Explicit note-sharing links still open the requested note. Opening the Dock shortcut preserves an already-open Notes window's user-adjusted size; closing and opening it again restores the default frame.
+
+Share copies `/desktop?note=<stable-id>` on the current origin, opening that note in Notes. If the clipboard is unavailable, the link appears in a selectable field. While running locally this link is usable only on the same computer; public sharing requires the eventual site deployment. No deployment was made for this iteration. Keep stable note IDs when updating content so existing links continue to work.

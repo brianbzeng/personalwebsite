@@ -1,5 +1,5 @@
-import VinylPortfolio from "./components/VinylPortfolio";
+import CinematicRoom from "./components/CinematicRoom";
 
 export default function Home() {
-  return <VinylPortfolio />;
+  return <CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn />;
 }

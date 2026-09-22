@@ -1122,7 +1122,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 /* Authentic Windows 11 desktop for the workstation monitor — 1277 × 508 */
 .windows-desktop-page {
   align-items: center;
-  background: #050507;
+  background: #050505;
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -1136,6 +1136,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
   aspect-ratio: 1277 / 508;
   background: #05070d url("/windows-11-bloom-dark.jpg") center 48% / cover no-repeat;
   color: #fff;
+  filter: grayscale(1);
   font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
   height: var(--desktop-h);
   isolation: isolate;
@@ -1193,25 +1194,34 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 
 .windows-shortcut-icon {
   align-items: center;
-  background: linear-gradient(145deg, #2b75d6, #0b3f8a);
-  border: 1px solid rgba(255, 255, 255, .45);
-  border-radius: calc(var(--desktop-h) * .009);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, .38);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   display: flex;
   height: calc(var(--desktop-h) * .067);
   justify-content: center;
   width: calc(var(--desktop-h) * .067);
 }
 
-.windows-shortcut-icon svg {
-  height: 58%;
-  width: 58%;
+.windows-app-icon {
+  display: inline-flex;
+  flex: none;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+  width: 100%;
 }
 
-.windows-recycle-icon { background: linear-gradient(145deg, #f7fbff, #88bceb); color: #1673c8; }
-.windows-shortcut-github { background: linear-gradient(145deg, #303239, #0e0f12); }
-.windows-shortcut-about { background: linear-gradient(145deg, #2e87df, #154578); }
-.windows-shortcut-contact { background: linear-gradient(145deg, #1884d6, #2c54ad); }
+.windows-app-icon > svg,
+.windows-app-icon > img {
+  display: block;
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+/* Keep the profile silhouette readable against the dark wallpaper, without a tile. */
+.windows-app-icon-about { filter: invert(.82); }
 
 .windows-terminal {
   background: #0c0c0c;
@@ -1320,6 +1330,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 
 .windows-terminal-body p { margin: 0; }
 
+.windows-terminal-name-art {
+  color: #e7e7e7;
+  font: inherit;
+  font-size: .56em;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  margin: 0;
+  white-space: pre;
+}
+
 .windows-terminal-prompt {
   align-items: baseline;
   display: flex;
@@ -1328,38 +1349,28 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 .windows-terminal-prompt label { white-space: nowrap; }
 
 .windows-terminal-input-wrap {
-  display: inline-flex;
-  min-width: 1ch;
+  display: block;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
   position: relative;
-}
-
-.windows-terminal-input-wrap input {
-  background: transparent;
-  border: 0;
-  caret-color: transparent;
-  color: transparent;
-  font: inherit;
-  inset: 0;
-  outline: 0;
-  padding: 0;
-  position: absolute;
-  width: max(15ch, 100%);
 }
 
 .windows-terminal-caret {
   animation: windows-caret 1s steps(1, end) infinite;
-  background: #f2f2f2;
-  display: inline-block;
-  height: 1.08em;
-  margin-left: .08em;
-  transform: translateY(.14em);
-  width: .56em;
+  color: #f2f2f2;
+  font: inherit;
+  line-height: inherit;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 1ch;
 }
 
 .windows-taskbar {
   align-items: center;
-  backdrop-filter: blur(calc(var(--desktop-h) * .04)) saturate(140%);
-  background: rgba(17, 20, 31, .84);
+  backdrop-filter: blur(calc(var(--desktop-h) * .04));
+  background: rgba(22, 22, 22, .84);
   border-top: 1px solid rgba(255, 255, 255, .09);
   bottom: 0;
   display: flex;
@@ -1486,6 +1497,16 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* Full-frame 1920 × 1080 desktop and movable window system */
+/* Tahoe keeps the room's monochrome palette, including native icon artwork. */
+.mac-desktop {
+  --mac-glass: rgba(42, 42, 42, .72);
+  --mac-glass-border: rgba(255, 255, 255, .27);
+  --mac-text: #f4f4f4;
+  --mac-secondary: #c2c2c2;
+  --mac-menu-height: 28px;
+  color-scheme: dark;
+}
+
 .windows-desktop-canvas {
   --desktop-h: 100vh;
   --desktop-w: 100vw;
@@ -1512,7 +1533,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 .windows-shortcut-icon {
-  border-radius: calc(var(--desktop-h) * .005);
   height: calc(var(--desktop-h) * .039);
   width: calc(var(--desktop-h) * .039);
 }
@@ -1530,7 +1550,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 
 .windows-terminal-titlebar,
 .windows-app-titlebar {
-  cursor: move;
+  cursor: default;
   height: calc(var(--desktop-h) * .039);
   touch-action: none;
 }
@@ -1540,7 +1560,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
   gap: calc(var(--desktop-h) * .0075);
 }
 
-.windows-terminal-tab svg {
+.windows-terminal-tab > .windows-app-icon {
   height: calc(var(--desktop-h) * .019);
   width: calc(var(--desktop-h) * .019);
 }
@@ -1608,15 +1628,37 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 .windows-terminal-prompt input {
   background: transparent;
   border: 0;
-  caret-color: #f2f2f2;
+  caret-color: transparent;
   color: #f2f2f2;
   flex: 1;
   font: inherit;
-  min-width: 5ch;
+  min-width: 0;
   outline: 0;
-  padding: 0;
+  padding: 0 1ch 0 0;
   position: static;
-  width: auto;
+  width: 100%;
+}
+
+.windows-terminal-entry > p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.windows-terminal-pulse {
+  margin-top: 1em;
+}
+
+.windows-terminal-pulse-art {
+  font: inherit;
+  letter-spacing: 0;
+  line-height: 1.1;
+  margin: 1em 0 0;
+  white-space: pre;
+}
+
+.windows-terminal-pulse-readout {
+  min-height: 1.35em;
+  white-space: pre;
 }
 
 .windows-app-window {
@@ -1648,7 +1690,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
   gap: calc(var(--desktop-h) * .008);
 }
 
-.windows-app-title > svg {
+.windows-app-title > .windows-app-icon {
   height: calc(var(--desktop-h) * .019);
   width: calc(var(--desktop-h) * .019);
 }
@@ -1771,7 +1813,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
   width: calc(var(--desktop-h) * .041);
 }
 
-.windows-taskbar-button svg {
+.windows-taskbar-button > svg,
+.windows-taskbar-button > .windows-app-icon {
   height: calc(var(--desktop-h) * .024);
   width: calc(var(--desktop-h) * .024);
 }
@@ -1800,3 +1843,92 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 .windows-taskbar-clock small {
   font-size: calc(var(--desktop-h) * .0105);
 }
+
+/* Compact Windows Terminal tab strip */
+.windows-terminal-titlebar {
+  align-items: flex-start;
+  padding-top: calc(var(--desktop-h) * .0035);
+}
+
+.windows-terminal-tab {
+  align-self: stretch;
+  background: #303030;
+  border-radius: calc(var(--desktop-h) * .007) calc(var(--desktop-h) * .007) 0 0;
+  gap: calc(var(--desktop-h) * .0065);
+  height: auto;
+  margin-left: calc(var(--desktop-h) * .004);
+  padding: 0 calc(var(--desktop-h) * .009);
+  width: calc(var(--desktop-h) * .18);
+}
+
+.windows-terminal-tab::after {
+  display: none;
+}
+
+.windows-terminal-tab > span:not(.windows-app-icon) {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.windows-terminal-tab-close,
+.windows-terminal-tab-actions button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--desktop-h) * .004);
+  color: #e8e8e8;
+  cursor: default;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.windows-terminal-tab-close {
+  height: calc(var(--desktop-h) * .025);
+  width: calc(var(--desktop-h) * .025);
+}
+
+.windows-terminal-tab-close:hover,
+.windows-terminal-tab-actions button:hover {
+  background: rgba(255, 255, 255, .1);
+}
+
+.windows-terminal-tab .windows-terminal-tab-close svg {
+  height: calc(var(--desktop-h) * .0125);
+  width: calc(var(--desktop-h) * .0125);
+}
+
+.windows-terminal-tab-actions {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  gap: calc(var(--desktop-h) * .0015);
+  margin-left: calc(var(--desktop-h) * .002);
+}
+
+.windows-terminal-tab-actions .windows-terminal-new-tab,
+.windows-terminal-tab-actions .windows-terminal-tab-menu {
+  font-size: calc(var(--desktop-h) * .019);
+  height: calc(var(--desktop-h) * .029);
+  width: calc(var(--desktop-h) * .029);
+}
+
+.windows-terminal-tab-actions .windows-terminal-tab-menu svg {
+  height: calc(var(--desktop-h) * .012);
+  width: calc(var(--desktop-h) * .012);
+}
+
+/* Shared artwork sizing takes precedence over the legacy per-context SVG sizing. */
+.windows-shortcut-icon .windows-app-icon > :is(svg, img),
+.windows-terminal-tab .windows-app-icon > :is(svg, img),
+.windows-taskbar-button .windows-app-icon > :is(svg, img) {
+  height: 100%;
+  width: 100%;
+}
+/* Preserve the room's horizontal composition on touch devices. */
+.landscape-gate{position:fixed;inset:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px;background:#151515;color:#eee;text-align:center;font:16px/1.5 Arial,sans-serif;}
+.landscape-gate h2{font:24px/1.2 Georgia,serif;margin:0;outline:none;}
+.landscape-gate p{margin:0;color:#b8b8b8;}
+.landscape-gate button{border:1px solid #888;border-radius:5px;background:#252525;color:#eee;padding:12px 18px;min-height:44px;font:16px Arial,sans-serif;}

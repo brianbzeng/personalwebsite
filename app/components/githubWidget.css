@@ -1,0 +1,28 @@
+.github-desktop-widget { width: 100%; flex-shrink: 0; padding: 15px 19px 13px; border: 1px solid var(--mac-glass-border); border-radius: 25px; clip-path: inset(0 round 25px); background: linear-gradient(145deg,#ffffff26,#77777726 60%,#ffffff12); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); box-shadow: inset 0 1px 1px #ffffff38,0 8px 24px #0003; color:#ededed; }
+.github-desktop-widget header,.github-desktop-widget footer { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:13px; color:#ccc; }
+.github-desktop-widget header > span { font-size:14px; font-weight:600; }
+.github-desktop-widget a,.github-desktop-widget button { color:inherit; }
+.github-desktop-widget a { padding:3px; }
+.github-widget-total { display:flex; gap:9px; align-items:baseline; margin-top:2px; }
+.github-widget-total strong { font-size:28px; line-height:1.3; font-weight:600; }
+.github-widget-total span { font-size:12px; color:#c7c7c7; }
+.github-widget-chart { width:100%; height:74px; overflow:visible; display:block; margin:4px 0 8px; }
+.github-widget-chart polygon { fill:#ffffff12; }
+.github-widget-chart polyline { fill:none; stroke:#dfdfdf; stroke-width:1.5; vector-effect:non-scaling-stroke; stroke-linejoin:round; }
+.github-widget-ping { fill:#fff; animation:github-widget-pulse 2.4s ease-in-out infinite; }
+.github-desktop-widget button { background:none; border:0; padding:3px 0 3px 8px; font:inherit; cursor:pointer; }
+.github-desktop-widget button:hover,.github-desktop-widget a:hover { color:#fff; text-decoration:underline; }
+.github-desktop-widget :focus-visible { outline:2px solid #eee; outline-offset:3px; border-radius:3px; }
+.github-widget-skeleton { height:74px; margin:4px 0 8px; border-radius:7px; background:linear-gradient(100deg,#ffffff08 25%,#ffffff22 45%,#ffffff08 65%); background-size:250% 100%; animation:github-widget-load 1.4s linear infinite; }
+.mac-desktop .terminal-push-entry { padding-bottom:12px; overflow-wrap:anywhere; }
+.mac-desktop .windows-terminal-entry a { color:#ededed; text-decoration:underline; text-underline-offset:3px; }
+.mac-desktop .windows-terminal-entry a:hover { color:#fff; }
+.mac-loading-cursor { position:fixed; top:0; left:0; width:22px; height:22px; z-index:2147483647; pointer-events:none; display:none; }
+.mac-loading-cursor i { display:block; width:20px; height:20px; border:2px solid #777; border-top-color:#f3f3f3; border-right-color:#bfbfbf; border-radius:50%; box-shadow:0 1px 4px #0008; animation:mac-loading-turn .65s linear infinite; }
+.mac-desktop.is-launching[data-pointer="true"],.mac-desktop.is-launching[data-pointer="true"] * { cursor:none!important; }
+.mac-desktop.is-launching[data-pointer="true"] .mac-loading-cursor { display:block; }
+.mac-launch-status { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@keyframes mac-loading-turn { to { rotate:360deg; } }
+@keyframes github-widget-pulse { 50% { opacity:.35; } }
+@keyframes github-widget-load { to { background-position:-150% 0; } }
+@media(prefers-reduced-motion:reduce) { .github-widget-ping,.github-widget-skeleton,.mac-loading-cursor i { animation:none; } }

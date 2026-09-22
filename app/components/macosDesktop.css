@@ -1,0 +1,222 @@
+/* Tahoe-inspired chrome. Shared window geometry and terminal behavior stay intact. */
+.mac-desktop.windows-desktop-canvas {
+  background: #171717 url("/macos-tahoe-dark.jpg") center / cover no-repeat;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  color: var(--mac-text);
+  --taskbar-height: 0px;
+  --win-surface: var(--mac-glass);
+  --win-border: var(--mac-glass-border);
+}
+.mac-desktop .win-workarea { inset: var(--mac-menu-height) 0 0; isolation: isolate; }
+.mac-desktop .windows-app-icon-about { filter: none; }
+.mac-desktop .windows-app-icon img { object-fit: contain; }
+.mac-desktop button:focus-visible { outline: 2px solid #eee; outline-offset: 2px; }
+.mac-desktop .win-window {
+  background: #101010; border: 1px solid #ffffff35; border-radius: 14px;
+  box-shadow: 0 26px 70px #0008, 0 0 0 1px #0003;
+  transform-origin: 50% 100%;
+  transition: transform .26s cubic-bezier(.32,.05,.5,1), opacity .2s, visibility 0s;
+}
+.mac-desktop .win-window.is-focused { border-color: #ffffff65; box-shadow: 0 32px 85px #000a, 0 0 0 1px #0004; }
+.mac-desktop .mac-terminal-window {
+  background: rgba(30, 30, 30, .82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.mac-desktop .win-window.is-minimized {
+  transform: translateY(65vh) scale(.08); opacity: 0; visibility: hidden; pointer-events: none;
+  transition: transform .28s cubic-bezier(.4,0,.7,.4), opacity .24s, visibility 0s .28s;
+}
+.mac-desktop .win-window.is-maximized, .mac-desktop .win-window.is-fullscreen { border-radius: 0; }
+.mac-desktop .win-titlebar {
+  height: 38px; min-height: 38px; align-items: center; border-radius: 13px 13px 0 0;
+  background: linear-gradient(#393939ee, #2d2d2dee); border-bottom: 1px solid #0008;
+}
+.mac-desktop .win-window:not(.is-focused) .win-titlebar { background: #303030; }
+.mac-desktop .mac-terminal-window .win-titlebar {
+  height: 30px; min-height: 30px; background: #202020;
+  border-bottom: 1px solid #ffffff09;
+}
+.mac-desktop .win-window.is-maximized .win-titlebar,
+.mac-desktop .win-window.is-fullscreen .win-titlebar { border-radius: 0; }
+.mac-window-heading {
+  position: absolute; inset: 0 95px; display: flex; align-items: center; justify-content: center;
+  gap: 7px; font-size: 13px; font-weight: 600; white-space: nowrap; pointer-events: none;
+  overflow: hidden; text-overflow: ellipsis; color: #dedede;
+}
+.mac-window-heading .windows-app-icon { width: 16px; height: 16px; }
+.mac-terminal-window .mac-window-heading { inset: 0 14px 0 85px; justify-content: flex-start; }
+.mac-terminal-window .mac-window-heading > span { overflow: hidden; text-overflow: ellipsis; }
+.mac-terminal-grid { font-variant-numeric: tabular-nums; }
+.mac-desktop .mac-help-window .win-titlebar { height: 30px; min-height: 30px; }
+.mac-help-body { flex: 1; min-height: 0; overflow: auto; padding: 24px; font-size: 16px; line-height: 1.5; }
+.mac-help-body h1 { margin: 0 0 8px; font-size: 22px; }
+.mac-help-body p { color: #bbb; margin: 0 0 16px; }
+.mac-help-open-terminal { display: inline-flex; align-items: center; gap: 14px; padding: 8px 12px; border: 1px solid #ffffff40; border-radius: 8px; background: #ffffff12; color: inherit; font: inherit; }
+.mac-help-open-terminal:hover { background: #ffffff24; }
+.mac-help-open-terminal:focus-visible { outline: 2px solid #eee; outline-offset: 3px; }
+.mac-help-body dl { margin: 24px 0 0; }
+.mac-help-body dl > div { padding: 12px 0; border-top: 1px solid #ffffff20; }
+.mac-help-body dt { font-size: 14px; }
+.mac-help-body dd { margin: 4px 0 0; color: #bbb; font-size: 14px; }
+.mac-terminal-window .terminal-cell-probe { position: absolute; top: 0; left: 0; display: block; width: max-content; margin: 0; padding: 0; border: 0; font: inherit; line-height: inherit; white-space: pre; visibility: hidden; pointer-events: none; user-select: none; }
+.mac-title-folder { display: block; width: 16px; height: 16px; object-fit: contain; }
+.mac-desktop .mac-traffic-lights { align-self: auto; height: auto; margin: 0 0 0 13px; gap: 8px; align-items: center; z-index: 2; }
+.mac-desktop .mac-traffic-lights > button,
+.mac-desktop .mac-traffic-lights .win-maximize-group > button {
+  width: 13px; height: 13px; border-radius: 50%; padding: 1px; border: 1px solid #0003;
+  background: #acacac; color: #252525; box-shadow: inset 0 1px 1px #fff4;
+}
+.mac-desktop .mac-traffic-lights > button:nth-child(2) { background: #d0d0d0; }
+.mac-desktop .mac-traffic-lights .win-maximize-group > button { background: #939393; }
+.mac-desktop .mac-traffic-lights svg { width: 9px; height: 9px; opacity: 0; }
+.mac-desktop .mac-traffic-lights:hover svg,
+.mac-desktop .mac-traffic-lights:focus-within svg { opacity: 1; }
+.mac-desktop .win-window:not(.is-focused) .mac-traffic-lights button { background: #686868; }
+.mac-desktop .win-snap-menu { top: 22px; left: -5px; right: auto; border-radius: 13px; backdrop-filter: blur(24px); background: var(--mac-glass); }
+.mac-desktop .win-snap-menu::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+.mac-desktop .win-snap-preview { border-radius: 14px; background: #fff2; }
+.mac-terminal-tabbar { display: flex; align-items: stretch; min-height: 29px; height: 29px; position: relative; background: #292929; border-bottom: 1px solid #111; }
+.mac-desktop .win-terminal-tabs { flex: 1; max-width: none; min-width: 0; padding: 0; }
+.mac-desktop .win-tab { position: relative; width: auto; flex: 1; min-width: 105px; border-radius: 0; margin: 0; border-right: 1px solid #101010; }
+.mac-desktop .win-tab.is-selected { background: #494949; box-shadow: inset 0 1px #ffffff12; }
+.mac-desktop .win-tab > [role=tab] { justify-content: center; padding: 0 30px; font-size: 12px; color: #d4d4d4; }
+.mac-desktop .win-tab-close { order: -1; position: absolute; margin: 0 0 0 5px; width: 20px; height: 20px; padding: 4px; }
+.mac-desktop .win-tab-close svg { width: 12px; height: 12px; }
+.mac-desktop .win-tab:not(:hover):not(:focus-within) .win-tab-close { opacity: 0; }
+.mac-desktop .win-tab-actions { margin: 0; gap: 0; }
+.mac-desktop .win-tab-actions button { height: 28px; width: 27px; font-size: 19px; border-left: 1px solid #111; border-radius: 0; }
+.mac-desktop .win-terminal-menu { top: 33px; right: 6px; left: auto; border-radius: 12px; background: #303030ee; backdrop-filter: blur(25px); }
+.mac-desktop .win-terminal-panel { border-radius: 0 0 13px 13px; }
+.mac-desktop .win-terminal-session {
+  padding: 20px 14px; font-family: Menlo, Monaco, "Cascadia Mono", Consolas, "Courier New", monospace;
+  background: #101010; color: #e7e7e7;
+}
+.mac-desktop .mac-terminal-window .win-terminal-panel,
+.mac-desktop .mac-terminal-window .win-terminal-session { background: transparent; }
+.mac-desktop .mac-terminal-window .win-terminal-session { padding: 12px 14px; }
+.mac-desktop .windows-terminal-prompt label { white-space: pre; }
+.mac-desktop .windows-terminal-name-art { max-width: none; }
+.mac-desktop .win-terminal-session .windows-terminal-name-art { font-size: min(4px, .415cqw); }
+.mac-desktop .mac-trash-body { flex: 1; display: grid; align-content: center; justify-items: center; gap: 14px; background: #232323; color: #bebebe; }
+.mac-trash-body .windows-app-icon { width: 76px; height: 76px; }
+.mac-trash-body p { margin: 0; font-size: 14px; }
+.mac-desktop .win-recycle-status { text-align: center; border-radius: 0 0 13px 13px; background: #303030; padding: 7px; }
+
+/* A clear top menu bar, separate from the bottom Dock. */
+.mac-menu-bar { position: absolute; inset: 0 0 auto; height: var(--mac-menu-height); padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 800; user-select: none; text-shadow: 0 1px 4px #0008; }
+.mac-app-menus, .mac-status-menus { display: flex; align-items: center; height: 100%; gap: 0; }
+.mac-menu-bar button { height: 100%; padding: 0 10px; border: 0; border-radius: 5px; background: transparent; color: #f4f4f4; font-size: 13px; white-space: nowrap; text-shadow: inherit; display: flex; align-items: center; justify-content: center; }
+.mac-menu-bar button:hover, .mac-menu-bar button.is-selected { background: #fff2; }
+.mac-app-menus > button:nth-child(2) { font-weight: 700; }
+.mac-menu-bar .mac-apple-menu { width: 34px; flex: 0 0 34px; padding: 0; display: grid; place-items: center; }
+.mac-apple-menu img { display: block; width: 16px; height: 20px; margin: 0; object-fit: contain; filter: invert(1); }
+.mac-status-menus svg { width: 17px; height: 17px; }
+.mac-network { width: 34px; display: flex; justify-content: center; position: relative; }
+.mac-network b { position: absolute; right: 0; top: 2px; font-size: 12px; }
+.mac-menu-bar .mac-clock { gap: 12px; padding-right: 3px; font-variant-numeric: tabular-nums; }
+.mac-desktop .win-flyout-dismiss { inset: 0; z-index: 500; }
+.mac-desktop .win-flyout { border-radius: 15px; border-color: var(--mac-glass-border); backdrop-filter: blur(35px) saturate(0); background: var(--mac-glass); box-shadow: inset 0 1px #fff2, 0 16px 45px #0006; animation: mac-panel-in .13s ease-out; }
+.mac-app-menu { top: 30px; width: 245px; max-width: calc(100% - 16px); padding: 5px; }
+.mac-menu-apple { left: clamp(8px, 12px, calc(100% - 253px)); } .mac-menu-app { left: clamp(8px, 40px, calc(100% - 253px)); } .mac-menu-shell { left: clamp(8px, 119px, calc(100% - 253px)); } .mac-menu-edit { left: clamp(8px, 168px, calc(100% - 253px)); } .mac-menu-window { left: clamp(8px, 213px, calc(100% - 253px)); }
+.mac-app-menu button { width: 100%; display: flex; align-items: center; justify-content: space-between; text-align: left; padding: 7px 11px; border-radius: 8px; font-size: 13px; }
+.mac-app-menu button:hover, .mac-app-menu button:focus-visible { background: #ffffff24; }
+.mac-app-menu kbd { color: #bbb; font: inherit; }
+.mac-app-menu hr { border: 0; border-top: 1px solid #fff2; margin: 5px 9px; }
+.mac-desktop .win-flyout button:disabled { opacity: .4; cursor: default; background: transparent; }
+.mac-menu-window { max-height: calc(100% - 52px); overflow-y: auto; }
+.mac-desktop .mac-spotlight { top: 17%; bottom: auto; padding: 10px; width: min(650px, calc(100% - 28px)); max-height: calc(80% - 40px); border-radius: 23px; }
+.mac-spotlight .win-launcher-search { height: 60px; border: 0; border-radius: 16px; background: transparent; padding: 0 16px; gap: 16px; }
+.mac-spotlight .win-launcher-search > svg { width: 25px; height: 25px; }
+.mac-spotlight .win-launcher-search input { height: 52px; font-size: 24px; }
+.mac-keycap { font-size: 11px; color: #aaa; border: 1px solid #fff2; border-radius: 5px; padding: 2px 5px; }
+.mac-spotlight-heading { font-size: 12px; color: #bbb; padding: 9px 15px; border-top: 1px solid #ffffff12; }
+.mac-spotlight .win-search-results { min-height: 0; padding-bottom: 2px; }
+.mac-spotlight .win-search-results > button { padding: 10px 15px; border-radius: 10px; gap: 13px; }
+.mac-spotlight .win-search-results .windows-app-icon { width: 34px; height: 34px; }
+.mac-spotlight .win-search-results .is-highlighted { background: #ffffff25; }
+.mac-desktop .win-calendar { top: 38px; bottom: auto; border-radius: 22px; }
+.mac-desktop .win-task-view { border-radius: 22px; }
+.mac-desktop .win-context-menu { border-radius: 13px; }
+.mac-desktop .win-context-menu { z-index: 900; width: 244px; max-width: calc(100% - 16px); overflow-y: auto; }
+.mac-desktop .win-context-menu button:focus-visible { background: #ffffff24; outline: 1px solid #fff8; }
+.mac-desktop-icons { position: absolute; left: 18px; top: 16px; bottom: 100px; display: flex; flex-direction: column; flex-wrap: wrap; align-content: flex-start; gap: 12px 10px; z-index: 2; pointer-events: none; }
+.mac-desktop-app { width: 90px; min-height: 82px; flex: 0 0 82px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 6px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: #f3f3f3; pointer-events: auto; cursor: default; }
+.mac-desktop-app:hover { background: #ffffff0e; }
+.mac-desktop-app:focus-visible { outline: 2px solid #fff9; outline-offset: 2px; background: #ffffff20; }
+.mac-desktop-app .windows-app-icon { display: block; width: 48px; height: 48px; flex: 0 0 48px; filter: grayscale(1) drop-shadow(0 2px 3px #0006); }
+.mac-desktop-app > span:last-child { font-size: 12px; line-height: 16px; text-align: center; text-shadow: 0 1px 3px #000c; }
+.mac-command-menu-anchor { position: relative; }
+.mac-command-submenu { position: absolute; left: calc(100% - 2px); top: -5px; width: 236px; padding: 5px; border: 1px solid var(--mac-glass-border); border-radius: 13px; background: var(--mac-glass); backdrop-filter: blur(35px) saturate(0); box-shadow: inset 0 1px #fff2, 0 12px 30px #0006; z-index: 1; }
+.mac-command-submenu[data-side="left"] { left: auto; right: calc(100% - 2px); }
+.mac-command-submenu button { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; white-space: nowrap; }
+.mac-desktop .win-task-view { max-height: calc(100% - 100px); overflow-y: auto; }
+.mac-desktop .win-task-view > div { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr)); }
+.mac-desktop .win-task-view article { width: auto; min-width: 0; }
+
+/* Bottom-edge reveal with cosine magnification around fixed resting positions. */
+.mac-dock-region { position: absolute; bottom: 0; left: 0; right: 0; height: 150px; z-index: 700; pointer-events: none; --dock-size: clamp(36px, 4vw, 52px); }
+.mac-dock-trigger { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 9px; padding: 0; border: 0; background: transparent; pointer-events: auto; }
+.mac-dock {
+  position: absolute; bottom: 9px; left: 50%; padding: 10px 13px 4px;
+  transform: translate(-50%, calc(100% + 25px)); opacity: 0; pointer-events: none;
+  transition: transform .3s cubic-bezier(.2,.75,.25,1), opacity .18s ease;
+}
+.mac-dock.is-visible, .mac-dock:focus-within { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.mac-dock::before {
+  content: ""; position: absolute; inset: 0 calc(-1 * var(--dock-expansion, 0px));
+  background: linear-gradient(145deg, #ffffff29, #ffffff10 45%, #55555566);
+  border: 1px solid #ffffff57; border-radius: 24px; backdrop-filter: blur(24px) saturate(0);
+  box-shadow: inset 0 1px 1px #ffffff61, inset 0 -1px 1px #ffffff21, 0 9px 28px #0005;
+  transition: inset .12s ease-out; pointer-events: none;
+}
+.mac-dock-items { display: flex; gap: 10px; align-items: flex-end; height: calc(var(--dock-size) + 12px); position: relative; }
+.mac-dock-app {
+  position: relative; width: var(--dock-size); height: calc(var(--dock-size) * 1.65 + 12px); flex-shrink: 0;
+  border: 0; padding: 0; background: none; border-radius: 12px; transition: transform .12s ease-out;
+}
+.mac-dock-icon { position: absolute; bottom: 10px; left: 0; width: var(--dock-size); height: var(--dock-size); transform: scale(var(--icon-scale, 1)); transform-origin: 50% 100%; transition: transform .12s ease-out; filter: drop-shadow(0 4px 3px #0005); }
+.mac-dock-icon .windows-app-icon { width: 100%; height: 100%; filter: grayscale(1); }
+.mac-dock-trash::before { content: ""; position: absolute; left: -6px; bottom: 12px; height: 36px; width: 1px; background: #ffffff30; }
+.mac-dock-indicator { position: absolute; bottom: 1px; left: calc(50% - 2px); width: 4px; height: 4px; border-radius: 50%; background: #eee; opacity: 0; }
+.mac-dock-app.is-running .mac-dock-indicator { opacity: .9; }
+.mac-dock-tooltip {
+  position: absolute; bottom: calc(var(--dock-size) * var(--icon-scale, 1) + 25px); left: 50%; transform: translateX(-50%);
+  padding: 5px 11px; border: 1px solid #ffffff35; border-radius: 8px; background: #333333e8; backdrop-filter: blur(20px);
+  font-size: 13px; line-height: 18px; color: #eee; white-space: nowrap; opacity: 0; pointer-events: none;
+  box-shadow: 0 4px 15px #0004; transition: opacity .1s;
+}
+.mac-dock-app:hover .mac-dock-tooltip, .mac-dock-app:focus-visible .mac-dock-tooltip { opacity: 1; }
+.mac-dock-app.is-bouncing .windows-app-icon { animation: mac-dock-bounce .6s ease-in-out; }
+.mac-menubar-reveal { position: absolute; inset: 0 0 auto; height: 5px; z-index: 799; pointer-events: none; }
+.mac-desktop:has(.win-window.is-fullscreen.is-foreground:not(.is-minimized)) .win-workarea { inset: 0; }
+.mac-desktop:has(.win-window.is-fullscreen.is-foreground:not(.is-minimized)) .mac-menu-bar { transform: translateY(-100%); }
+.mac-desktop:has(.win-window.is-fullscreen.is-foreground:not(.is-minimized)) .mac-menubar-reveal { pointer-events: auto; }
+.mac-desktop:has(.mac-menubar-reveal:hover) .mac-menu-bar,
+.mac-desktop:has(.win-flyout) .mac-menu-bar,
+.mac-desktop .mac-menu-bar:hover, .mac-desktop .mac-menu-bar:focus-within { transform: translateY(0) !important; }
+.mac-desktop .win-window.is-fullscreen { border: 0; }
+@keyframes mac-dock-bounce { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-17px); } 60% { transform: translateY(-3px); } 78% { transform: translateY(-8px); } }
+@keyframes mac-panel-in { from { opacity: 0; translate: 0 -4px; } to { opacity: 1; translate: 0 0; } }
+@media (max-width: 650px) {
+  .mac-menu-bar { padding: 0 6px; gap: 2px; }
+  .mac-menu-bar button { padding: 0 7px; font-size: 12px; }
+  .mac-network, .mac-mission-control, .mac-clock > span:first-child { display: none !important; }
+  .mac-desktop .mac-traffic-lights > button, .mac-desktop .mac-traffic-lights .win-maximize-group > button { width: 13px; }
+  .mac-desktop .win-terminal-tabs { max-width: none; }
+  .mac-desktop .win-terminal-session { padding: 13px 10px; }
+  .mac-menu-bar .mac-clock { gap: 0; }
+  .mac-desktop .win-calendar { max-height: calc(100% - 48px); overflow-y: auto; }
+  .mac-desktop-icons { left: 8px; gap: 8px; }
+  .mac-desktop-app { width: 86px; }
+  .mac-command-submenu, .mac-command-submenu[data-side="left"] { position: static; width: 100%; margin: 3px 0; box-shadow: none; }
+}
+@media (hover: none), (pointer: coarse) {
+  .mac-dock-region { height: 8%; }
+  .mac-dock-trigger { height: 100%; }
+  .mac-desktop .win-workarea { bottom: 85px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mac-dock-app, .mac-dock-icon { transform: none !important; }
+  .mac-dock::before { inset: 0; }
+}

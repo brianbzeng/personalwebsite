@@ -1,0 +1,28 @@
+// Existing brianbzeng.com Worker. Deploy only after Brian approves staging.
+// The Sites demo in .openai/hosting.json is a separate deployment target.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "brian-zeng-portfolio",
+  "account_id": "f8dd8297df368ee2d0ad296d9289bfec",
+  "main": "./dist/server/index.js",
+  "no_bundle": true,
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "rules": [{ "type": "ESModule", "globs": ["**/*.js", "**/*.mjs"] }],
+  "assets": { "directory": "./dist/client", "binding": "ASSETS" },
+  "routes": [{ "pattern": "brianbzeng.com", "custom_domain": true }],
+  "keep_vars": true,
+  "vars": {
+    "SPOTIFY_REDIRECT_URI": "https://brianbzeng.com/api/spotify/callback",
+    "SPOTIFY_USER_ID": "12127274651"
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "brian-portfolio-spotify",
+    "database_id": "008edf17-3029-4117-8f89-e29a2871a46a",
+    "migrations_dir": "drizzle"
+  }],
+  "workers_dev": true,
+  "preview_urls": true,
+  "observability": { "enabled": true, "head_sampling_rate": 1, "logs": { "enabled": true, "invocation_logs": false } }
+}

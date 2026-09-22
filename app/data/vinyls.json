@@ -1,0 +1,9 @@
+[
+  {"slug":"castingcompass","title":"CastingCompass","summary":"A production fishing planner that turns ocean, weather, bathymetry, and trip data into explainable opportunities.","label":"Halibut planner","href":"https://castingcompass.com","icon":0},
+  {"slug":"amazon-review-audit","title":"Amazon","summary":"An interpretable NLP pipeline that prioritizes suspicious reviews for human inspection without claiming to prove deception.","label":"Review suspicion audit","href":"https://github.com/brianbzeng/amazonmodel","icon":2},
+  {"slug":"f1-constructors-forecast","title":"F1 Constructor","summary":"Ridge regression and race simulations turn current constructor performance into probability-weighted championship scenarios.","label":"Championship forecast","href":"https://github.com/brianbzeng/f1model","icon":4},
+  {"slug":"nba-odds-predictor","title":"NBA Home Win Predictor","summary":"NBA game forecasts using margin-adjusted Elo ratings, recent form, rest, and injury data.","label":"Game forecast model","href":"https://nba.brianbzeng.com/","icon":1},
+  {"slug":"ttb-label-review-assistant","title":"TTB Label","summary":"AI-assisted alcohol-label review with commodity-aware rules, evidence extraction, and human-in-the-loop workflows.","label":"Label review assistant","href":"https://treasury.brianbzeng.com/","icon":3},
+  {"slug":"coming-soon","title":"","summary":"","label":"","href":null,"icon":null,"decorative":true},
+  {"slug":"data-science-report-hub","title":"","summary":"","label":"","href":null,"icon":null,"decorative":true}
+]

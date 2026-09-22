@@ -1,0 +1,37 @@
+.report-leaf { width:600px;height:750px;background:#f1f1ed;color:#262626;position:relative;box-sizing:border-box;font:23px/1.43 Georgia,'Times New Roman',serif;overflow:hidden; }
+.report-running { position:absolute;left:42px;right:42px;top:24px;font:15px/1.25 Arial,sans-serif;color:#575757;border-bottom:1px solid #b6b6b2;padding-bottom:10px;letter-spacing:.015em; }
+.report-body { position:absolute;left:42px;right:42px;top:72px;bottom:52px; }
+.report-folio { position:absolute;bottom:20px;left:42px;right:42px;display:flex;justify-content:flex-end;font:15px Arial,sans-serif;color:#555; }
+.report-leaf :is(p,ul,ol,dl) { margin:0 0 18px; }
+.report-leaf h2 { font:normal 38px/1.13 Georgia,serif;margin:0 0 28px;letter-spacing:-.02em; }
+.report-leaf h3,.report-leaf h4 { font:bold 25px/1.22 Georgia,serif;margin:0 0 18px; }
+.report-leaf a { color:#333;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere; }
+.report-leaf code { font:19px/1.4 monospace;overflow-wrap:anywhere; }
+.report-leaf :is(.report-note,.report-method,.report-answer) { border-left:3px solid #777;padding-left:16px;margin:0 0 18px; }
+.report-leaf .chapter-kicker,.report-leaf .entry-label { font:15px/1.3 Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#555; }
+.report-leaf .list-item { padding-left:23px;text-indent:-23px; }
+.report-leaf .stat-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px; }
+.report-leaf .stat-value { font:bold 27px Arial,sans-serif; }
+.report-leaf .stat-label { font:18px/1.35 Arial,sans-serif; }
+.report-leaf .table-entry { border-top:1px solid #aaa;padding-top:12px;margin-bottom:20px;font:21px/1.36 Georgia,serif; }
+.report-leaf .table-field { margin-bottom:10px; }
+.report-leaf dt { font:bold 16px/1.3 Arial,sans-serif;text-transform:capitalize;color:#555; }
+.report-leaf dd { margin:3px 0 0;overflow-wrap:anywhere; }
+.report-leaf .title-page { padding-top:85px; }
+.report-leaf .title-page h1 { font:normal 51px/1.08 Georgia,serif;margin:0 0 32px;letter-spacing:-.035em; }
+.report-leaf .title-page .subtitle { font:24px/1.45 Georgia,serif;margin-bottom:16px; }
+.report-leaf .title-page .repository { font:17px/1.4 Arial,sans-serif;margin:0 0 28px; }
+.report-leaf .title-page .author { font:21px Arial,sans-serif; }
+.report-leaf .title-page .source { font:17px/1.7 Arial,sans-serif;margin-top:24px; }
+.report-leaf .toc-entry { display:flex;align-items:baseline;gap:12px;font:22px/1.25 Georgia,serif;margin:0 0 22px;text-decoration:none; }
+.report-leaf .toc-entry .toc-number { margin-left:auto;font:17px Arial,sans-serif; }
+.report-leaf figure { margin:0 0 24px;display:block; }
+.report-leaf .figure-label { font:18px Arial,sans-serif;margin-bottom:14px; }
+.report-leaf .figure-image { width:100%; }
+.report-leaf figure img { display:block;width:100%;height:auto;mix-blend-mode:multiply; }
+.report-leaf figcaption { font:19px/1.4 Georgia,serif;margin-top:20px; }
+.report-leaf .figure-detail { font:15px Arial,sans-serif;margin-top:12px;color:#555; }
+.report-leaf .citation-entry { border-top:1px solid #aaa;padding-top:12px;margin-bottom:22px;font:20px/1.3 Georgia,serif; }
+.report-leaf .citation-entry p { margin:0 0 5px; }
+.report-leaf .citation-entry h4 { font:bold 21px/1.25 Georgia,serif;margin:0 0 5px; }
+.report-leaf .citation-id { font:16px/1.3 monospace;overflow-wrap:anywhere;color:#555; }

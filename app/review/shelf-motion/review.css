@@ -1,0 +1,4 @@
+.motion-review-toolbar{position:fixed;z-index:30;left:12px;top:10px;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 24px);flex-wrap:wrap;color:#eee;font:13px Arial,sans-serif;background:#171717e8;border:1px solid #555;border-radius:6px;padding:8px}
+.motion-review-toolbar button{font:inherit;color:inherit;background:#242424;border:1px solid #666;border-radius:4px;padding:8px 10px;cursor:pointer}
+.motion-review-toolbar button[aria-pressed=true]{background:#505050;border-color:#bbb}
+@media(max-height:500px){.motion-review-toolbar{font-size:12px;padding:5px}.motion-review-toolbar span{display:none}.motion-review-toolbar button{padding:6px 8px}}

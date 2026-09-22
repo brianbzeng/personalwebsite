@@ -1,0 +1,80 @@
+{
+  "materialsUpdated": 18,
+  "assets": [
+    {
+      "file": "castingcompass-front.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\castingcompass-front.png",
+      "packed": true
+    },
+    {
+      "file": "castingcompass-back.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\castingcompass-back.png",
+      "packed": true
+    },
+    {
+      "file": "castingcompass-spine.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\public/room/vinyl-art\\castingcompass-spine.png",
+      "packed": true
+    },
+    {
+      "file": "amazon-review-audit-front.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\amazon-review-audit-front.png",
+      "packed": true
+    },
+    {
+      "file": "amazon-review-audit-back.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\amazon-review-audit-back.png",
+      "packed": true
+    },
+    {
+      "file": "amazon-review-audit-spine.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\public/room/vinyl-art\\amazon-review-audit-spine.png",
+      "packed": true
+    },
+    {
+      "file": "f1-constructors-forecast-front.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v7\\f1-constructors-forecast-front.png",
+      "packed": true
+    },
+    {
+      "file": "f1-constructors-forecast-back.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\f1-constructors-forecast-back.png",
+      "packed": true
+    },
+    {
+      "file": "f1-constructors-forecast-spine.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\public/room/vinyl-art\\f1-constructors-forecast-spine.png",
+      "packed": true
+    },
+    {
+      "file": "nba-odds-predictor-front.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\nba-odds-predictor-front.png",
+      "packed": true
+    },
+    {
+      "file": "nba-odds-predictor-back.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\nba-odds-predictor-back.png",
+      "packed": true
+    },
+    {
+      "file": "nba-odds-predictor-spine.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\public/room/vinyl-art\\nba-odds-predictor-spine.png",
+      "packed": true
+    },
+    {
+      "file": "ttb-label-review-assistant-front.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\ttb-label-review-assistant-front.png",
+      "packed": true
+    },
+    {
+      "file": "ttb-label-review-assistant-back.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\blender/outputs\\cover-approval-v4\\ttb-label-review-assistant-back.png",
+      "packed": true
+    },
+    {
+      "file": "ttb-label-review-assistant-spine.png",
+      "source": "C:\\Users\\Brian Zeng\\Documents\\Blender-Asset-Research\\personalwebsite\\public/room/vinyl-art\\ttb-label-review-assistant-spine.png",
+      "packed": true
+    }
+  ]
+}

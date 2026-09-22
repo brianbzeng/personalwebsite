@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LandscapeGuard from './components/LandscapeGuard';
 
 export const metadata: Metadata = {
   title: "Brian Zeng / Project Archive",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><LandscapeGuard>{children}</LandscapeGuard></body>
     </html>
   );
 }

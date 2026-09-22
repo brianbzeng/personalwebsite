@@ -1,0 +1,65 @@
+@font-face { font-family: 'Manic Regular'; src: url('/review/fonts/manic/MANIC-Regular.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: block; }
+@font-face { font-family: 'Manic Alternate One'; src: url('/review/fonts/manic/MANIC-Alternates1.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: block; }
+@font-face { font-family: 'Manic Alternate Two'; src: url('/review/fonts/manic/MANIC-Alternates2.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: block; }
+@font-face { font-family: 'Manic Alternate Three'; src: url('/review/fonts/manic/MANIC-Alternates3.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: block; }
+.handwritten-cue {
+  --cue-glow: 0.22;
+  display: block;
+  width: 124px;
+  max-width: 100%;
+  color: #fff;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 0 2px rgb(255 255 255 / var(--cue-glow))) drop-shadow(0 0 7px rgb(255 255 255 / var(--cue-glow)));
+}
+.handwritten-cue svg { display: block; width: 100%; height: auto; overflow: visible; }
+.handwritten-cue path { stroke: currentColor; stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.handwritten-cue__letters { opacity: 0.95; fill: currentColor; stroke: none; font-size: 42px; font-weight: 400; font-synthesis: none; font-kerning: none; font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'clig' 0, 'calt' 0; }
+[data-manic-variant="0"] { font-family: 'Manic Regular', cursive; }
+[data-manic-variant="1"] { font-family: 'Manic Alternate One', cursive; }
+[data-manic-variant="2"] { font-family: 'Manic Alternate Two', cursive; }
+[data-manic-variant="3"] { font-family: 'Manic Alternate Three', cursive; }
+.handwritten-cue--drag .handwritten-cue__letters { font-size: 48px; }
+.handwritten-cue__arrow { opacity: 0.84; animation: cue-breathe 4.6s ease-in-out infinite; }
+.handwritten-cue__float { transform-origin: 50% 50%; animation: cue-float 4.6s ease-in-out infinite; }
+.handwritten-cue--drag .handwritten-cue__float { animation-delay: -1.1s; }
+.handwritten-cue[data-paused] *, .cue-review[data-paused] .handwritten-cue * { animation-play-state: paused; }
+@keyframes cue-float {
+  0%, 100% { transform: translate(0, 1px) rotate(-0.6deg); }
+  50% { transform: translate(3px, -3px) rotate(0.7deg); }
+}
+@keyframes cue-breathe { 0%, 100% { opacity: 0.72; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .handwritten-cue__float, .handwritten-cue__arrow { animation: none; }
+}
+
+/* This sandbox is deliberately separate from the production room. */
+.cue-review { min-height: 100dvh; background: #141414; color: #e8e8e8; padding: clamp(18px, 4vw, 48px); font: 14px/1.5 Arial, sans-serif; }
+.cue-review * { box-sizing: border-box; }
+.cue-review__header { max-width: 1080px; margin: 0 auto 26px; display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+.cue-review__eyebrow { color: #9e9e9e; letter-spacing: 0.13em; text-transform: uppercase; font-size: 10px; margin: 0 0 9px; }
+.cue-review h1 { font-size: clamp(22px, 3vw, 32px); font-weight: 400; letter-spacing: -0.03em; margin: 0 0 6px; }
+.cue-review__header p:last-child { margin: 0; color: #aaa; max-width: 600px; }
+.cue-review button { border: 1px solid #555; border-radius: 6px; background: #242424; color: white; padding: 9px 15px; min-height: 40px; cursor: pointer; white-space: nowrap; }
+.cue-review button:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.cue-review__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 1080px; margin: auto; }
+.cue-review__card { margin: 0; border: 1px solid #383838; border-radius: 12px; overflow: hidden; }
+.cue-review__scene { position: relative; aspect-ratio: 1.35; background: radial-gradient(ellipse at 48% 48%, #363636, #242424 75%); overflow: hidden; }
+.cue-review__card figcaption { padding: 15px 18px; border-top: 1px solid #383838; color: #aaa; }
+.cue-review__card figcaption strong { color: #eee; font-weight: 400; }
+/* Reserve actual empty space, including the full floating-motion envelope.
+   Text and gesture loops never sit on the objects. A future pointing arrow
+   may overlap by its tip only; these gesture arrows remain entirely clear. */
+.cue-review__book { position: absolute; left: 5%; top: 21%; width: 62%; height: 66%; filter: drop-shadow(0 7px 10px #161616); }
+.cue-review__swipe { position: absolute; left: 70%; top: 36%; width: 27%; }
+.cue-review__vinyl { position: absolute; left: 24%; top: 30%; width: 52%; height: auto; filter: drop-shadow(0 7px 10px #161616); }
+/* Align to the cover's centre (not the protruding disc's centre). */
+.cue-review__drag { position: absolute; left: 30.7%; top: 5%; width: 28%; }
+.cue-review__footer { max-width: 1080px; margin: 20px auto 0; color: #888; font-size: 12px; }
+.cue-review__variants { max-width: 1080px; margin: 20px auto 0; padding: 16px 20px; border: 1px solid #383838; border-radius: 12px; background: #242424; }
+.cue-review__variants svg { display: block; width: 260px; max-width: 100%; height: auto; color: #fff; }
+.cue-review__variants p { color: #aaa; font-size: 12px; margin: 0; }
+@media (max-width: 650px) {
+  .cue-review__grid { grid-template-columns: 1fr; }
+  .cue-review__header { align-items: start; }
+}

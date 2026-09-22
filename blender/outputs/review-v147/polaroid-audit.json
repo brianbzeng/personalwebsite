@@ -1,0 +1,38 @@
+{
+  "orderedPhotos": [
+    {
+      "position": 1,
+      "object": "SHELF_Polaroid_D_Photo",
+      "image": "V147_Polaroid_1",
+      "path": "/room/polaroid-art/v147/photo-1.png",
+      "grayscale": true,
+      "packed": true
+    },
+    {
+      "position": 2,
+      "object": "SHELF_Polaroid_C_Photo",
+      "image": "V147_Polaroid_2",
+      "path": "/room/polaroid-art/v147/photo-2.png",
+      "grayscale": true,
+      "packed": true
+    },
+    {
+      "position": 3,
+      "object": "SHELF_Polaroid_B_Photo",
+      "image": "V147_Polaroid_3",
+      "path": "/room/polaroid-art/v147/photo-3.png",
+      "grayscale": true,
+      "packed": true
+    },
+    {
+      "position": 4,
+      "object": "SHELF_Polaroid_A_Photo",
+      "image": "V147_Polaroid_4",
+      "path": "/room/polaroid-art/v147/photo-4.png",
+      "grayscale": true,
+      "packed": true
+    }
+  ],
+  "existingTransformsUnchanged": true,
+  "existingFramesPreserved": true
+}

@@ -1,0 +1,162 @@
+.mac-desktop-widgets { position: absolute; right: 22px; top: 20px; width: 390px; max-width: calc(100% - 132px); max-height: calc(100% - 40px); display: flex; flex-direction: column; gap: 16px; overflow-y: auto; scrollbar-width: none; z-index: 1; padding-bottom: 8px; }
+.mac-desktop-widgets > .spotify-widget { position: relative; right: auto; top: auto; width: 100%; max-width: none; flex-shrink: 0; }
+.mac-desktop-widgets { background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+/* Clip each glass surface independently, including its blur and exterior shadow. */
+.mac-desktop-widgets > .spotify-widget { clip-path: inset(0 round 27px); }
+.mac-desktop-widgets > .notes-widget { clip-path: inset(0 round 25px); }
+.f1-driver-widget { box-sizing: border-box; width: calc((100% - 16px) / 2); flex-shrink: 0; padding: 16px; display: flex; flex-direction: column; gap: 5px; border: 1px solid var(--mac-glass-border); border-radius: 25px; clip-path: inset(0 round 25px); background: linear-gradient(145deg, #ffffff26, #77777726 60%, #ffffff12); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); color: #f3f3f3; font-size: 14px; }
+.f1-driver-widget { align-self: flex-end; aspect-ratio: 1; min-height: 0; padding: 14px; gap: 3px; justify-content: center; }
+.f1-driver-widget-label { font-size: 12px; line-height: 1.2; }
+.f1-driver-widget-caption { font-size: 12px; color: #ccc; }
+.f1-driver-widget > strong { font-size: 18px; line-height: 1.15; margin-top: 3px; }
+.f1-driver-widget > b { font-size: 26px; line-height: 1.2; margin-top: 3px; }
+.f1-driver-widget small { font-size: 12px; font-weight: 400; }
+.f1-driver-widget a { color: inherit; font-size: 12px; margin-top: 3px; text-decoration: none; }
+.f1-driver-widget a:focus-visible { outline: 2px solid #eee; outline-offset: 2px; }
+.notes-widget { display: block; flex-shrink: 0; width: 100%; min-height: 180px; padding: 18px 20px 22px; border: 1px solid var(--mac-glass-border); border-radius: 25px; background: linear-gradient(145deg, #ffffff26, #77777726 60%, #ffffff12); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); color: #f3f3f3; box-shadow: inset 0 1px 1px #ffffff38, 0 8px 24px #0003; text-align: left; font: inherit; cursor: default; }
+.notes-widget:hover { background-color: #ffffff09; }
+.notes-widget-label { display: flex; align-items: center; gap: 7px; color: #d0d0d0; font-size: 14px; }
+.notes-widget-label .windows-app-icon { width: 23px; height: 23px; }
+.notes-widget-label > span:last-child { margin-left: auto; }
+.notes-widget-title { display: block; margin-top: 15px; font-size: 21px; line-height: 1.3; }
+.notes-widget .note-content { margin-top: 12px; font-size: 15px; max-height: 108px; overflow: hidden; }
+.note-content { font-size: 16px; line-height: 1.6; overflow-wrap: anywhere; }
+.note-content p { margin: 0 0 1em; white-space: pre-wrap; }
+.note-content h2 { margin: 1em 0 .5em; font-size: 22px; line-height: 1.3; }
+.note-content h3 { margin: 1em 0 .5em; font-size: 18px; line-height: 1.4; }
+.note-content ul, .note-content ol { margin: 0 0 1em; padding-left: 1.4em; }
+.note-content li { margin: .4em 0; white-space: pre-wrap; }
+.note-content .note-checklist { list-style: none; padding-left: 0; }
+.note-checklist li { display: flex; gap: 10px; align-items: flex-start; }
+.note-check { flex: 0 0 17px; width: 17px; height: 17px; margin-top: .28em; display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid #bbb; border-radius: 50%; font-size: 12px; line-height: 1; }
+.note-checklist .is-checked { color: #a8a8a8; }
+.note-checklist .is-checked > span:last-child { text-decoration: line-through; }
+.note-checklist .is-checked .note-check { background: #d5d5d5; color: #222; }
+.note-underline { text-decoration: underline; text-underline-offset: 3px; }
+.mac-desktop .mac-notes-window {
+  --notes-folders-width: 20.55cqw;
+  --notes-list-width: 20cqw;
+  --notes-toolbar-height: clamp(52px, 5.1cqw, 84px);
+  --notes-tool-size: clamp(32px, 3.65cqw, 60px);
+  --notes-icon-size: clamp(19px, 2cqw, 33px);
+  background: #1e1e1e; border: 1px solid #464646; border-radius: 28px;
+  container-type: inline-size; color: #d7d7d7;
+}
+.mac-desktop .mac-notes-window.is-focused { border-color: #575757; }
+.mac-desktop .mac-notes-window.is-maximized, .mac-desktop .mac-notes-window.is-fullscreen { border-radius: 0; }
+.mac-notes-window .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+.mac-desktop .mac-notes-window .win-titlebar {
+  height: var(--notes-toolbar-height); min-height: var(--notes-toolbar-height); flex-shrink: 0;
+  border-radius: 27px 27px 0 0; border: 0; background: transparent; z-index: 2;
+}
+.mac-desktop .mac-notes-window:not(.is-focused) .win-titlebar { background: transparent; }
+.mac-desktop .mac-notes-window .win-titlebar::after { content: ""; position: absolute; bottom: 0; left: var(--notes-folders-width); right: 0; height: 1px; background: #383838; }
+.mac-desktop .mac-notes-window .mac-traffic-lights { position: absolute; left: clamp(20px, 2.4cqw, 40px); top: 50%; transform: translateY(-50%); margin: 0; gap: clamp(8px, .9cqw, 15px); }
+.mac-desktop .mac-notes-window .mac-traffic-lights > button,
+.mac-desktop .mac-notes-window .mac-traffic-lights .win-maximize-group > button { width: clamp(13px, 1.4cqw, 23px); height: clamp(13px, 1.4cqw, 23px); }
+.mac-notes-toolbar { position: relative; width: 100%; height: 100%; display: flex; align-items: center; padding-left: var(--notes-folders-width); }
+.mac-notes-toolbar button { display: inline-flex; align-items: center; justify-content: center; width: var(--notes-tool-size); height: var(--notes-tool-size); flex-shrink: 0; border: 0; padding: 0; border-radius: 50%; color: #d6d6d6; background: transparent; font: inherit; cursor: default; }
+.mac-notes-toolbar button:not(:disabled):hover { background: #ffffff0e; }
+.mac-notes-toolbar button:disabled { color: #9b9b9b; }
+.mac-notes-toolbar svg { flex-shrink: 0; width: var(--notes-icon-size); height: var(--notes-icon-size); }
+.notes-sidebar-tools { position: absolute; right: calc(100% - var(--notes-folders-width) + .6cqw); top: 50%; transform: translateY(-50%); display: flex; gap: .55cqw; }
+.notes-collection-tools { display: flex; align-items: center; justify-content: space-between; width: var(--notes-list-width); flex-shrink: 0; padding: 0 1.15cqw 0 2cqw; gap: 8px; }
+.notes-collection-heading { min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.notes-collection-heading strong { font-size: clamp(15px, 1.45cqw, 24px); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.notes-collection-heading > span { color: #888; font-size: clamp(12px, 1.2cqw, 20px); }
+.notes-editor-tools { display: flex; align-items: center; flex: 1; min-width: 0; gap: 1.2cqw; padding-right: .7cqw; }
+.notes-toolbar-divider { height: 2.8cqw; min-height: 26px; width: 1px; background: #414141; flex-shrink: 0; }
+.mac-notes-toolbar .notes-round-tool, .notes-tool-capsule, .mac-notes-search { border: 1px solid #3f3f3f; box-shadow: inset 0 0 0 1px #ffffff03; }
+.notes-tool-capsule { display: flex; align-items: center; flex-shrink: 0; border-radius: 99px; padding: 0 .12cqw; background: #242424; }
+.notes-tool-capsule button { width: 3.85cqw; min-width: 31px; }
+.notes-options-anchor { position: relative; display: flex; flex-shrink: 0; }
+.notes-options-panel { position: absolute; top: calc(100% + 8px); left: 0; z-index: 8; width: 176px; padding: 5px; border: 1px solid #626262; border-radius: 10px; background: #303030f5; backdrop-filter: blur(20px); box-shadow: 0 10px 30px #0008; }
+.notes-options-panel.notes-options-right { left: auto; right: 0; }
+.mac-notes-toolbar .notes-options-panel button { justify-content: space-between; width: 100%; height: auto; min-height: 32px; padding: 7px 9px; border-radius: 5px; font-size: 13px; text-align: left; }
+.mac-notes-toolbar .notes-options-panel button:not(:disabled):hover { background: #5d5d5d; }
+.mac-notes-search { min-width: 70px; flex: 1; display: flex; align-items: center; height: calc(var(--notes-tool-size) + 2px); gap: 0; padding: 0 1cqw; border-radius: 99px; background: #252525; color: #929292; }
+.mac-notes-search > svg:nth-child(2) { width: .75cqw; min-width: 8px; height: 12px; margin-left: -.3cqw; margin-right: .7cqw; }
+.mac-notes-search input { width: 100%; min-width: 0; padding: 0; border: 0; outline: none; background: none; color: #e0e0e0; font: inherit; font-size: clamp(13px, 1.5cqw, 24px); }
+.mac-notes-search input::placeholder { color: #929292; opacity: 1; }
+.mac-notes-search:focus-within { outline: 2px solid #bdbdbd; outline-offset: 2px; }
+.mac-notes-layout { position: relative; flex: 1; min-height: 0; display: grid; grid-template-columns: var(--notes-folders-width) var(--notes-list-width) minmax(0, 1fr); }
+/* The inset folder panel wraps the traffic lights, as in the MacBook reference. */
+.mac-notes-folders { position: absolute; top: calc(8px - var(--notes-toolbar-height)); bottom: 8px; left: 8px; width: calc(var(--notes-folders-width) - 8px); border: 1px solid #373737; border-radius: 22px; background: linear-gradient(160deg, #1e1e1e, #1a1a1a); padding: calc(var(--notes-toolbar-height) - 3px) .9cqw 20px; overflow-y: auto; scrollbar-width: thin; }
+.mac-notes-folders[hidden] { display: none; }
+.mac-notes-folders h2 { padding: 0 .6cqw; margin: 2.2cqw 0 .25cqw; font-size: clamp(12px, 1.18cqw, 20px); color: #898989; line-height: 1.25; font-weight: 600; }
+.notes-folder-row { width: 100%; min-height: 3.25cqw; display: flex; align-items: center; gap: .55cqw; padding: .6cqw; border: 0; border-radius: 10px; background: none; color: #d8d8d8; font: inherit; font-size: clamp(13px, 1.4cqw, 23px); text-align: left; }
+.notes-folder-row > svg { width: 1.95cqw; height: 1.95cqw; min-width: 20px; min-height: 20px; flex-shrink: 0; }
+.notes-folder-row > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notes-folder-row > small { margin-left: auto; font-size: inherit; color: #777; }
+.notes-folder-row[aria-current="true"] { background: #2b2b2b; color: #ececec; }
+.notes-folder-row:hover { background-color: #ffffff0b; }
+.mac-notes-list { grid-column: 2; min-height: 0; min-width: 0; overflow-y: auto; padding: 0 1cqw 20px; background: #202020; border-right: 1px solid #090909; scrollbar-width: thin; scrollbar-color: #525252 transparent; }
+.notes-date-group > h2 { margin: 0; padding: 1.1cqw .6cqw 1cqw; border-bottom: 1px solid #393939; font-size: clamp(15px, 1.6cqw, 26px); font-weight: 700; line-height: 1.3; }
+.notes-date-group + .notes-date-group { margin-top: 2cqw; }
+.notes-date-group > div { padding-top: 1cqw; }
+.mac-notes-list button { position: relative; display: flex; flex-direction: column; width: 100%; padding: 1.15cqw 2.5cqw; border: 0; border-radius: 10px; background: transparent; color: #d7d7d7; text-align: left; font: inherit; line-height: 1.25; }
+.mac-notes-list button + button::before { content: ""; position: absolute; top: 0; left: 2.5cqw; right: .6cqw; height: 1px; background: #363636; }
+.mac-notes-list button[aria-current="true"] { background: #626262; color: #f0f0f0; }
+.mac-notes-list button[aria-current="true"]::before, .mac-notes-list button[aria-current="true"] + button::before { display: none; }
+.mac-notes-list button:not([aria-current="true"]):hover { background: #ffffff09; }
+.mac-notes-list strong { display: block; max-width: 100%; font-size: clamp(14px, 1.4cqw, 23px); font-weight: 700; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mac-notes-list button > span { display: flex; align-items: baseline; gap: .7cqw; min-width: 0; max-width: 100%; font-size: clamp(12px, 1.25cqw, 21px); color: #929292; }
+.mac-notes-list button[aria-current="true"] > span { color: #cecece; }
+.mac-notes-list time { color: #d4d4d4; flex-shrink: 0; }
+.mac-notes-list button > span > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mac-notes-detail { position: relative; grid-column: 3; display: flex; flex-direction: column; min-width: 0; min-height: 0; background: #1e1e1e; border-bottom-right-radius: 27px; overflow: hidden; }
+.mac-note-page { flex: 1; min-height: 0; overflow-y: auto; padding: .9cqw 2.4cqw 40px; color: #d7d7d7; scrollbar-width: thin; scrollbar-color: #525252 transparent; }
+.mac-note-page:focus-visible { outline: 2px solid #ccc; outline-offset: -4px; }
+.notes-timestamp { display: block; margin: 0 0 1cqw; text-align: center; color: #808080; font-size: clamp(12px, 1.25cqw, 21px); line-height: 1.4; }
+.mac-note-page h1 { font-size: clamp(24px, 2cqw, 34px); line-height: 1.2; margin: 0 0 .65em; font-weight: 750; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.mac-note-page .note-content { font-size: clamp(16px, 1.45cqw, 24px); line-height: 1.4; }
+.mac-note-page .note-check { width: 1em; height: 1em; flex-basis: 1em; margin-top: .2em; }
+.mac-notes-empty { color: #b5b5b5; font-size: 14px; padding: 8px; }
+.notes-copy-toast { position: absolute; top: 42px; right: 20px; padding: 7px 12px; border: 1px solid #555; border-radius: 8px; background: #333; color: #eee; box-shadow: 0 4px 16px #0004; font-size: 13px; }
+.mac-notes-share-fallback { display: grid; gap: 5px; padding: 10px 24px; font-size: 13px; }
+.mac-notes-share-fallback input { width: 100%; padding: 7px; border: 1px solid #ffffff30; border-radius: 5px; background: #333; color: #eee; font: inherit; }
+.is-sidebar-hidden .mac-notes-layout { grid-template-columns: 0 minmax(190px, 26cqw) minmax(0, 1fr); }
+.is-sidebar-hidden .mac-notes-toolbar { padding-left: calc(max(85px, 8.4cqw) + var(--notes-tool-size) + 18px); }
+.is-sidebar-hidden .notes-sidebar-tools { left: calc(max(85px, 8.4cqw) + 10px); right: auto; }
+.is-sidebar-hidden .notes-sidebar-tools > button:first-child { display: none; }
+.is-sidebar-hidden .notes-collection-tools { width: auto; flex: 0 0 15cqw; padding-left: 0; }
+.mac-desktop .mac-notes-window.is-sidebar-hidden .win-titlebar::after { left: 0; }
+.mac-desktop .mac-notes-window.is-maximized .mac-notes-detail, .mac-desktop .mac-notes-window.is-fullscreen .mac-notes-detail { border-radius: 0; }
+@container (max-width: 1050px) {
+  .mac-notes-toolbar .notes-secondary-tool { display: none; }
+}
+@container (max-width: 760px) {
+  .mac-desktop .mac-notes-window .win-titlebar { height: 54px; min-height: 54px; }
+  .mac-desktop .mac-notes-window .win-titlebar::after { left: 0; }
+  .mac-desktop .mac-notes-window .mac-traffic-lights { left: 20px; gap: 8px; }
+  .mac-notes-toolbar, .is-sidebar-hidden .mac-notes-toolbar { padding: 0 8px 0 130px; }
+  .notes-sidebar-tools, .is-sidebar-hidden .notes-sidebar-tools { left: 92px; right: auto; }
+  .notes-sidebar-tools > button:first-child, .notes-collection-tools, .notes-toolbar-divider, .mac-notes-toolbar .notes-compose { display: none; }
+  .notes-editor-tools { gap: 8px; padding: 0; }
+  .mac-notes-search { padding: 0 9px; }
+  .mac-notes-search > svg:nth-child(2) { margin: 0 4px 0 -2px; }
+  .mac-notes-layout, .is-sidebar-hidden .mac-notes-layout { grid-template-columns: minmax(115px, 32%) minmax(0, 1fr); grid-template-rows: 40px minmax(0, 1fr); }
+  .is-sidebar-hidden .mac-notes-layout { grid-template-rows: 0 minmax(0, 1fr); }
+  .mac-notes-folders { position: static; width: auto; grid-column: 1 / -1; grid-row: 1; display: flex; gap: 10px; align-items: center; padding: 0 10px; border: 0; border-bottom: 1px solid #383838; border-radius: 0; overflow: hidden; }
+  .mac-notes-folders h2 { display: none; }
+  .notes-folder-row { width: auto; padding: 5px 8px; gap: 6px; }
+  .notes-folder-row > small { padding-left: 5px; }
+  .mac-notes-list { grid-column: 1; grid-row: 2; border-bottom-left-radius: 27px; padding: 0 8px 15px; }
+  .notes-date-group > h2 { padding: 12px 5px 9px; }
+  .mac-notes-list button { padding: 12px 10px; }
+  .mac-notes-list button > span { gap: 6px; }
+  .mac-notes-detail { grid-column: 2; grid-row: 2; }
+  .mac-note-page { padding: 12px 20px 30px; }
+  .notes-timestamp { margin-bottom: 16px; }
+}
+@container (max-width: 400px) {
+  .notes-format-tools { display: none; }
+  .mac-notes-layout, .is-sidebar-hidden .mac-notes-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: 40px minmax(85px, 28%) minmax(0, 1fr); }
+  .is-sidebar-hidden .mac-notes-layout { grid-template-rows: 0 minmax(85px, 28%) minmax(0, 1fr); }
+  .mac-notes-list { border-radius: 0; border-right: 0; border-bottom: 1px solid #383838; }
+  .mac-notes-detail { grid-column: 1; grid-row: 3; border-bottom-left-radius: 27px; }
+  .notes-date-group > h2 { padding: 5px; font-size: 13px; }
+  .mac-notes-list button { padding: 7px 10px; }
+  .mac-note-page { padding: 14px; }
+}
+@media (max-width: 650px) { .mac-desktop-widgets { right: 14px; width: 360px; } }

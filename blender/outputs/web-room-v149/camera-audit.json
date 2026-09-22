@@ -1,0 +1,1298 @@
+[
+  {
+    "frame": 1,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 1,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 1,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 1,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 1,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 1,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -1.130157470703125,
+      -4.9485392570495605,
+      4.1501665115356445
+    ],
+    "approved": [
+      -1.130157470703125,
+      -4.9485392570495605,
+      4.1501665115356445
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -0.02935110777616501,
+      0.8102198243141174,
+      1.5341875553131104
+    ],
+    "approved": [
+      -0.02935110777616501,
+      0.8102198243141174,
+      1.5341875553131104
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 73,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.0,
+      2.1500000953674316,
+      1.4028000831604004
+    ],
+    "approved": [
+      0.0,
+      2.1500000953674316,
+      1.4028000831604004
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -0.02935110777616501,
+      0.8102198243141174,
+      1.5341875553131104
+    ],
+    "approved": [
+      -0.02935110777616501,
+      0.8102198243141174,
+      1.5341875553131104
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 121,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.0,
+      1.9434717893600464,
+      1.4793777465820312
+    ],
+    "approved": [
+      0.0,
+      1.9434717893600464,
+      1.4793777465820312
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -0.18010005354881287,
+      0.558904767036438,
+      1.7803432941436768
+    ],
+    "approved": [
+      -0.18010005354881287,
+      0.558904767036438,
+      1.7803432941436768
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 128,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -1.4268412590026855,
+      -0.8242847323417664,
+      3.2747273445129395
+    ],
+    "approved": [
+      -1.4268412590026855,
+      -0.8242847323417664,
+      3.2747273445129395
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 241,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      1.100000023841858,
+      1.649999976158142,
+      1.5399999618530273
+    ],
+    "approved": [
+      1.100000023841858,
+      1.649999976158142,
+      1.5399999618530273
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 277,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      1.100000023841858,
+      1.649999976158142,
+      1.5399999618530273
+    ],
+    "approved": [
+      1.100000023841858,
+      1.649999976158142,
+      1.5399999618530273
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 301,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 373,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 397,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.3499999940395355,
+      -2.2799999713897705,
+      2.0999999046325684
+    ],
+    "approved": [
+      0.3499999940395355,
+      -2.2799999713897705,
+      2.0999999046325684
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 469,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.3499999940395355,
+      -2.2799999713897705,
+      2.0999999046325684
+    ],
+    "approved": [
+      0.3499999940395355,
+      -2.2799999713897705,
+      2.0999999046325684
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 493,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_APPROVED_GREETING_Restored_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_MonitorRounded_v133",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_Website_Pans_v119",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ],
+    "approved": [
+      -12.214731216430664,
+      -12.894277572631836,
+      9.207818031311035
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_Shelf_books_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      2.015000104904175
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_Shelf_records_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.5800000429153442
+    ]
+  },
+  {
+    "frame": 565,
+    "name": "CAM_Shelf_photos_v137",
+    "positionError": 0.0,
+    "angleError": 0.0,
+    "lensError": 0.0,
+    "shiftError": 0.0,
+    "current": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ],
+    "approved": [
+      0.30000001192092896,
+      1.3600000143051147,
+      1.1549999713897705
+    ]
+  }
+]

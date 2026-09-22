@@ -47,9 +47,13 @@ export default defineConfig(async () => {
     resolve: {
       dedupe: ["react", "react-dom"],
     },
-    server: isCodexSeatbeltSandbox
-      ? { watch: { useFsEvents: false, usePolling: true } }
-      : undefined,
+    server: {
+      // Spotify's loopback callback requires the IPv4 literal, not localhost.
+      host: "127.0.0.1",
+      port: 3000,
+      strictPort: true,
+      ...(isCodexSeatbeltSandbox ? { watch: { useFsEvents: false, usePolling: true } } : {}),
+    },
     plugins: [
       vinext(),
       sites(),

@@ -1,0 +1,15 @@
+# Desktop workflow and mug orientation — v132
+
+Local-only update. The Notes application remains; its desktop card is replaced with a grayscale glass GitHub Pulse widget. The contribution chart uses the existing public contribution source. The widget's Recent pushes action opens `python pulse.py`, now a chronological public-push directory, with repository/branch, Pacific timestamp, and commit links when GitHub provides a SHA. Missing commit messages/counts are not invented.
+
+GitHub consumers share one in-flight request and the existing 30-minute cache policy. Calendar and public-events failures are independent. Expired fields are not renewed as live data when just the other source succeeds. Historical fallback is labeled as a saved snapshot. Public PushEvent field definitions were checked against https://docs.github.com/en/rest/using-the-rest-api/github-event-types#pushevent.
+
+`exit` returns from the embedded desktop through the monitor-out animation, validating both message origin and iframe source. A standalone desktop navigates to `/`. Help, autocomplete, and command menus include it. Contact output has explicit mailto, LinkedIn, and GitHub links.
+
+Application launches wait 333 ms with a grayscale pointer spinner. Concurrent launches share busy state, singleton launches are deduplicated, and close/minimize cancels a pending reopen. Timers clear on exit/unmount. External Spotify navigation remains synchronous to preserve the browser's popup gesture; its busy feedback lasts the same brief interval. Existing greeting startup/boot behavior is unchanged.
+
+The v132 Blender scene rotates all ten mug body/liquid/handle/outline parts about the mug center by -126.6798° around world Z. The handle's horizontal direction has dot product 1.0 with the seat direction. All non-mug object transforms remain unchanged. The mug's world-space traveling-highlight coordinates rotate with the model. No source meshes are joined or reshaped. Original v131 scene/media remain preserved.
+
+Verification so far: 105 tests pass; local browser checks confirm contact URLs, 12 public-push entries, Notes card replacement, a measured ~375 ms launch including render overhead, overlapping launches without duplicate singleton windows, cancel-on-close, standalone exit, embedded animated exit, and rejection of a same-origin message from the wrong window. Production build passes. Full TypeScript checking still reports the two pre-existing `VinylPortfolio.tsx` Vector2 errors; changed files are clean.
+
+Final media delivery: all seven 1080p/24 fps clips and four stills are rendered, decoded without errors, and integrated from `/room/v132/`. The cursor-light mask was rebuilt for the rotated mug; its alpha is quantized to 32 levels and compressed to 146 KB. The unchanged camera paths, room lighting, and other interactables are preserved. Final browser verification uses v132 idle/mask and successfully exits the embedded terminal back through the room animation. At 390 px viewport width the widget has no horizontal overflow; reduced-motion disables its animation. Previous scene and media versions remain available; nothing is published.

@@ -1,0 +1,12 @@
+{
+  "fps": 24,
+  "armDuration": 0.52,
+  "liftStart": 0.52,
+  "liftDuration": 1.2,
+  "fadeStart": 0.8,
+  "fadeDuration": 0.95,
+  "panStart": 1.875,
+  "panDuration": 3,
+  "revealDuration": 0.2,
+  "insertDuration": 0.5
+}

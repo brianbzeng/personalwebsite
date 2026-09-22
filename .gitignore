@@ -30,13 +30,22 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.dev.vars*
 
 # vercel
 .vercel
 
 # typescript
 next-env.d.ts
+*.tsbuildinfo
 /dist/
 /.wrangler/
 /outputs/
 /work/
+
+# Local authoring inputs, raw renders, and generated inspection output
+/blender/assets/
+/blender/outputs/
+/blender/inspect_v110_scene.json
+__pycache__/
+*.pyc

@@ -1,0 +1,25 @@
+{
+  "season": 2026,
+  "asOf": "2026-09-07",
+  "through": "Italian Grand Prix",
+  "raceDate": "2026-09-06",
+  "completedRaces": 13,
+  "totalRaces": 23,
+  "completedSprints": 5,
+  "source": "https://www.formula1.com/en/results/2026/team",
+  "calendarSource": "https://www.formula1.com/en/racing/2026",
+  "resultsSource": "https://www.formula1.com/en/results/2026/races",
+  "teams": [
+    { "name": "Mercedes", "currentRank": 1, "currentPoints": 468 },
+    { "name": "Ferrari", "currentRank": 2, "currentPoints": 346 },
+    { "name": "McLaren", "currentRank": 3, "currentPoints": 287 },
+    { "name": "Red Bull Racing", "currentRank": 4, "currentPoints": 204 },
+    { "name": "Racing Bulls", "currentRank": 5, "currentPoints": 75 },
+    { "name": "Alpine", "currentRank": 6, "currentPoints": 62 },
+    { "name": "Haas F1 Team", "currentRank": 7, "currentPoints": 21 },
+    { "name": "Audi", "currentRank": 8, "currentPoints": 16 },
+    { "name": "Williams", "currentRank": 9, "currentPoints": 11 },
+    { "name": "Aston Martin", "currentRank": 10, "currentPoints": 3 },
+    { "name": "Cadillac", "currentRank": 11, "currentPoints": 0 }
+  ]
+}
