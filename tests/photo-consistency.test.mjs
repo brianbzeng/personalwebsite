@@ -38,7 +38,7 @@ test('photo staging propagates matching media through direct pans, posters, and 
   assert.match(shelf,/<ShelfScene review=\{review\} coherentPhotos=\{coherentPhotos\}/);
   assert.match(scene,/getShelfPlates\(props.coherentPhotos,props.coherentBooks\)\[props.cubby\].background/);
   assert.match(read('app/components/shelfPolaroids.ts'),/fetch\('\/review\/v154\/photos.json'\)/);
-  assert.match(read('app/page.tsx'),/<CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
+  assert.match(read('app/page.tsx'),/<CinematicRoom coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
   assert.match(room,/shelfReview = false/);
   assert.match(room,/review=\{shelfReview\}/);
   assert.doesNotMatch(room,/review=\{coherentPhotos\}/);

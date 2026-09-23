@@ -43,6 +43,15 @@ def hide_active(cubby):
     return obs
 s.render.resolution_percentage=100;s.render.resolution_x=1920;s.render.resolution_y=1080;s.eevee.taa_render_samples=16;s.eevee.volumetric_samples=16
 s.render.image_settings.file_format='PNG';s.render.image_settings.color_mode='RGB'
+if '--greeting-consistency' in sys.argv:
+    s.frame_set(1);paint('greeting-probe',0,pose(home),1,None,0)
+    if '--probes' not in sys.argv:
+        authored('idle',list(range(1,241)),home)
+        authored('monitor-in',list(range(1,122)),monitor,'Monitor')
+        authored('monitor-out',list(range(121,242)),monitor,'Monitor',True)
+        authored('diploma-in',list(range(397,470)),pan,'Diploma')
+        authored('diploma-out',list(range(493,566)),pan,'Diploma',True)
+    print('V161_GREETING_RENDER_COMPLETE',flush=True);sys.exit(0)
 if '--greeting-only' in sys.argv:
     s.frame_set(1);paint('greeting-probe',0,pose(home),1,None,0)
     if '--probes' not in sys.argv:authored('idle',list(range(1,241)),home)

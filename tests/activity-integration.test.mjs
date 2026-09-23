@@ -8,7 +8,7 @@ const shelf = read('app/components/BookshelfExperience.tsx');
 const desktop = read('app/components/MonitorDesktop.tsx');
 
 test('approved cues and mobile layout are promoted without staging redirect suppression', () => {
-  assert.match(read('app/page.tsx'), /<CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
+  assert.match(read('app/page.tsx'), /<CinematicRoom coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
   assert.doesNotMatch(read('app/page.tsx'), /shelfReview/);
   assert.match(read('app/desktop/page.tsx'), /<MonitorDesktop mobileLayout \/>/);
   assert.match(room, /activityCues && shelfReview && \(phase==='vinyls'\|\|phase==='diploma'\)/);

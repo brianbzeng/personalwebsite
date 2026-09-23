@@ -14,6 +14,8 @@ The main site now uses the same approved playback and return animations; review 
 
 ## Future changes
 
+Approved greeting player consistency (2026-09-22): Brian approved `/review/greeting-consistency` and requested production publication. Home now enables `coherentGreeting`, using v161 greeting/idle and monitor/diploma media with the established gray player materials. Camera paths, timing, geometry and lighting are unchanged. All 273 tests, build, typecheck and dry run passed. Home/desktop/Spotify API return 200; home includes the promoted flag and all seven live v161 assets match local SHA-256 hashes. Version: `58a836a7-ed3c-47ae-b9f9-3d8fd938030c`; rollback: `afb2dc84-99d3-4155-b85a-1305d4343961`. Existing domain, bindings, variables and secrets preserved.
+
 Operational Notes app (2026-09-22): Brian requested and approved production publication after local review. The full Mac-style toolbar works (new note/folder, format popover with styles and B/I/U/S, interactive checklists with the approved centered SVG checkmarks, table insert, attach ≤750 KB, markup drawing, delete with undo). Visitor edits persist to localStorage only; unedited board copies refresh on BOARD_SYNC bumps and edited/local notes are never overwritten. All 267 tests, typecheck, build, and dry run passed; the live MonitorDesktop client bundle SHA-256 matches the local build, home/desktop and the Spotify API return 200, and a live browser check confirmed the editor, interactive checklist bubbles, toolbar, and localStorage on brianbzeng.com. Version: afb2dc84-99d3-4155-b85a-1305d4343961; rollback reference: f5eb5281-72fb-4813-a9b3-e72e534e6271. Domain, D1 binding, vars and secrets preserved.
 
 

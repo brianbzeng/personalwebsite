@@ -30,11 +30,13 @@ const HOTSPOTS = {
   frame: { left: "72.5%", top: "30.49%", width: "5.2%", height: "12.5%" },
 };
 
-export default function CinematicRoom({ speakerPreview = false, coherentPhotos = false, coherentBooks = false, shelfReview = false, mobileLayout = false, responsiveLayout = false, activityCues = false, refinedCues = false, cueFadeIn = false, fastTransitions = false }: { speakerPreview?: boolean; coherentPhotos?: boolean; coherentBooks?: boolean; shelfReview?: boolean; mobileLayout?: boolean; responsiveLayout?: boolean; activityCues?: boolean; refinedCues?: boolean; cueFadeIn?: boolean; fastTransitions?: boolean }) {
+export default function CinematicRoom({ speakerPreview = false, coherentPhotos = false, coherentBooks = false, coherentGreeting = false, shelfReview = false, mobileLayout = false, responsiveLayout = false, activityCues = false, refinedCues = false, cueFadeIn = false, fastTransitions = false }: { speakerPreview?: boolean; coherentPhotos?: boolean; coherentBooks?: boolean; coherentGreeting?: boolean; shelfReview?: boolean; mobileLayout?: boolean; responsiveLayout?: boolean; activityCues?: boolean; refinedCues?: boolean; cueFadeIn?: boolean; fastTransitions?: boolean }) {
   const {setCanvas: setHandoffCanvas, capture: captureHandoff, release: releaseHandoff}=usePanHandoff();
   const photosMedia=coherentPhotos?PHOTO_CONSISTENCY_MEDIA:PHOTOS_MEDIA;
   const booksMedia=coherentBooks?BOOK_CONSISTENCY_MEDIA:BOOKS_MEDIA;
-  const media = useMemo(() => ({ room: MEDIA, monitor: MONITOR_MEDIA, shelf: SHELF_MEDIA, books: booksMedia, photos: photosMedia }), [booksMedia, photosMedia]);
+  const greetingMedia=coherentGreeting?'/room/v161/':MEDIA;
+  const monitorMedia=coherentGreeting?'/room/v161/':MONITOR_MEDIA;
+  const media = useMemo(() => ({ room: greetingMedia, monitor: monitorMedia, shelf: SHELF_MEDIA, books: booksMedia, photos: photosMedia }), [greetingMedia, monitorMedia, booksMedia, photosMedia]);
   const phaseRef = useRef<Phase>("room");
   const shelfReady = useRef(false);
   const [shelfCueMemory]=useState(createCueVisitState);
@@ -76,11 +78,11 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
     const release=()=>{if(active)releaseHandoff();};
     if(phase==='room'){
       if(motion&&!idleFailed&&video&&typeof video.requestVideoFrameCallback==='function')frame=video.requestVideoFrameCallback(release);
-      else {const image=new Image();image.src=`${MEDIA}greeting.webp`;void image.decode().catch(()=>{}).then(release);}
+      else {const image=new Image();image.src=`${greetingMedia}greeting.webp`;void image.decode().catch(()=>{}).then(release);}
     }else if(phase==='diploma')void diplomaImage.current?.decode().catch(()=>{}).then(release);
     else if(phase==='boot')release();
     return()=>{active=false;if(frame)video?.cancelVideoFrameCallback(frame);};
-  },[phase,motion,idleFailed,releaseHandoff]);
+  },[phase,motion,idleFailed,releaseHandoff,greetingMedia]);
 
   useEffect(() => () => { if (glowFade.current) clearTimeout(glowFade.current); }, []);
 
@@ -196,7 +198,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
     if (playing) pauseSceneClips();
     if (phase === "diploma-in" && transitionVisible) {
       const image = new Image();
-      image.src = `${MEDIA}diploma.webp`;
+      image.src = `${greetingMedia}diploma.webp`;
       void image.decode().catch(() => {});
     }
     if (playing) return;
@@ -207,7 +209,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
       else if (phase === "diploma") primeSceneClip(sceneTransitionSrc("diploma-out", media));
     }, phase === "room" ? 700 : 0);
     return () => window.clearTimeout(warm);
-  }, [phase, motion, pageVisible, traveling, transitionVisible, media]);
+  }, [phase, motion, pageVisible, traveling, transitionVisible, media, greetingMedia]);
   const destination = phase === "approach" ? "boot" : phase === "diploma-in" ? "diploma" : phase === "vinyl-in" || phase === "books-in" || phase==='photos-in' ? "vinyls" : "room";
   function enterVinyls() { shelfReady.current = false; setInitialCubby(1); returnTarget.current = "vinyls"; setTransitionVisible(false); setPhase(motion ? "vinyl-in" : "vinyls"); }
   function enterBooks() { shelfReady.current = false; setInitialCubby(0); returnTarget.current = "books"; setTransitionVisible(false); setPhase(motion ? "books-in" : "vinyls"); }
@@ -240,8 +242,8 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
         onPointerLeave={() => { if (roomGlow.current) roomGlow.current.style.opacity = "0"; }}>
         {/* The image paints immediately, including when autoplay is blocked. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="cinematic-media" src={phase === "vinyls" || ['books-out','vinyl-out','photos-out'].includes(phase) ? initialCubby===2?`${photosMedia}photos-still.webp`:initialCubby===0&&coherentBooks?`${BOOK_CONSISTENCY_MEDIA}books-still.webp`:initialCubby===1?`${SHELF_MEDIA}vinyl-still.webp?v=157`:`${MEDIA}${['books','vinyl','photos'][initialCubby]}-still.webp` : `${MEDIA}greeting.webp`} alt="A grayscale room with white highlights on the monitor, vinyl records, and a framed diploma." fetchPriority="high" width={1920} height={1080} />
-        {motion && !idleFailed && <video ref={idle} className="cinematic-media cinematic-idle" src={`${MEDIA}idle.mp4`} muted loop playsInline autoPlay preload="none" aria-hidden="true" onError={() => setIdleFailed(true)} />}
+        <img className="cinematic-media" src={phase === "vinyls" || ['books-out','vinyl-out','photos-out'].includes(phase) ? initialCubby===2?`${photosMedia}photos-still.webp`:initialCubby===0&&coherentBooks?`${BOOK_CONSISTENCY_MEDIA}books-still.webp`:initialCubby===1?`${SHELF_MEDIA}vinyl-still.webp?v=157`:`${MEDIA}${['books','vinyl','photos'][initialCubby]}-still.webp` : `${greetingMedia}greeting.webp`} alt="A grayscale room with white highlights on the monitor, vinyl records, and a framed diploma." fetchPriority="high" width={1920} height={1080} />
+        {motion && !idleFailed && <video ref={idle} className="cinematic-media cinematic-idle" src={`${greetingMedia}idle.mp4`} muted loop playsInline autoPlay preload="none" aria-hidden="true" onError={() => setIdleFailed(true)} />}
         {phase === "room" && motion && pageVisible && <div ref={roomGlow} className="cinematic-outline-glow" aria-hidden="true" />}
         {phase === "room" && motion && pageVisible && <PolaroidPulse />}
         {<RoomSpeakerActivity playing={!speakerPreview || speakerMode === "live" ? speakerFeed.playing : speakerMode === "playing"} motion={motion} visible={phase === "room" && pageVisible} />}
@@ -301,7 +303,7 @@ export default function CinematicRoom({ speakerPreview = false, coherentPhotos =
       {showShelf && <Suspense fallback={<div className={inboundShelf ? 'cinematic-sr' : mobileLayout?'cinematic-sr':'cinematic-shelf-loading'} role="status">Preparing the shelf…</div>}><VinylShelf preparing={inboundShelf && transitionVisible} fastTransitions={fastTransitions} coherentPhotos={coherentPhotos} coherentBooks={coherentBooks} refinedCues={refinedCues} cueFadeIn={cueFadeIn} cueMemory={shelfCueMemory} mobileLayout={mobileLayout} responsiveLayout={responsiveLayout} activityCues={activityCues && phase==='vinyls'} review={shelfReview} initialCubby={initialCubby} onReady={onShelfReady} motion={motion} onExit={cubby=>{restoreFocus.current=true;setInitialCubby(cubby);returnTarget.current=cubby===0?"books":cubby===2?'photos':"vinyls";setTransitionVisible(false);setPhase(motion?(cubby===0?"books-out":cubby===2?'photos-out':"vinyl-out"):"room");}} /></Suspense>}
       {(phase === "diploma" || (phase === "diploma-out" && holdingReturn)) && <div className="cinematic-diploma">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img ref={diplomaImage} src={`${MEDIA}diploma.webp`} alt="Close-up of Brian’s framed diploma" />
+        <img ref={diplomaImage} src={`${greetingMedia}diploma.webp`} alt="Close-up of Brian’s framed diploma" />
         {mobileLayout&&<DiplomaEnlargement />}
         <button className="cinematic-back" onPointerEnter={() => hover("diploma-out")} onPointerDown={() => arm("diploma-out")} onClick={() => { restoreFocus.current = true; setTransitionVisible(false); setPhase(motion ? "diploma-out" : "room"); }}>← Room</button>
       </div>}

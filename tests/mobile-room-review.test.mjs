@@ -12,7 +12,7 @@ test('approved mobile room layout is enabled without preview-only redirect suppr
   assert.match(shelf, /mobileLayout=false/);
   assert.match(read('app/review/mobile-layout/page.tsx'), /<CinematicRoom coherentPhotos shelfReview mobileLayout \/>/);
   const home = read('app/page.tsx');
-  assert.match(home, /return <CinematicRoom coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>;/);
+  assert.match(home, /return <CinematicRoom coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>;/);
   assert.doesNotMatch(home, /shelfReview|mobile-desktop/);
   assert.match(room, /data-mobile-layout=\{mobileLayout\}/);
   assert.match(room, /<VinylShelf[^>]*mobileLayout=\{mobileLayout\}/);
