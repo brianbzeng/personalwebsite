@@ -30,7 +30,7 @@ test('room and shelf use white media consistently with neutral interaction contr
   assert.match(room,/white highlights/);
   assert.doesNotMatch(room+shelf+media,/\/room\/v13[2345]\//);
   assert.match(shelf,/const shelfPlates=getShelfPlates\(coherentPhotos,coherentBooks\)/);
-  assert.match(media,/still:'\/room\/v156\/vinyl-still.webp'/);
+  assert.match(media,/still:'\/room\/v156\/vinyl-still.webp\?v=157'/);
   assert.match(media,/BOOK_CONSISTENCY_MEDIA='\/room\/v160\/'/);
   assert.match(css,/--room-highlight: #eee/);
   assert.doesNotMatch(css,/room-amber|edb369/);

@@ -16,7 +16,7 @@ export async function loadPlaybackFilms(){
       video.addEventListener('loadeddata',ready);video.addEventListener('error',failed);video.load();
     });return video;
   };
-  const image=async(name:string)=>{const value=new Image();value.src=`/room/v156/${name}.webp`;await value.decode();return value;};
+  const image=async(name:string)=>{const value=new Image();value.src=`/room/v156/${name}.webp${name==='vinyl-background'?'?v=157':''}`;await value.decode();return value;};
   const [play,back,first,last]=await Promise.all([make('playback'),make('return'),image('vinyl-background'),image('playback-end')]);
   return {play,back,first,last,dispose(){for(const video of [play,back]){video.pause();video.removeAttribute('src');video.load();}}};
 }

@@ -5,6 +5,13 @@ type Part = { name:string; rig:string|null; positions:number[]; uvs:number[]; in
 export type PlayerModel = {frames:number;fps:number;meshes:Part[];samples:Record<string,{matrix:number[];opacity:number}>[];camera:{position:number[];quaternion:number[];fov:number}};
 type TModule = typeof Three;
 
+// The disc surfaces ride the same highlight band as the tonearm parts so one
+// coherent light pass moves across the whole player, in step with the model.
+const DISC_SURFACE=/^(V138_Player_Platter|V138_Platter_Rim|V138_Playback_Record|V148_LabelMark|V138_Groove_|V138_Spindle)/;
+const DISC_SWEEP={axis:[0,1,0],min:0.9259585738182068,span:0.38808292150497437,start:152,duration:96,cycle:240,color:[0.8299999833106995,0.8899999856948853,1]};
+// Object-space radii for a rotation-invariant radial sheen on the vinyl faces.
+const DISC_SHEEN:Record<string,number>={'V138_Playback_Record':.12,'V148_LabelMark':.024};
+
 export async function createShelfPlayer(T:TModule, model:PlayerModel) {
   const background=new T.Scene(), rigs=new Map<string,Three.Group>(), clock={value:0};
   const resources:{geometry:Three.BufferGeometry;materials:Three.Material[]}[]=[];
@@ -25,17 +32,26 @@ export async function createShelfPlayer(T:TModule, model:PlayerModel) {
       const map=item.texture?await new T.TextureLoader().loadAsync(item.texture):null;if(map){map.colorSpace=T.SRGBColorSpace;maps.push(map);}
       const options={color:map?new T.Color(1,1,1):new T.Color().fromArray(item.color),map,side:item.frontSide?T.FrontSide:T.DoubleSide};
       const material=new T.MeshBasicMaterial(options);
-      if(item.sweep){const s=item.sweep;material.onBeforeCompile=shader=>{
-        Object.assign(shader.uniforms,{sweepClock:clock,sweepAxis:{value:new T.Vector3().fromArray(s.axis)},sweepMin:{value:s.min},sweepSpan:{value:s.span},sweepStart:{value:s.start},sweepDuration:{value:s.duration},sweepCycle:{value:s.cycle},sweepColor:{value:new T.Color().fromArray(s.color)}});
-        shader.vertexShader='varying vec3 sweepPosition;\n'+shader.vertexShader;
-        shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nsweepPosition=(modelMatrix*vec4(transformed,1.0)).xyz;');
-        shader.fragmentShader='varying vec3 sweepPosition; uniform float sweepClock,sweepMin,sweepSpan,sweepStart,sweepDuration,sweepCycle; uniform vec3 sweepAxis,sweepColor;\n'+shader.fragmentShader;
-        shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nfloat u=(dot(sweepPosition,sweepAxis)-sweepMin)/sweepSpan; float elapsed=mod(sweepClock-sweepStart,sweepCycle); float distance=min(elapsed/sweepDuration,1.0)*1.83-.18-u; diffuseColor.rgb+=sweepColor*smoothstep(-.16,0.0,distance)*(1.0-smoothstep(.05,.65,distance))*.65;');
-      };material.customProgramCacheKey=()=> 'shelf-player-sweep-v145';}
+      const sweep=item.sweep??(DISC_SURFACE.test(part.name)?DISC_SWEEP:undefined);
+      const sheen=DISC_SHEEN[part.name];
+      if(sweep||sheen){material.onBeforeCompile=shader=>{
+        if(sweep){const s=sweep;Object.assign(shader.uniforms,{sweepClock:clock,sweepAxis:{value:new T.Vector3().fromArray(s.axis)},sweepMin:{value:s.min},sweepSpan:{value:s.span},sweepStart:{value:s.start},sweepDuration:{value:s.duration},sweepCycle:{value:s.cycle},sweepColor:{value:new T.Color().fromArray(s.color)}});}
+        const varyings='varying vec3 sweepPosition;\n'+(sheen?'varying vec3 discLocal;\n':'');
+        shader.vertexShader=varyings+shader.vertexShader;
+        shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nsweepPosition=(modelMatrix*vec4(transformed,1.0)).xyz;'+(sheen?'\ndiscLocal=position;':''));
+        let prefix=varyings;
+        if(sweep)prefix+='uniform float sweepClock,sweepMin,sweepSpan,sweepStart,sweepDuration,sweepCycle; uniform vec3 sweepAxis,sweepColor;\n';
+        shader.fragmentShader=prefix+shader.fragmentShader;
+        let inject='';
+        if(sweep)inject+='\nfloat u=(dot(sweepPosition,sweepAxis)-sweepMin)/sweepSpan; float elapsed=mod(sweepClock-sweepStart,sweepCycle); float distance=min(elapsed/sweepDuration,1.0)*1.83-.18-u; diffuseColor.rgb+=sweepColor*smoothstep(-.16,0.0,distance)*(1.0-smoothstep(.05,.65,distance))*.65;';
+        if(sheen)inject+=`\nfloat discR=clamp(length(discLocal.xy)/${sheen},0.0,1.0); diffuseColor.rgb+=vec3(1.0)*(.02+.055*discR*discR);`;
+        shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>'+inject);
+      };material.customProgramCacheKey=()=> sheen?'shelf-player-disc-v157':'shelf-player-sweep-v145';}
       return material;
     }));
     resources.push({geometry,materials});const mesh=new T.Mesh(geometry,materials);mesh.name=part.name;
     if(part.name.startsWith('V138_Groove_'))for(const material of materials)material.color.setRGB(.075,.075,.075);
+    if(part.name==='V148_LabelMark')for(const material of materials)material.color.setRGB(.14,.14,.14);
     if(part.rig===RECORD_RIG){mesh.userData.disc=true;record.add(mesh);if(part.name.startsWith('V138_Groove_')){const reverse=mesh.clone();reverse.scale.z=-1;reverse.name+='Back';record.add(reverse);}}else(part.rig?rigs.get(part.rig)!:background).add(mesh);
   }
   const matrix=new T.Matrix4(),p=new T.Vector3(),q=new T.Quaternion(),s=new T.Vector3(),p2=p.clone(),q2=q.clone(),s2=s.clone();

@@ -26,7 +26,8 @@ export function usePanHandoff(){
 
 export const shelfPlates=[
   {still:'/room/v149/books-still.webp',background:'/room/v149/books-background.webp'},
-  {still:'/room/v156/vinyl-still.webp',background:'/room/v156/vinyl-background.webp'},
+  // v157: plate disc brightened; the revision busts earlier cached copies.
+  {still:'/room/v156/vinyl-still.webp?v=157',background:'/room/v156/vinyl-background.webp?v=157'},
   {still:'/room/v154/photos-still.webp',background:'/room/v152/photos-background.webp'},
 ];
 
