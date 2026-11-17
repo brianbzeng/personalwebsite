@@ -11,7 +11,7 @@ Built and approved September 29, 2026. Deployed to brianbzeng.com with the accom
 
 New opens Safari above Terminal above Notes. As of November 16, 2026, normal monitor visits open only Terminal; other applications remain available on demand. Production home and desktop enable the feature.
 
-The November 16 investigation found the deployed gallery bundle missing the `bz-hub-v1` bridge. The gallery returns HTTP 200, but Safari's handshake times out. Repair belongs in the separate gallery deployment; this website release does not overwrite that project.
+The November 16 investigation found the deployed gallery bundle missing the `bz-hub-v1` bridge. The approved repair restored it on the latest report-gallery main (`da194a5`) and deployed Pages `2ace0cf0`. The live gallery now serves the bridge bundle. The portfolio failure caption was removed in `388ac13`; see production-release.md for validation and deployment details.
 
 ## Behavior
 
