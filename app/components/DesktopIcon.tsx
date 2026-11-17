@@ -13,9 +13,13 @@ function RacingFlagIcon() {
   </svg>;
 }
 
-export type DesktopApp = "terminal" | "help" | "recycle" | "spotify" | "notes" | "f1";
+function HubCompassIcon() {
+  return <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="2" y="2" width="60" height="60" rx="15" fill="#234c70" /><circle cx="32" cy="32" r="24" fill="#548fae" stroke="#e0f2fc" strokeWidth="2" /><path d="M43 18 37 37 21 46 27 27Z" fill="#fafafa" /><path d="M43 18 37 37 27 27Z" fill="#ee705d" /><circle cx="32" cy="32" r="2" fill="#234c70" /></svg>;
+}
+export type DesktopApp = "terminal" | "help" | "recycle" | "spotify" | "notes" | "f1" | "hub";
 export const DESKTOP_APP_ORDER: DesktopApp[] = ["terminal", "notes", "f1", "help", "spotify", "recycle"];
 export const DESKTOP_APPS: { id: DesktopApp; name: string; description: string }[] = [
+  { id: "hub", name: "Safari", description: "Browse Brian's data science reports in Safari" },
   { id: "recycle", name: "Trash", description: "Empty Trash" },
   { id: "help", name: "Help", description: "Terminal command reference" },
   { id: "terminal", name: "Terminal", description: "GitHub Pulse and portfolio commands" },
@@ -27,6 +31,6 @@ export const MAC_ICON_ASSETS = { terminal: "terminal.png", recycle: "trash.png",
 
 export default function DesktopIcon({ name }: { name: DesktopApp }) {
   return <span className={`windows-app-icon windows-app-icon-${name}`} aria-hidden="true">
-    {name === "f1" ? <RacingFlagIcon /> : <img src={name === "spotify" ? "/spotify/icon-primary.svg" : `/macos-icons/${MAC_ICON_ASSETS[name]}`} alt="" draggable={false} />}
+    {name === "hub" ? <HubCompassIcon /> : name === "f1" ? <RacingFlagIcon /> : <img src={name === "spotify" ? "/spotify/icon-primary.svg" : `/macos-icons/${MAC_ICON_ASSETS[name]}`} alt="" draggable={false} />}
   </span>;
 }

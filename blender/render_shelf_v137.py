@@ -16,11 +16,14 @@ def selected(key,amount):
 def pose(c):return (c.matrix_world.translation.copy(),c.matrix_world.to_quaternion(),c.data.lens,c.data.shift_y)
 def blend(a,b,t):return (a[0].lerp(b[0],t),a[1].slerp(b[1],t),a[2]*(1-t)+b[2]*t,a[3]*(1-t)+b[3]*t)
 def paint(name,index,p,ambient=73,key='Vinyl',amount=1):
+    if globals().get('RENDER_SEQUENCES') is not None and name not in RENDER_SEQUENCES:return
     s.frame_set(ambient);capture.location=p[0];capture.rotation_mode='QUATERNION';capture.rotation_quaternion=p[1];capture.data.lens=p[2];capture.data.shift_y=p[3];s.camera=capture
     selected(key,amount);folder=os.path.join(out,name);os.makedirs(folder,exist_ok=True);s.render.filepath=os.path.join(folder,f'{index:04d}.png')
     refresh_probe='--refresh-probes' in sys.argv and (name.endswith(('-still','-background')) or name=='greeting-probe')
     refresh_greeting='--refresh-greeting' in sys.argv and name in ('greeting-probe','idle')
-    if refresh_probe or refresh_greeting or not os.path.exists(s.render.filepath):bpy.ops.render.render(write_still=True)
+    if refresh_probe or refresh_greeting or not os.path.exists(s.render.filepath):
+        if globals().get('RENDER_FRAME'):RENDER_FRAME(s.render.filepath,name,index)
+        else:bpy.ops.render.render(write_still=True)
     print('V137_FRAME',name,index,flush=True)
 def authored(name,frames,c,key=None,reverse=False):
     for i,f in enumerate(frames):

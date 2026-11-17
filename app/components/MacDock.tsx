@@ -7,9 +7,10 @@ import { SPOTIFY_PROFILE_URL } from "./spotifyData";
 
 type DockApp = DesktopApp | "spotify";
 const APPS: DockApp[] = ["terminal", "notes", "f1", "help", "spotify", "recycle"];
-type Props = { onLaunch: (app: DesktopApp) => void; onExternalLaunch: () => void; onAppContextMenu: (event: ReactMouseEvent<HTMLElement>, app: DesktopApp) => void; running: DesktopApp[]; nearBottom: boolean };
+type Props = { onLaunch: (app: DesktopApp) => void; onExternalLaunch: () => void; onAppContextMenu: (event: ReactMouseEvent<HTMLElement>, app: DesktopApp) => void; running: DesktopApp[]; nearBottom: boolean; safariHub?: boolean };
 
-export default function MacDock({ onLaunch, onExternalLaunch, onAppContextMenu, running, nearBottom }: Props) {
+export default function MacDock({ onLaunch, onExternalLaunch, onAppContextMenu, running, nearBottom, safariHub = false }: Props) {
+  const apps: DockApp[] = safariHub ? ["hub", ...APPS] : APPS;
   const [shown, setShown] = useState(false);
   const [pointer, setPointer] = useState<number | null>(null);
   const [size, setSize] = useState(52);
@@ -20,7 +21,7 @@ export default function MacDock({ onLaunch, onExternalLaunch, onAppContextMenu, 
   nearBottomRef.current = nearBottom;
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const bounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const layout = dockLayout(pointer, APPS.length, size, 10);
+  const layout = dockLayout(pointer, apps.length, size, 10);
 
   function reveal() {
     if (hideTimer.current) clearTimeout(hideTimer.current);
@@ -61,7 +62,7 @@ export default function MacDock({ onLaunch, onExternalLaunch, onAppContextMenu, 
         }
         if (event.key === "Escape") { (document.activeElement as HTMLElement)?.blur(); setShown(false); setPointer(null); }
       }}>
-        {APPS.map((id, index) => {
+        {apps.map((id, index) => {
           const name = id === "spotify" ? "Spotify" : DESKTOP_APPS.find((app) => app.id === id)!.name;
           const props = {
             className: "mac-dock-app " + (id === "recycle" ? "mac-dock-trash " : "") + (id !== "spotify" && running.includes(id) ? "is-running " : "") + (bouncing === id ? "is-bouncing" : ""),

@@ -1,4 +1,5 @@
 import {useCallback,useEffect,useRef} from 'react';
+import {BOOK_EXPERIENCE_ENABLED} from './shelfState';
 
 /** Keep the last decoded frame until the destination has actually painted. */
 export function usePanHandoff(){
@@ -34,6 +35,7 @@ export const shelfPlates=[
 // Opt-in media only: the approved experience keeps its current release until review.
 export const PHOTO_CONSISTENCY_MEDIA='/room/v159/';
 export const BOOK_CONSISTENCY_MEDIA='/room/v160/';
+export const BOOK_RETIRED_MEDIA='/room/v163/';
 const coherentPhotoPlates=shelfPlates.map((plate,index)=>index===2?{
   still:`${PHOTO_CONSISTENCY_MEDIA}photos-still.webp`,
   background:`${PHOTO_CONSISTENCY_MEDIA}photos-background.webp`,
@@ -41,12 +43,17 @@ const coherentPhotoPlates=shelfPlates.map((plate,index)=>index===2?{
 const coherentBookPlate={still:`${BOOK_CONSISTENCY_MEDIA}books-still.webp`,background:`${BOOK_CONSISTENCY_MEDIA}books-background.webp`};
 const coherentBookPlates=shelfPlates.map((plate,index)=>index===0?coherentBookPlate:plate);
 const coherentShelfPlates=coherentPhotoPlates.map((plate,index)=>index===0?coherentBookPlate:plate);
+const retiredPhotoPlate={still:`${BOOK_RETIRED_MEDIA}photos-still.webp`,background:`${BOOK_RETIRED_MEDIA}photos-background.webp`};
+const retiredShelfPlates=shelfPlates.map((plate,index)=>index===2?retiredPhotoPlate:plate);
+const retiredCoherentBookPlates=retiredShelfPlates.map((plate,index)=>index===0?coherentBookPlate:plate);
 export function getShelfPlates(coherentPhotos=false,coherentBooks=false){
+  if(!BOOK_EXPERIENCE_ENABLED)return coherentBooks?retiredCoherentBookPlates:retiredShelfPlates;
   if(coherentBooks)return coherentPhotos?coherentShelfPlates:coherentBookPlates;
   return coherentPhotos?coherentPhotoPlates:shelfPlates;
 }
 export function shelfTravelClip(from:number,to:number,coherentPhotos=false,coherentBooks=false){
   const photoAdjacent=(from===1&&to===2)||(from===2&&to===1);
   const bookAdjacent=(from===1&&to===0)||(from===0&&to===1);
+  if(!BOOK_EXPERIENCE_ENABLED&&photoAdjacent)return `${BOOK_RETIRED_MEDIA}shelf-${from}-${to}.mp4`;
   return `${coherentBooks&&bookAdjacent?BOOK_CONSISTENCY_MEDIA:coherentPhotos&&photoAdjacent?PHOTO_CONSISTENCY_MEDIA:'/room/v155/'}shelf-${from}-${to}.mp4`;
 }

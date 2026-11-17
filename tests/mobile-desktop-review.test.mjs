@@ -7,7 +7,7 @@ const css = read("app/components/mobileDesktop.css");
 
 test("approved phone desktop layout is enabled and confined to short landscape screens", () => {
   assert.match(read("app/components/MonitorDesktop.tsx"), /mobileLayout = false/);
-  assert.match(read("app/desktop/page.tsx"), /<MonitorDesktop mobileLayout \/>/);
+  assert.match(read("app/desktop/page.tsx"), /<MonitorDesktop safariHub mobileLayout responsiveLayout \/>/);
   assert.match(read("app/review/mobile-desktop/page.tsx"), /<MonitorDesktop mobileLayout \/>/);
   assert.match(css, /max-width: 1024px.*max-height: 600px.*orientation: landscape/);
   assert.match(css, /data-mobile-layout="review"/);

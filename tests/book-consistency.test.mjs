@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const exports={};
-vm.runInNewContext(ts.transpileModule(read('app/components/panHandoff.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports,require:()=>({})});
+vm.runInNewContext(ts.transpileModule(read('app/components/panHandoff.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports,require:()=>({BOOK_EXPERIENCE_ENABLED:true})});
 
 test('corrected top cubby plates are independently opt-in and preserve adjacent approved media',()=>{
   const current=exports.getShelfPlates(true),preview=exports.getShelfPlates(true,true);

@@ -1,6 +1,6 @@
-export type DesktopWindowId = `terminal-${number}` | "recycle" | "notes" | "f1" | "help";
+export type DesktopWindowId = `terminal-${number}` | "recycle" | "notes" | "f1" | "help" | "hub";
 export type ManagedWindow = {
-  id: DesktopWindowId; app: "terminal" | "recycle" | "notes" | "f1" | "help"; number: number;
+  id: DesktopWindowId; app: "terminal" | "recycle" | "notes" | "f1" | "help" | "hub"; number: number;
   minimized: boolean; z: number; initialCommand?: string;
 };
 export type DesktopSession = {
@@ -12,8 +12,9 @@ export const INITIAL_DESKTOP_SESSION: DesktopSession = {
   active: "terminal-1", nextTerminal: 2, restoreIds: [], restoreActive: null,
 };
 export type WindowAction =
+  | { type: "initialize-safari"; hub: boolean }
   | { type: "new-terminal"; command?: string }
-  | { type: "open-trash" | "open-notes" | "open-f1" | "open-help" | "show-desktop" | "close-terminals" | "hide-terminals" | "blur" }
+  | { type: "open-trash" | "open-notes" | "open-f1" | "open-help" | "open-hub" | "show-desktop" | "close-terminals" | "hide-terminals" | "blur" }
   | { type: "focus" | "minimize" | "close"; id: DesktopWindowId };
 
 export function frontWindow(windows: ManagedWindow[]) {
@@ -24,16 +25,31 @@ export function preferredTerminal(state: DesktopSession) {
     ?? state.windows.filter((item) => item.app === "terminal").sort((a, b) => b.z - a.z)[0];
 }
 export function managedWindowTitle(item: ManagedWindow) {
-  return item.app === "terminal" ? `Terminal ${item.number}` : item.app === "notes" ? "Notes" : item.app === "f1" ? "F1 Forecast" : item.app === "help" ? "Help" : "Trash";
+  return item.app === "terminal" ? `Terminal ${item.number}` : item.app === "hub" ? "Safari" : item.app === "notes" ? "Notes" : item.app === "f1" ? "F1 Forecast" : item.app === "help" ? "Help" : "Trash";
+}
+/** Monitor opens Terminal only; the explicit New! gallery launch stays unchanged. */
+export function safariDesktopSession(hub: boolean): DesktopSession {
+  if (!hub) return {
+    ...INITIAL_DESKTOP_SESSION,
+    windows: INITIAL_DESKTOP_SESSION.windows.map(item => ({ ...item })),
+    restoreIds: [],
+  };
+  const windows: ManagedWindow[] = [
+    { id: "notes", app: "notes", number: 0, minimized: false, z: 10 },
+    { id: "terminal-1", app: "terminal", number: 1, minimized: false, z: 11 },
+  ];
+  if (hub) windows.push({ id: "hub", app: "hub", number: 0, minimized: false, z: 12 });
+  return { windows, active: hub ? "hub" : "terminal-1", nextTerminal: 2, restoreIds: [], restoreActive: null };
 }
 export function desktopWindowReducer(state: DesktopSession, action: WindowAction): DesktopSession {
+  if (action.type === "initialize-safari") return safariDesktopSession(action.hub);
   const topZ = Math.max(9, ...state.windows.map((item) => item.z)) + 1;
   if (action.type === "new-terminal") {
     const item: ManagedWindow = { id: `terminal-${state.nextTerminal}`, app: "terminal", number: state.nextTerminal, minimized: false, z: topZ, initialCommand: action.command };
     return { ...state, windows: [...state.windows, item], active: item.id, nextTerminal: state.nextTerminal + 1 };
   }
-  if (action.type === "open-trash" || action.type === "open-notes" || action.type === "open-f1" || action.type === "open-help") {
-    const id = action.type === "open-notes" ? "notes" : action.type === "open-f1" ? "f1" : action.type === "open-help" ? "help" : "recycle";
+  if (action.type === "open-trash" || action.type === "open-notes" || action.type === "open-f1" || action.type === "open-help" || action.type === "open-hub") {
+    const id = action.type === "open-hub" ? "hub" : action.type === "open-notes" ? "notes" : action.type === "open-f1" ? "f1" : action.type === "open-help" ? "help" : "recycle";
     const exists = state.windows.some((item) => item.id === id);
     return { ...state, active: id, windows: exists
       ? state.windows.map((item) => item.id === id ? { ...item, minimized: false, z: topZ } : item)

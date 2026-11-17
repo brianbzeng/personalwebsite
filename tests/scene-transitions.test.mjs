@@ -41,7 +41,7 @@ function loadCache(matchCoarse = true) {
   const exports = {};
   vm.runInNewContext(ts.transpileModule(read('app/components/sceneTransitionCache.ts'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, {
     exports,
-    require: () => ({ BOOK_CONSISTENCY_MEDIA: '/room/v160/', PHOTO_CONSISTENCY_MEDIA: '/room/v159/' }),
+    require: () => ({ BOOK_EXPERIENCE_ENABLED: true, BOOK_CONSISTENCY_MEDIA: '/room/v160/', PHOTO_CONSISTENCY_MEDIA: '/room/v159/' }),
     document,
     matchMedia: () => ({ matches: matchCoarse }),
   });

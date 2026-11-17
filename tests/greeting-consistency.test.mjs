@@ -9,9 +9,9 @@ test('approved greeting correction is promoted while retaining legacy source def
   assert.match(room,/coherentGreeting = false/);
   assert.match(room,/const MEDIA = "\/room\/v149\/"/);
   assert.match(room,/const MONITOR_MEDIA = "\/room\/v149\/"/);
-  assert.match(room,/greetingMedia=coherentGreeting\?'\/room\/v161\/':MEDIA/);
-  assert.match(room,/monitorMedia=coherentGreeting\?'\/room\/v161\/':MONITOR_MEDIA/);
-  assert.match(read('app/page.tsx'),/<CinematicRoom coherentGreeting coherentPhotos coherentBooks/);
+  assert.match(room,/greetingMedia=!BOOK_EXPERIENCE_ENABLED\?BOOK_RETIRED_MEDIA:coherentGreeting\?'\/room\/v161\/':MEDIA/);
+  assert.match(room,/monitorMedia=!BOOK_EXPERIENCE_ENABLED\?BOOK_RETIRED_MEDIA:coherentGreeting\?'\/room\/v161\/':MONITOR_MEDIA/);
+  assert.match(read('app/page.tsx'),/<CinematicRoom safariHub coherentGreeting coherentPhotos coherentBooks/);
   assert.match(read('app/review/greeting-consistency/page.tsx'),/<CinematicRoom coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
 });
 
@@ -19,7 +19,7 @@ test('greeting still, ambient video, handoff decoding and corrected pans share t
   assert.match(room,/image.src=`\$\{greetingMedia\}greeting.webp`/);
   assert.match(room,/src=\{`\$\{greetingMedia\}idle.mp4`\}/);
   assert.match(room,/: `\$\{greetingMedia\}greeting.webp`\}/);
-  assert.match(room,/room: greetingMedia, monitor: monitorMedia, shelf: SHELF_MEDIA, books: booksMedia, photos: photosMedia/);
+  assert.match(room,/room: greetingMedia, monitor: monitorMedia, shelf: shelfMedia, books: booksMedia, photos: photosMedia/);
   assert.match(room,/image.src = `\$\{greetingMedia\}diploma.webp`/);
   assert.match(room,/ref=\{diplomaImage\} src=\{`\$\{greetingMedia\}diploma.webp`\}/);
   assert.match(room,/releaseHandoff,greetingMedia\]/);

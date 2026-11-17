@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import PROJECTS from "../data/vinyls.json";
 import ShelfScene, { type ShelfControls, type PageCorners, type BookLayout, type CueBounds } from "./ShelfScene";
 import ActivityCues, { type CueSpec } from './ActivityCues';
 import { createCueVisitState, rememberCueVisit, learnShelfNavigation, type CueVisitState } from './cueVisitState';
-import { CUBBIES, adjacentCubby, type ShelfSelection } from "./shelfState";
-import ReportBookOverlay from './ReportBookOverlay';
+import { CUBBIES, FIRST_CUBBY, adjacentCubby, type ShelfSelection } from "./shelfState";
+const ReportBookOverlay = lazy(() => import('./ReportBookOverlay'));
 import type { ReportBook } from './reportBook';
 import { swipeBookDirection, swipeCubbyDirection, wheelPixels } from "./shelfGestures";
 import {PHOTO_LABELS} from './shelfPolaroids';
@@ -28,7 +28,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
   const swipe = useRef<{ id: number; x: number; y: number } | null>(null);
   const suppressClickUntil = useRef(0);
   const wheel = useRef({ total: 0, last: 0, consumed: false });
-  const [cubby, setCubby] = useState(initialCubby), [ready, setReady] = useState(false), [failed, setFailed] = useState(false);
+  const [cubby, setCubby] = useState(Math.max(FIRST_CUBBY, Math.min(2, initialCubby))), [ready, setReady] = useState(false), [failed, setFailed] = useState(false);
   const [selected, setSelected] = useState<ShelfSelection>(null), [bookOpen, setBookOpen] = useState(false);
   const [spread, setSpread] = useState(0), [turning, setTurning] = useState(false);
   const [recordPlayback,setRecordPlayback]=useState<'playing'|'finished'|null>(null);
@@ -70,7 +70,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
   useEffect(() => {
     if (!ready || !motion || preparing) return;
     for (const to of [cubby - 1, cubby + 1]) {
-      if (to < 0 || to > 2) continue;
+      if (to < FIRST_CUBBY || to > 2) continue;
       primeSceneClip(shelfTravelClip(cubby, to, coherentPhotos, coherentBooks));
     }
     primeSceneClip(shelfExitSrc(cubby, coherentPhotos, coherentBooks));
@@ -78,7 +78,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
   useEffect(() => {
     mounted.current = true;
     // Ready-to-paint plates prevent a black frame at either end of a cubby move.
-    for (const urls of shelfPlates) for (const src of Object.values(urls)) { const image = new Image(); image.src = src; preloadPlates.current.push(image); void image.decode().catch(() => {}); }
+    for (const urls of shelfPlates.slice(FIRST_CUBBY)) for (const src of Object.values(urls)) { const image = new Image(); image.src = src; preloadPlates.current.push(image); void image.decode().catch(() => {}); }
     return () => { mounted.current = false; preloadPlates.current = []; };
   }, [shelfPlates]);
 
@@ -131,7 +131,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
   }, [travel]);
 
   async function moveTo(to: number, exit = false) {
-    if (busyRef.current || to < 0 || to > 2) return;
+    if (busyRef.current || to < FIRST_CUBBY || to > 2) return;
     markBusy(true);
     await controls.current?.settle();
     if (!mounted.current) return;
@@ -253,7 +253,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
           onCueTargets={activityCues?setCueTargets:undefined}
           onSelect={setSelected} onBook={setBookOpen} onSpread={setSpread} onTurning={setTurning} onCorners={setCorners} onLayout={setBookLayout} onPlayback={onPlayback} onPhoto={setPhoto} />
       </div>
-      {selected==='book' && bookOpen && <ReportBookOverlay spread={spread} layout={bookLayout} busy={busy||turning} onLoad={setReport} onJump={page=>controls.current?.jumpPage(page)}/>}
+      {selected==='book' && bookOpen && <Suspense fallback={null}><ReportBookOverlay spread={spread} layout={bookLayout} busy={busy||turning} onLoad={setReport} onJump={page=>controls.current?.jumpPage(page)}/></Suspense>}
       {selected === "book" && bookOpen && corners && !busy && <div className="book-page-corners">
         <button className="page-corner-left" aria-label="Previous spread" disabled={spread === 0 || turning} style={{ left: `${corners.left.x}%`, top: `${corners.left.y}%` }} onPointerEnter={() => controls.current?.corner(-1)} onPointerMove={() => controls.current?.corner(-1)} onPointerLeave={() => controls.current?.corner(null)} onFocus={() => controls.current?.corner(-1)} onBlur={() => controls.current?.corner(null)} onClick={() => controls.current?.page(-1)} />
         <button className="page-corner-right" aria-label="Next spread" disabled={!report || spread === Math.ceil(report.pages.length/2) - 1 || turning} style={{ left: `${corners.right.x}%`, top: `${corners.right.y}%` }} onPointerEnter={() => controls.current?.corner(1)} onPointerMove={() => controls.current?.corner(1)} onPointerLeave={() => controls.current?.corner(null)} onFocus={() => controls.current?.corner(1)} onBlur={() => controls.current?.corner(null)} onClick={() => controls.current?.page(1)} />
@@ -269,7 +269,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
     </div>
     <button className="cinematic-back" disabled={busy} onPointerDown={() => primeSceneClip(shelfExitSrc(cubby, coherentPhotos, coherentBooks), true)} onClick={() => void moveTo(cubby, true)}>← Room</button>
     {selected === null && <>
-      <button className="shelf-arrow shelf-arrow-up" aria-label={`Move up${cubby > 0 ? ` to ${CUBBIES[cubby - 1]}` : ""}`} disabled={busy || (!ready && !failed) || cubby === 0} onPointerDown={() => { if (cubby > 0) primeSceneClip(shelfTravelClip(cubby, cubby - 1, coherentPhotos, coherentBooks), true); }} onClick={() => void moveTo(adjacentCubby(cubby, -1))}><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 13 6-6 6 6" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
+      {cubby > FIRST_CUBBY && <button className="shelf-arrow shelf-arrow-up" aria-label={`Move up to ${CUBBIES[cubby - 1]}`} disabled={busy || (!ready && !failed)} onPointerDown={() => primeSceneClip(shelfTravelClip(cubby, cubby - 1, coherentPhotos, coherentBooks), true)} onClick={() => void moveTo(adjacentCubby(cubby, -1))}><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 13 6-6 6 6" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>}
       <button className="shelf-arrow shelf-arrow-down" aria-label={`Move down${cubby < 2 ? ` to ${CUBBIES[cubby + 1]}` : ""}`} disabled={busy || (!ready && !failed) || cubby === 2} onPointerDown={() => { if (cubby < 2) primeSceneClip(shelfTravelClip(cubby, cubby + 1, coherentPhotos, coherentBooks), true); }} onClick={() => void moveTo(adjacentCubby(cubby, 1))}><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="m4 7 6 6 6-6" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
     </>}
     <div className="vinyl-project-controls">
@@ -280,7 +280,7 @@ export default function BookshelfExperience({ onExit, onReady: onDestinationRead
           {cubby === 0 && <button ref={bookButton} disabled={!ready || busy} onPointerEnter={() => controls.current?.hover("book")} onPointerLeave={() => controls.current?.hover(null)} onFocus={() => controls.current?.hover("book")} onBlur={() => controls.current?.hover(null)} onClick={() => controls.current?.select("book")}>Data science report</button>}
           {cubby===2&&<button ref={photosButton} disabled={!ready||busy} onClick={()=>controls.current?.select('photos')}>Photographs</button>}
         </div>
-      </> : selected==='photos'? <><p>{photo===null?'':PHOTO_LABELS[photo]}</p><div>{photo===null?PHOTO_LABELS.map((label,index)=><button key={label} ref={index===0?inspectButton:undefined} disabled={busy||turning} aria-label={`Enlarge photo ${index+1}: ${label}`} onClick={()=>controls.current?.inspectPhoto(index)}>{index+1}</button>):<button ref={inspectButton} disabled={busy||turning} onClick={()=>controls.current?.inspectPhoto(null)}>Back to photos</button>}<button disabled={busy} onClick={returnToShelf}>Return to shelf</button></div></> : selected === "book" ? <>
+      </> : selected==='photos'? <><div>{photo===null?PHOTO_LABELS.map((label,index)=><button key={label} ref={index===0?inspectButton:undefined} disabled={busy||turning} aria-label={`Enlarge photo ${index+1}: ${label}`} onClick={()=>controls.current?.inspectPhoto(index)}>{index+1}</button>):<button ref={inspectButton} disabled={busy||turning} onClick={()=>controls.current?.inspectPhoto(null)}>Back to photos</button>}<button disabled={busy} onClick={returnToShelf}>Return to shelf</button></div></> : selected === "book" ? <>
         <p role="status">{bookOpen ? `Pages ${spread*2+1}–${spread*2+2}${report?` of ${report.pages.length}`:''}` : "How Consistent Is Formula 1 Stewarding?"}</p>
         <div><button ref={inspectButton} disabled={busy || turning} onClick={() => controls.current?.openBook(!bookOpen)}>{bookOpen ? "Close book" : "Open book"}</button><button disabled={busy} onClick={returnToShelf}>Return to shelf</button></div>
       </> : <><p>{PROJECTS[selected].title}</p><div>{!recordPlayback&&<button ref={inspectButton} disabled={busy} onClick={() => controls.current?.flip()}>Front / back</button>}<button disabled={busy} onClick={returnToShelf}>Return to holder</button>{recordPlayback==='finished'?<a href={PROJECTS[selected].href!} target="_blank" rel="noopener noreferrer">Open project ↗</a>:<button disabled={busy} onClick={()=>controls.current?.playRecord()}>{mobileLayout?'Play record':'Play record ↗'}</button>}</div></>}

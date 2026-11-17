@@ -3,14 +3,23 @@
 Never modify the source blend or existing public media. Use --probes for stills;
 full run resumes already rendered frames in this version's private output folder.
 """
-import bpy, json, math, os, sys
+import bpy, json, math, os, sys, runpy
 
 root = os.path.dirname(os.path.abspath(__file__))
 source = os.path.join(root, 'outputs/blender/glm-5-3-flash-iterations/lofi-room-cathode-glm53f-city-v156-restored-playback.blend')
 bpy.ops.wm.open_mainfile(filepath=source)
 s = bpy.context.scene
-out = os.path.join(root, 'outputs/web-room-v159')
+retire_book = '--retire-book' in sys.argv
+out = os.path.join(root, 'outputs/web-room-v162-photos' if retire_book else 'outputs/web-room-v159')
 os.makedirs(out, exist_ok=True)
+patch = None
+if retire_book:
+    wire = bpy.data.objects['CATHODE_WIREFRAME_BOOK_Mid_9']
+    neighbor = bpy.data.objects['CATHODE_WIREFRAME_BOOK_Mid_8']
+    for slot in wire.material_slots:
+        slot.link = 'OBJECT'
+        slot.material = neighbor.active_material
+    patch = runpy.run_path(os.path.join(root,'render_book_outline_patch.py'))['patch_renderer'](os.path.join(root,'outputs/web-room-v159'))
 
 def sample(frame):
     whole = math.floor(frame)
@@ -80,7 +89,11 @@ def paint(name, value, ambient=73, amount=1):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     if not os.path.exists(path):
         s.render.filepath = path
-        bpy.ops.render.render(write_still=True)
+        if patch and '/' in name:
+            sequence, frame = name.split('/')
+            patch(path, sequence, int(frame))
+        else:
+            bpy.ops.render.render(write_still=True)
     audit['frames'].append({'name':name, 'position':list(camera.location), 'quaternion':list(camera.rotation_quaternion), 'lens':camera.data.lens, 'ambient':ambient})
     print('V159_FRAME', name, flush=True)
 

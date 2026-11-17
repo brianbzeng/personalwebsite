@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DesktopPage() {
-  return <MonitorDesktop mobileLayout />;
+  return <MonitorDesktop safariHub mobileLayout responsiveLayout />;
 }

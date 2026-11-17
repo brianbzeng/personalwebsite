@@ -15,6 +15,7 @@ import DesktopCalendar from "./DesktopCalendar";
 import MacDock from "./MacDock";
 import SpotifyWidget from "./SpotifyWidget";
 import DesktopNotes from "./DesktopNotes";
+import DesktopSafari from "./DesktopSafari";
 import GitHubPulse from "./GitHubPulse";
 import DesktopF1 from "./DesktopF1";
 import driverLeader from "../data/f1-driver-leader.json";
@@ -29,8 +30,11 @@ type Flyout = "apple" | "app" | "shell" | "edit" | "window" | "search" | "tasks"
 const appName = (id: DesktopApp) => DESKTOP_APPS.find((app) => app.id === id)!.name;
 const COMMANDS = [...Object.values(APP_COMMANDS), "clear", "exit"];
 const APP_LAUNCH_DELAY = 333;
+// Benched, not removed: restore this flag to bring back the standings card.
+// The separate F1 Forecast app, snapshot data, and widget styles stay intact.
+const F1_CHAMPIONSHIP_WIDGET_ENABLED = false;
 
-export default function MonitorDesktop({ mobileLayout = false, responsiveLayout = false }: { mobileLayout?: boolean; responsiveLayout?: boolean } = {}) {
+export default function MonitorDesktop({ mobileLayout = false, responsiveLayout = false, safariHub = false }: { mobileLayout?: boolean; responsiveLayout?: boolean; safariHub?: boolean } = {}) {
   const [session, dispatch] = useReducer(desktopWindowReducer, INITIAL_DESKTOP_SESSION);
   const { windows, active } = session;
   const [flyout, setFlyout] = useState<Flyout>(null);
@@ -59,7 +63,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
   const menuButtons = useRef(new Map<Flyout, HTMLButtonElement>());
   const clock = now ? pacificClock(now) : null;
   const dateLabel = now ? new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short", month: "short", day: "numeric" }).format(now) : "";
-  const results = DESKTOP_APPS.filter((app) => (app.name + " " + app.description).toLowerCase().includes(search.toLowerCase().trim()));
+  const results = DESKTOP_APPS.filter((app) => (safariHub || app.id !== "hub") && (app.name + " " + app.description).toLowerCase().includes(search.toLowerCase().trim()));
   const activeWindow = windows.find((item) => item.id === active);
   const activeApp = activeWindow ? appName(activeWindow.app) : "Desktop";
   const terminals = windows.filter((item) => item.app === "terminal");
@@ -67,6 +71,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
   const notesWindow = windows.find((item) => item.id === "notes");
   const f1Window = windows.find((item) => item.id === "f1");
   const helpWindow = windows.find((item) => item.id === "help");
+  const hubWindow = windows.find((item) => item.id === "hub");
   const desktopToggleLabel = windows.some((item) => !item.minimized) ? "Show Desktop" : "Restore Windows";
   const canToggleDesktop = windows.some((item) => !item.minimized || session.restoreIds.includes(item.id));
   useEffect(() => () => { for (const timer of launchTimers.current.values()) clearTimeout(timer); }, []);
@@ -89,6 +94,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
   }
 
   useEffect(() => {
+    if (safariHub) dispatch({ type: "initialize-safari", hub: new URLSearchParams(window.location.search).get("app") === "hub" });
     const openLinkedNote = () => {
       const id = new URLSearchParams(window.location.search).get("note");
       // Board links resolve here; local-note links resolve inside the Notes store.
@@ -97,12 +103,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
     openLinkedNote();
     window.addEventListener("popstate", openLinkedNote);
     return () => window.removeEventListener("popstate", openLinkedNote);
-  }, []);
-
-  useEffect(() => {
-    // Every monitor visit greets with the Notes board popped over the terminal.
-    dispatch({ type: "open-notes" });
-  }, []);
+  }, [safariHub]);
 
   useEffect(() => {
     const tick = () => setNow(new Date());
@@ -119,8 +120,8 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
   }, [flyout]);
   useEffect(() => {
     if (flyout || restoringMenuFocus) return;
-    if (active === "recycle" || active === "notes" || active === "f1" || active === "help") {
-      const title = active === "notes" ? "Notes" : active === "f1" ? "F1 Forecast" : active === "help" ? "Help" : "Trash";
+    if (active === "recycle" || active === "notes" || active === "f1" || active === "help" || active === "hub") {
+      const title = active === "hub" ? "Safari" : active === "notes" ? "Notes" : active === "f1" ? "F1 Forecast" : active === "help" ? "Help" : "Trash";
       const target = desktopRef.current?.querySelector<HTMLElement>(`.win-window[aria-label="${title}"]`);
       if (target && !target.contains(document.activeElement)) target.focus({ preventScroll: true });
     }
@@ -148,6 +149,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
     terminalRefs.current.get(target.id)?.run(command);
   }
   function launch(app: DesktopApp, overrideCommand?: string) {
+    if (app === "hub") { if (safariHub) launchAfterPause(app, () => dispatch({ type: "open-hub" })); return; }
     if (app === "spotify") { window.open(SPOTIFY_PROFILE_URL, "_blank", "noopener,noreferrer"); launchAfterPause("spotify", () => {}); return; }
     if (app === "recycle") { launchAfterPause(app, () => dispatch({ type: "open-trash" })); return; }
     if (app === "notes") { openNotes(); return; }
@@ -229,15 +231,16 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
           openContext(event, null);
         }}>
         <div className="mac-desktop-widgets"><SpotifyWidget /><GitHubPulse variant="widget" />
-          <section className="f1-driver-widget" aria-label="F1 drivers’ championship leader">
+          {F1_CHAMPIONSHIP_WIDGET_ENABLED && <section className="f1-driver-widget" aria-label="F1 drivers’ championship leader">
             <span className="f1-driver-widget-label">F1 · Championship leader</span>
             <strong>{driverLeader.name}</strong>
             <span>{driverLeader.team}</span>
             <b>{driverLeader.points} <small>PTS</small></b>
             <a href={driverLeader.source} target="_blank" rel="noopener noreferrer" title={`Standings through the ${driverLeader.through}`}>Driver standings ↗</a>
-          </section>
+          </section>}
         </div>
         <div className="mac-desktop-icons" aria-label="Desktop applications">
+          {safariHub && <button type="button" className="mac-desktop-app" aria-label="Open Safari" onClick={() => launch("hub")} onContextMenu={(event) => openContext(event, "hub")}><DesktopIcon name="hub" /><span>Safari</span></button>}
           {DESKTOP_APP_ORDER.map((id) => <button key={id} type="button" className="mac-desktop-app" aria-label={`Open ${appName(id)}`}
             onClick={() => launch(id)} onContextMenu={(event) => openContext(event, id)}>
             <DesktopIcon name={id} /><span>{appName(id)}</span>
@@ -250,6 +253,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
         {notesWindow && <DesktopNotes selectedId={selectedNoteId} openRequest={noteOpenRequest} onSelect={setSelectedNoteId}
           foreground={active === "notes"} active={active === "notes" && !flyout} minimized={notesWindow.minimized} zIndex={notesWindow.z}
           onActivate={() => activate("notes")} onMinimize={() => minimize("notes")} onClose={() => closeWindow("notes")} />}
+        {safariHub && hubWindow && <DesktopSafari foreground={active === "hub"} active={active === "hub" && !flyout} minimized={hubWindow.minimized} zIndex={hubWindow.z} onActivate={() => activate("hub")} onMinimize={() => minimize("hub")} onClose={() => closeWindow("hub")} />}
         {f1Window && <DesktopF1 foreground={active === "f1"} active={active === "f1" && !flyout} minimized={f1Window.minimized} zIndex={f1Window.z}
           onActivate={() => activate("f1")} onMinimize={() => minimize("f1")} onClose={() => closeWindow("f1")} />}
         {trash && <DesktopWindow title="Trash" foreground={active === "recycle"} active={active === "recycle" && !flyout} minimized={trash.minimized} zIndex={trash.z}
@@ -294,6 +298,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
           </>}
         </>}
         {flyout === "shell" && <>
+          {safariHub && <button role="menuitem" type="button" onClick={() => launch("hub")}>Safari</button>}
           <button role="menuitem" type="button" onClick={() => newTerminal()}>New Terminal Window</button><hr />
           {activeApp === "Terminal" ? <button role="menuitem" type="button" onClick={() => runCommand(APP_COMMANDS.github)}>Run pulse.py</button>
             : DESKTOP_APP_ORDER.filter((id) => id !== "terminal").map((id) => <button role="menuitem" type="button" key={id} onClick={() => launch(id)}>{appName(id)}</button>)}
@@ -373,7 +378,7 @@ export default function MonitorDesktop({ mobileLayout = false, responsiveLayout 
             ref={(button) => { if (button) menuButtons.current.set("calendar", button); }} onClick={() => toggleFlyout("calendar")}><span>{dateLabel}</span><span>{clock?.time ?? "--:--"}</span></button>
         </nav>
       </header>
-      <MacDock nearBottom={nearDock} onLaunch={launch} onExternalLaunch={() => launchAfterPause("spotify", () => {})} onAppContextMenu={openContext} running={[...new Set(windows.map((item) => item.app))]} />
+      <MacDock safariHub={safariHub} nearBottom={nearDock} onLaunch={launch} onExternalLaunch={() => launchAfterPause("spotify", () => {})} onAppContextMenu={openContext} running={[...new Set(windows.map((item) => item.app))]} />
       <div ref={busyCursor} className="mac-loading-cursor" aria-hidden="true"><i /></div>
       <span className="mac-launch-status" role="status">{pendingApps ? "Opening application…" : ""}</span>
     </section>

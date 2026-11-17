@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import ts from 'typescript';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const exports={};
-vm.runInNewContext(ts.transpileModule(read('app/components/panHandoff.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports,require:()=>({})});
+vm.runInNewContext(ts.transpileModule(read('app/components/panHandoff.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports,require:()=>({BOOK_EXPERIENCE_ENABLED:true})});
 
 test('corrected photo media is opt-in and leaves all approved default paths intact',()=>{
   const approved=exports.getShelfPlates(),preview=exports.getShelfPlates(true);
@@ -25,7 +25,7 @@ test('photo staging propagates matching media through direct pans, posters, and 
   const room=read('app/components/CinematicRoom.tsx'),shelf=read('app/components/BookshelfExperience.tsx'),scene=read('app/components/ShelfScene.tsx');
   assert.match(read('app/review/photo-consistency/page.tsx'),/<CinematicRoom coherentPhotos shelfReview \/>/);
   assert.match(room,/coherentPhotos = false/);
-  assert.match(room,/photosMedia=coherentPhotos\?PHOTO_CONSISTENCY_MEDIA:PHOTOS_MEDIA/);
+  assert.match(room,/photosMedia=!BOOK_EXPERIENCE_ENABLED\?BOOK_RETIRED_MEDIA:coherentPhotos\?PHOTO_CONSISTENCY_MEDIA:PHOTOS_MEDIA/);
   assert.match(room,/\$\{photosMedia\}photos-still.webp/);
   assert.match(room,/photos: photosMedia/);
   assert.match(room,/src=\{sceneTransitionSrc\(phase, media\)\}/);
@@ -38,7 +38,7 @@ test('photo staging propagates matching media through direct pans, posters, and 
   assert.match(shelf,/<ShelfScene review=\{review\} coherentPhotos=\{coherentPhotos\}/);
   assert.match(scene,/getShelfPlates\(props.coherentPhotos,props.coherentBooks\)\[props.cubby\].background/);
   assert.match(read('app/components/shelfPolaroids.ts'),/fetch\('\/review\/v154\/photos.json'\)/);
-  assert.match(read('app/page.tsx'),/<CinematicRoom coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
+  assert.match(read('app/page.tsx'),/<CinematicRoom safariHub coherentGreeting coherentPhotos coherentBooks mobileLayout activityCues refinedCues cueFadeIn fastTransitions \/>/);
   assert.match(room,/shelfReview = false/);
   assert.match(room,/review=\{shelfReview\}/);
   assert.doesNotMatch(room,/review=\{coherentPhotos\}/);

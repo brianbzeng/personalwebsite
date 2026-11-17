@@ -7,10 +7,14 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const exports={};vm.runInNewContext(ts.transpileModule(read('app/components/shelfState.ts'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText,{exports});
 const shelf=read('app/components/BookshelfExperience.tsx'),scene=read('app/components/ShelfScene.tsx');
 const model=JSON.parse(read('public/room/v149/shelf-geometry.json'));
-test('navigation is bounded to the three specified cubbies and begins at records',()=>{
+test('book archive is retained but navigation is bounded to records and photos',()=>{
   assert.deepEqual([...exports.CUBBIES],['Books','Records','Camera & photographs']);
-  for(let i=0;i<3;i++)for(const d of [-1,1])assert.equal(exports.adjacentCubby(i,d),Math.max(0,Math.min(2,i+d)));
-  assert.match(shelf,/\[cubby, setCubby\] = useState\(initialCubby\)/);
+  assert.equal(exports.BOOK_EXPERIENCE_ENABLED,false);
+  for(let i=0;i<3;i++)for(const d of [-1,1])assert.equal(exports.adjacentCubby(i,d),Math.max(1,Math.min(2,i+d)));
+  assert.match(shelf,/useState\(Math.max\(FIRST_CUBBY/);
+  assert.match(shelf,/to < FIRST_CUBBY/);
+  assert.match(shelf,/shelfPlates.slice\(FIRST_CUBBY\)/);
+  assert.match(shelf,/cubby > FIRST_CUBBY && <button/);
   assert.deepEqual(model.cubbies.map(c=>c.id),['books','records','photos']);
   for(const c of model.cubbies){assert.equal(c.camera[1],model.cubbies[1].camera[1]);assert.ok(Math.abs(c.target[1]-1.36)<1e-6);}
 });

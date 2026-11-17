@@ -1,4 +1,5 @@
-import { BOOK_CONSISTENCY_MEDIA, PHOTO_CONSISTENCY_MEDIA } from './panHandoff';
+import { BOOK_CONSISTENCY_MEDIA, PHOTO_CONSISTENCY_MEDIA, BOOK_RETIRED_MEDIA } from './panHandoff';
+import { BOOK_EXPERIENCE_ENABLED } from './shelfState';
 
 export type SceneMedia = { room: string; monitor: string; shelf: string; books: string; photos: string };
 
@@ -9,11 +10,11 @@ const PHOTOS_MEDIA = '/room/v154/';
 
 export function sceneMedia(coherentPhotos = false, coherentBooks = false): SceneMedia {
   return {
-    room: ROOM_MEDIA,
-    monitor: ROOM_MEDIA,
-    shelf: SHELF_MEDIA,
+    room: BOOK_EXPERIENCE_ENABLED ? ROOM_MEDIA : BOOK_RETIRED_MEDIA,
+    monitor: BOOK_EXPERIENCE_ENABLED ? ROOM_MEDIA : BOOK_RETIRED_MEDIA,
+    shelf: BOOK_EXPERIENCE_ENABLED ? SHELF_MEDIA : BOOK_RETIRED_MEDIA,
     books: coherentBooks ? BOOK_CONSISTENCY_MEDIA : BOOKS_MEDIA,
-    photos: coherentPhotos ? PHOTO_CONSISTENCY_MEDIA : PHOTOS_MEDIA,
+    photos: !BOOK_EXPERIENCE_ENABLED ? BOOK_RETIRED_MEDIA : coherentPhotos ? PHOTO_CONSISTENCY_MEDIA : PHOTOS_MEDIA,
   };
 }
 

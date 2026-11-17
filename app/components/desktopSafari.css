@@ -1,0 +1,49 @@
+/* Scoped Tahoe-style glass chrome. The site itself remains the live Hub. */
+.mac-desktop .mac-safari-window { --safari-ink:#eee; border-radius:22px; background:linear-gradient(145deg,#535456e8,#252628eb); backdrop-filter:blur(35px) saturate(1.3); -webkit-backdrop-filter:blur(35px) saturate(1.3); overflow:visible; container-type:inline-size; color:var(--safari-ink); }
+.mac-desktop .mac-safari-window .win-titlebar,.mac-desktop .mac-safari-window:not(.is-focused) .win-titlebar { min-height:58px;height:58px;background:transparent;border:0;border-radius:22px 22px 0 0;gap:15px;padding-right:14px; }
+.mac-desktop .mac-safari-window .mac-traffic-lights { flex:0 0 auto;margin-left:17px;gap:8px; }
+.safari-toolbar { display:flex;align-items:center;gap:10px;min-width:0;flex:1; }
+.safari-toolbar button { background:transparent;border:0;color:inherit;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;padding:7px;flex-shrink:0; }
+.safari-toolbar button:hover:not(:disabled) { background:#ffffff19; }
+.safari-toolbar button:disabled { opacity:.3;cursor:default; }
+.safari-toolbar svg,.safari-sidebar svg { width:19px;height:19px;flex-shrink:0; }
+.safari-control-group { display:flex;align-items:center;padding:2px;border:1px solid #ffffff12;border-radius:24px;background:linear-gradient(#ffffff0c,#ffffff03);box-shadow:inset 0 1px #ffffff12,0 1px 2px #0002; }
+.mac-desktop .mac-safari-window .win-titlebar { position:relative; }
+.safari-tools { margin-left:auto; }
+/* Anchor to the whole titlebar, not the uneven space between toolbar buttons. */
+.safari-address { position:absolute;left:50%;top:11px;transform:translateX(-50%);width:min(650px,calc(100% - 440px));min-width:110px;display:flex;align-items:center;height:36px;border:1px solid #ffffff22;border-radius:20px;background:#12131445;box-shadow:inset 0 1px 2px #0002,0 1px #ffffff0b; }
+.safari-address-display { display:flex;justify-content:center;align-items:center;gap:7px;flex:1;min-width:0;color:#d5d6d7;font-size:12px;cursor:pointer;text-decoration:none;white-space:nowrap; }
+.safari-address-display:focus-visible { outline:2px solid #ddd;outline-offset:3px;border-radius:4px; }
+.safari-address-display svg { width:10px;height:12px;color:#afb1b3; }
+.safari-address-display span { overflow:hidden;text-overflow:ellipsis; }
+.safari-site-mark { color:#dfddd4;font-size:15px; }
+.safari-content { display:flex;min-height:0;flex:1;overflow:hidden;border-radius:0 0 21px 21px; }
+.safari-page-container { min-width:0;flex:1;position:relative;background:#edeae4;overflow:hidden; }
+.safari-page-container iframe { display:block;border:0;transform-origin:top left;background:#edeae4;filter:grayscale(1); }
+.safari-sidebar { width:210px;flex-shrink:0;background:linear-gradient(110deg,#ffffff0d,#ffffff03);border-right:1px solid #ffffff0b;padding:20px 12px;overflow:auto;font-size:12px; }
+.safari-sidebar h2 { margin:0 8px 5px;font-size:14px;font-weight:600; }
+.safari-sidebar h3 { margin:24px 8px 9px;font-size:11px;color:#aaa;font-weight:600; }
+.safari-sidebar p { color:#aaa;font-size:11px;line-height:1.6;margin:4px 8px; }
+.safari-sidebar button { width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;text-align:left;border:0;background:transparent;color:inherit;border-radius:8px;font:inherit; }
+.safari-sidebar button:hover,.safari-sidebar button[aria-current] { background:#ffffff16; }
+.safari-sidebar button:disabled { opacity:.45; }
+.safari-sidebar svg { width:16px;height:16px;color:#b6babf; }
+.safari-sidebar small { display:block;margin:30px 8px 0;color:#85888a;font-size:10px; }
+.safari-loading { position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#edeae4;color:#353630;padding:24px;gap:12px; }
+.safari-loading .safari-site-mark { color:#565850;font-size:36px; }
+.safari-loading strong { font-size:16px;font-weight:500; }
+.safari-loading p { font-size:12px;max-width:290px;color:#74766f;margin:0;line-height:1.6; }
+.safari-loading button { border:1px solid #bbbcb5;border-radius:20px;padding:8px 18px;background:#faf9f5;color:#34362f;font-size:12px; }
+.safari-popover-dismiss { position:absolute;inset:58px 0 0;z-index:3;border:0;background:none;cursor:default; }
+.safari-popover { position:absolute;top:53px;right:16px;z-index:4;width:230px;padding:10px;border:1px solid #ffffff25;border-radius:15px;background:#353638f5;backdrop-filter:blur(25px);box-shadow:0 12px 28px #0006;display:flex;flex-direction:column;gap:4px; }
+.safari-popover-pages { right:auto;left:180px; }
+.safari-popover strong { font-size:11px;font-weight:500;color:#aeb0b4;padding:6px 8px; }
+.safari-popover button { text-align:left;background:none;color:#eee;border:0;border-radius:7px;padding:8px;font-size:12px; }
+.safari-popover button:hover { background:#ffffff16; }
+.safari-zoom { display:flex;justify-content:space-between; }
+.safari-zoom button:disabled { opacity:.35; }
+.safari-notice { position:absolute;bottom:20px;left:50%;transform:translateX(-50%);max-width:90%;background:#252729ed;color:white;padding:10px 17px;border:1px solid #fff2;border-radius:20px;font-size:12px;z-index:5;text-align:center; }
+.mac-desktop .mac-safari-window.is-fullscreen .safari-content,.mac-desktop .mac-safari-window.is-maximized .safari-content { border-radius:0; }
+@container (max-width:700px) { .safari-toolbar{gap:5px}.safari-toolbar button{width:28px;height:30px;padding:6px}.safari-tools{gap:0}.safari-sidebar{width:165px}.safari-address-display{font-size:10px;gap:4px}.safari-popover-pages{left:100px} }
+@container (max-width:600px) { .safari-toolbar{padding-top:6px}.safari-address{top:49px;width:calc(100% - 28px);height:30px}.mac-desktop .mac-safari-window .win-titlebar{height:89px;min-height:89px;align-items:flex-start;padding-top:4px;gap:8px}.mac-desktop .mac-safari-window .mac-traffic-lights{margin-top:16px;margin-left:12px}.safari-sidebar{position:absolute;inset:89px auto 0 0;z-index:2;background:#343638f7;box-shadow:10px 0 30px #0003}.safari-popover{top:89px}.safari-popover-dismiss{top:89px} }
+@media (prefers-reduced-motion:reduce) { .mac-desktop .mac-safari-window { transition:none; } }

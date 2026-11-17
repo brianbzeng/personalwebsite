@@ -50,9 +50,24 @@ for part in player['meshes']:
         obj.material_slots[index].material = mat
         changed.append({'object': obj.name, 'slot': index, 'color': item['color']})
 
-out = os.path.join(root, 'outputs/web-room-v161')
+retire_book = '--retire-book' in sys.argv
+if retire_book:
+    # Use the adjacent decorative book's outline, not the shared interactive
+    # material (which must keep pulsing on the remaining active objects).
+    wire = bpy.data.objects['CATHODE_WIREFRAME_BOOK_Mid_9']
+    neighbor = bpy.data.objects['CATHODE_WIREFRAME_BOOK_Mid_8']
+    assert neighbor.active_material and neighbor.active_material != wire.active_material
+    for slot in wire.material_slots:
+        slot.link = 'OBJECT'
+        slot.material = neighbor.active_material
+
+out = os.path.join(root, 'outputs/web-room-v162' if retire_book else 'outputs/web-room-v161')
 os.makedirs(out, exist_ok=True)
 with open(os.path.join(out, 'material-audit.json'), 'w') as handle:
     json.dump({'source': os.path.basename(source), 'recipe': 'restore_playback_v156', 'changed': changed}, handle, indent=2)
 sys.argv += ['--v149', '--greeting-consistency']
-runpy.run_path(os.path.join(root, 'render_shelf_v137.py'), init_globals={'OUTPUT_DIR': out})
+extra = {}
+if retire_book:
+    helper = runpy.run_path(os.path.join(root, 'render_book_outline_patch.py'))
+    extra['RENDER_FRAME'] = helper['patch_renderer'](os.path.join(root, 'outputs/web-room-v161'))
+runpy.run_path(os.path.join(root, 'render_shelf_v137.py'), init_globals={'OUTPUT_DIR': out, **extra})
