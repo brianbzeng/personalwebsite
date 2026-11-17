@@ -27,6 +27,14 @@ test('Safari validates sender and links its current page to an isolated browser 
   assert.match(src,/if \(ready\) \{ send\('reload'\); return; \}/);
 });
 
+test('Safari failure keeps its heading and retry without the explanatory caption',()=>{
+  const src=readFileSync(new URL('../app/components/DesktopSafari.tsx',import.meta.url),'utf8');
+  assert.doesNotMatch(src,/The gallery bridge is not available yet|Your other desktop apps still work/);
+  assert.match(src,/Gallery connection unavailable/);
+  assert.match(src,/onClick=\{reload\}>Try again/);
+  assert.match(src,/!failed&&<p>Connecting to the research gallery/);
+});
+
 test('photo inspection removes visible captions but preserves accessible descriptions',()=>{
   const src=readFileSync(new URL('../app/components/BookshelfExperience.tsx',import.meta.url),'utf8');
   assert.doesNotMatch(src, /<p>\{photo===null\?'':PHOTO_LABELS\[photo\]\}<\/p>/);

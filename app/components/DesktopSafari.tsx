@@ -118,7 +118,7 @@ export default function DesktopSafari(props: Props) {
         {origin && <iframe key={revision} ref={frame} src={frameSource} title="Research Work — Data Science Hub" inert={!!popover} aria-hidden={!!popover} sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox" referrerPolicy="strict-origin-when-cross-origin"
           style={{width:`${100/zoom}%`,height:`${100/zoom}%`,transform:`scale(${zoom})`}}
           onLoad={()=>frame.current?.contentWindow?.postMessage({channel:HUB_CHANNEL,type:'hello'},origin)} />}
-        {!ready && <div className="safari-loading" role="status"><span className="safari-site-mark">▥</span><strong>{failed?'Gallery connection unavailable':'Opening Research Work'}</strong><p>{failed?'The gallery bridge is not available yet. Your other desktop apps still work.':'Connecting to the research gallery…'}</p>{failed&&<button type="button" onClick={reload}>Try again</button>}</div>}
+        {!ready && <div className="safari-loading" role="status"><span className="safari-site-mark">▥</span><strong>{failed?'Gallery connection unavailable':'Opening Research Work'}</strong>{!failed&&<p>Connecting to the research gallery…</p>}{failed&&<button type="button" onClick={reload}>Try again</button>}</div>}
       </div>
     </div>
     {popover && <><button className="safari-popover-dismiss" aria-label="Dismiss Safari menu" onClick={()=>setPopover(null)}/><div className={`safari-popover safari-popover-${popover}`} role="dialog" aria-label={popover==='share'?'Share page':'Page options'}>
